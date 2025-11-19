@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Portfolio – Anthony White | anthonycs.dev</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --bg: #020617;
+            --bg-alt: #020818;
+            --card-bg: #050816;
+            --accent: #00d4ff;
+            --accent-soft: #38bdf8;
+            --accent-green: #4ade80;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-soft: #1f2937;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+            color: var(--text-main);
+        }
+
+        a { color: var(--accent-soft); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        header {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-soft);
+            background: linear-gradient(to right, #020617, #02081a);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .brand-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .brand-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        nav {
+            font-size: 14px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        nav a { color: var(--text-muted); }
+        nav a:hover { color: var(--accent-soft); }
+
+        main {
+            max-width: 1000px;
+            margin: 24px auto 40px;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+            gap: 18px;
+        }
+
+        @media (max-width: 850px) {
+            main { grid-template-columns: minmax(0, 1fr); }
+        }
+
+        .card {
+            border-radius: 14px;
+            border: 1px solid var(--border-soft);
+            background: var(--card-bg);
+            padding: 14px 16px 16px;
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+        .subtitle {
+            margin: 0 0 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .tag {
+            font-size: 11px;
+            font-family: monospace;
+            border-radius: 999px;
+            padding: 3px 8px;
+            border: 1px solid var(--border-soft);
+            color: var(--text-muted);
+        }
+
+        .section-title {
+            margin: 14px 0 6px;
+            font-size: 16px;
+        }
+
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .project {
+            border-radius: 10px;
+            border: 1px solid var(--border-soft);
+            background: #020617;
+            padding: 10px 12px;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        .project-title {
+            margin: 0;
+            font-size: 15px;
+        }
+        .project-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+        .project-desc {
+            margin: 0 0 6px;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .pill {
+            font-size: 10px;
+            font-family: monospace;
+            border-radius: 999px;
+            padding: 2px 6px;
+            border: 1px solid var(--border-soft);
+            color: var(--text-muted);
+        }
+
+        .link-row {
+            margin-top: 6px;
+            font-size: 12px;
+        }
+
+        .sidebar-block + .sidebar-block {
+            margin-top: 12px;
+        }
+
+        .sidebar-title {
+            margin: 0 0 4px;
+            font-size: 15px;
+        }
+        .sidebar-text {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        ul {
+            margin: 4px 0 0 16px;
+            padding: 0;
+            font-size: 12px;
+            color: var(--text-main);
+        }
+
+        .mono {
+            font-family: monospace;
+        }
+
+        .contact-item {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+        .contact-label {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <div class="brand-name">Anthony White</div>
+        <div class="brand-sub">
+            Computer Science student · <span class="mono">anthonycs.dev</span>
+        </div>
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/learncs/">LearnCS</a>
+        <a href="/tools/">Tools</a>
+        <a href="/capyhost/">CapyHost</a>
+    </nav>
+</header>
+
+<main>
+    <!-- LEFT: About + Projects -->
+    <section class="card">
+        <h1>Portfolio</h1>
+        <p class="subtitle">
+            I’m Anthony White, a CS student who likes building from the bare metal up:
+            from ESP32-S3 hardware and microcontrollers to full websites, APIs, and my own VPS setup.
+        </p>
+
+        <div class="tag-row">
+            <span class="tag">Linux · Nginx · VPS</span>
+            <span class="tag">C++ · Python · Java</span>
+            <span class="tag">ESP32-S3 · Microcontrollers</span>
+            <span class="tag">Flask · HTML/CSS/JS</span>
+        </div>
+
+        <h2 class="section-title">Highlighted Projects</h2>
+
+        <div class="project-list">
+            <!-- Project 1: anthonycs.dev infrastructure -->
+            <article class="project">
+                <div class="project-header">
+                    <h3 class="project-title">anthonycs.dev – Self-Hosted CS Lab</h3>
+                    <span class="project-meta">Status: live · VPS + Nginx + HTTPS</span>
+                </div>
+                <p class="project-desc">
+                    A server I configured from scratch on a VPS, running Nginx, HTTPS, a custom homepage,
+                    study tools, and a Flask backend. Everything on this domain is deployed and managed
+                    by me, including virtual host configs, reverse proxying, and a basic API.
+                </p>
+                <div class="pill-row">
+                    <span class="pill">Ubuntu</span>
+                    <span class="pill">Nginx</span>
+                    <span class="pill">Certbot / HTTPS</span>
+                    <span class="pill">systemd services</span>
+                    <span class="pill">SSH + CLI</span>
+                </div>
+                <div class="link-row">
+                    <a href="https://anthonycs.dev/" target="_blank" rel="noopener">› Visit anthonycs.dev</a>
+                </div>
+            </article>
+
+            <!-- Project 2: LearnCS -->
+            <article class="project">
+                <div class="project-header">
+                    <h3 class="project-title">LearnCS – Computer Science Study Platform</h3>
+                    <span class="project-meta">Status: live · study site</span>
+                </div>
+                <p class="project-desc">
+                    A custom “Learn CS” page that organizes programming languages, data structures,
+                    algorithms, operating systems, networks, and CS history. It includes external
+                    references, expandable sections, and an embedded code runner to experiment while reading.
+                </p>
+                <div class="pill-row">
+                    <span class="pill">HTML/CSS/JS</span>
+                    <span class="pill">Educational design</span>
+                    <span class="pill">Iframe tools</span>
+                </div>
+                <div class="link-row">
+                    <a href="https://anthonycs.dev/learncs/" target="_blank" rel="noopener">› Open LearnCS</a>
+                </div>
+            </article>
+
+            <!-- Project 3: Anthony API -->
+            <article class="project">
+                <div class="project-header">
+                    <h3 class="project-title">Anthony API – Flask Backend Service</h3>
+                    <span class="project-meta">Status: live · /api</span>
+                </div>
+                <p class="project-desc">
+                    A small Flask API running as a systemd service on the VPS, reverse-proxied through Nginx.
+                    It currently exposes a health check endpoint and is designed to be extended with tools
+                    like converters, planners, and future CapyOS integration.
+                </p>
+                <div class="pill-row">
+                    <span class="pill">Python</span>
+                    <span class="pill">Flask</span>
+                    <span class="pill">systemd</span>
+                    <span class="pill">Reverse proxy</span>
+                </div>
+                <div class="link-row">
+                    <a href="https://anthonycs.dev/api/ping" target="_blank" rel="noopener">› /api/ping</a>
+                </div>
+            </article>
+
+            <!-- Project 4: CapyOS + CapyHost -->
+            <article class="project">
+                <div class="project-header">
+                    <h3 class="project-title">CapyOS – ESP32-S3 Desk Companion (In Progress)</h3>
+                    <span class="project-meta">Status: WIP · embedded + web</span>
+                </div>
+                <p class="project-desc">
+                    A planned “desk companion” running on an ESP32-S3 with a display: mini-games, a clock,
+                    calendar, and alarms. The CapyHost dashboard at <span class="mono">/capyhost/</span>
+                    is the web side of the project, which will eventually sync with the device over an API.
+                </p>
+                <div class="pill-row">
+                    <span class="pill">ESP32-S3</span>
+                    <span class="pill">Embedded C / C++</span>
+                    <span class="pill">Microcontroller UI</span>
+                    <span class="pill">Web dashboard</span>
+                </div>
+                <div class="link-row">
+                    <a href="https://anthonycs.dev/capyhost/" target="_blank" rel="noopener">› CapyHost dashboard</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- RIGHT: Skills / Contact / Hosting -->
+    <aside class="card">
+        <div class="sidebar-block">
+            <h2 class="sidebar-title">Contact</h2>
+            <p class="sidebar-text">Best ways to reach me or see more of my work:</p>
+            <p class="contact-item">
+                <span class="contact-label">Email:</span>
+                <a href="mailto:awhitecsdev@gmail.com">awhitecsdev@gmail.com</a>
+            </p>
+            <p class="contact-item">
+                <span class="contact-label">GitHub:</span>
+                <a href="https://github.com/awhitecsdev" target="_blank" rel="noopener">
+                    github.com/awhitecsdev
+                </a>
+            </p>
+        </div>
+
+        <div class="sidebar-block">
+            <h2 class="sidebar-title">Skills & Focus</h2>
+            <p class="sidebar-text">
+                My main interests are systems-level work and practical infrastructure:
+            </p>
+            <ul>
+                <li>Linux, command line, and server configuration</li>
+                <li>Programming in C++, Python, and Java</li>
+                <li>Microcontrollers (ESP32-S3) and embedded projects</li>
+                <li>Web development with HTML/CSS/JS + simple backends</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-block">
+            <h2 class="sidebar-title">Tech Stack</h2>
+            <ul>
+                <li><b>Languages:</b> C++, Python, Java, HTML, CSS, JavaScript</li>
+                <li><b>Backend:</b> Flask (Python), REST-style endpoints</li>
+                <li><b>Infra:</b> Ubuntu, Nginx, systemd, SSH</li>
+                <li><b>Hardware:</b> ESP32-S3, basic electronics, embedded programming</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-block">
+            <h2 class="sidebar-title">How this portfolio is hosted</h2>
+            <p class="sidebar-text">
+                This portfolio isn’t on a drag-and-drop site. It’s served from:
+            </p>
+            <ul>
+                <li><span class="mono">/var/www/</span> on a cloud VPS I manage</li>
+                <li>Nginx configured manually for each path</li>
+                <li>HTTPS certificates via Certbot</li>
+                <li>A custom Flask service for <span class="mono">/api</span></li>
+            </ul>
+            <p class="sidebar-text">
+                I use this setup to practice real-world deployment instead of only local projects.
+            </p>
+        </div>
+    </aside>
+</main>
+</body>
+</html>
+

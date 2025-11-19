@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CapyHost – Project</title>
+    <link rel="stylesheet" href="/portfolio/css/style.css">
+</head>
+<body>
+<header>
+    <h1>CapyHost – Self-Hosted Server Stack</h1>
+    <p>Linux server, Nginx, SSH, multi-site hosting</p>
+    <nav>
+        <a href="/portfolio/index.html">Home</a>
+        <a href="/portfolio/projects.html">Back to Projects</a>
+        <a href="/">⮜ Server Hub</a>
+    </nav>
+</header>
+
+<main>
+    <section>
+        <h2>Overview</h2>
+        <p>
+            CapyHost is my self-managed Linux server that hosts multiple sites and services.
+            I use it to learn server administration, security basics, and how to deploy web
+            applications in a more realistic environment than just local development.
+        </p>
+    </section>
+
+    <section>
+        <h2>Tech Stack</h2>
+        <ul>
+            <li>Ubuntu Server on DigitalOcean</li>
+            <li>Nginx for web serving and routing</li>
+            <li>SSH with key-based authentication</li>
+            <li>UFW firewall for basic network security</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>What I Learned</h2>
+        <ul>
+            <li>How to securely connect to a remote server using SSH keys.</li>
+            <li>How to configure Nginx to serve multiple sites from one machine.</li>
+            <li>How to organize a server file structure for long-term projects.</li>
+        </ul>
+    </section>
+</main>
+
+<footer>
+    <div class="links">
+        <a href="https://github.com/YOUR_GITHUB" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/YOUR_LINKEDIN" target="_blank">LinkedIn</a>
+        <a href="mailto:your.email@example.com">Email</a>
+        <a href="/resume.pdf">Resume (soon)</a>
+    </div>
+    <div>© <span id="year"></span> Anthony White</div>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</footer>
+</body>
+</html>

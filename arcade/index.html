@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Arcade – Anthony White | anthonycs.dev</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Retro pixel-style font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050112;
+            --bg-alt: #120622;
+            --card-bg: #050816;
+            --accent-pink: #ff4fd8;
+            --accent-cyan: #32f5ff;
+            --accent-green: #6afc7a;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --border-soft: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top, #3b0764 0, #020617 55%),
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0.03) 0px,
+                    rgba(255, 255, 255, 0.03) 1px,
+                    transparent 1px,
+                    transparent 3px
+                );
+            color: var(--text-main);
+        }
+
+        a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+            background: linear-gradient(to right, #020617, #120622);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .brand-name {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .brand-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        nav {
+            font-size: 12px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        nav a {
+            color: var(--text-muted);
+        }
+        nav a:hover {
+            color: var(--accent-cyan);
+        }
+        nav .active {
+            color: var(--accent-cyan);
+        }
+
+        main {
+            max-width: 1040px;
+            margin: 26px auto 40px;
+            padding: 0 16px;
+        }
+
+        /* Arcade cabinet container */
+        .cabinet {
+            border-radius: 20px;
+            border: 2px solid #111827;
+            background: radial-gradient(circle at top, #0b1120 0, #020617 55%);
+            box-shadow:
+                0 0 40px rgba(59, 130, 246, 0.35),
+                0 0 90px rgba(236, 72, 153, 0.25);
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glowing edges */
+        .cabinet::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            pointer-events: none;
+        }
+
+        /* Marquee */
+        .marquee {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 14px;
+            border: 1px solid #334155;
+            padding: 10px 14px;
+            background:
+                linear-gradient(135deg, rgba(236, 72, 153, 0.2), transparent),
+                radial-gradient(circle at left, rgba(56, 189, 248, 0.3), transparent),
+                #020617;
+            margin-bottom: 12px;
+        }
+
+        .marquee-title {
+            font-family: "Press Start 2P", system-ui, sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            text-shadow:
+                0 0 4px rgba(50, 245, 255, 0.9),
+                0 0 10px rgba(236, 72, 153, 0.8);
+        }
+
+        .marquee-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .marquee-badge {
+            font-size: 9px;
+            font-family: "Press Start 2P", system-ui, sans-serif;
+            color: var(--accent-green);
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(74, 222, 128, 0.6);
+            background: rgba(5, 46, 22, 0.7);
+        }
+
+        .screen {
+            border-radius: 16px;
+            background:
+                radial-gradient(circle at top, rgba(59, 130, 246, 0.35), transparent 55%),
+                #020617;
+            border: 1px solid #1f2937;
+            padding: 14px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.1fr);
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 850px) {
+            .screen {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* Fake scanlines overlay */
+        .screen::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(15, 23, 42, 0.35),
+                rgba(15, 23, 42, 0.35) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            mix-blend-mode: soft-light;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .screen-inner {
+            position: relative;
+            z-index: 1; /* above scanlines */
+        }
+
+        .games-header {
+            margin: 0 0 6px;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            font-family: "Press Start 2P", system-ui, sans-serif;
+        }
+
+        .subtitle {
+            margin: 0 0 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .tag {
+            font-size: 9px;
+            font-family: "Press Start 2P", system-ui, sans-serif;
+            border-radius: 999px;
+            padding: 4px 8px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            color: #e5e7eb;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .games-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .game-card {
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+            background: radial-gradient(circle at top left, rgba(236, 72, 153, 0.15), #020617);
+            padding: 10px 11px;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .game-title {
+            margin: 0;
+            font-size: 13px;
+            font-family: "Press Start 2P", system-ui, sans-serif;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .game-meta {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: monospace;
+            white-space: nowrap;
+        }
+
+        .game-desc {
+            margin: 0 0 6px;
+            font-size: 12px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 3px;
+        }
+        .pill {
+            font-size: 9px;
+            font-family: monospace;
+            border-radius: 999px;
+            padding: 2px 6px;
+            border: 1px solid #334155;
+            color: var(--text-muted);
+        }
+
+        .btn-row {
+            margin-top: 7px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: #020617;
+            color: #e5e7eb;
+            padding: 5px 10px;
+            font-size: 10px;
+            font-family: "Press Start 2P", system-ui, sans-serif;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .btn.play {
+            border-color: var(--accent-pink);
+            color: var(--accent-pink);
+        }
+        .btn.disabled {
+            opacity: 0.55;
+            cursor: default;
+        }
+        .btn:hover:not(.disabled) {
+            background: #02081f;
+        }
+
+        .mono {
+            font-family: monospace;
+        }
+
+        /* Right side: info / contact / how it works */
+        .sidebar-title {
+            margin: 0 0 4px;
+            font-size: 13px;
+            font-family: "Press Start 2P", system-ui, sans-serif;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-green);
+        }
+        .sidebar-text {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .sidebar-block + .sidebar-block {
+            margin-top: 12px;
+        }
+        ul {
+            margin: 4px 0 0 16px;
+            padding: 0;
+            font-size: 12px;
+        }
+
+        .contact-item {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+        .contact-label {
+            color: var(--text-muted);
+        }
+
+        /* Cabinet bottom controls (just for vibes) */
+        .controls {
+            margin-top: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+        }
+        .control-button {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            border: 2px solid #020617;
+            background: radial-gradient(circle at 30% 30%, #f97316, #b91c1c);
+            box-shadow:
+                0 0 10px rgba(248, 113, 113, 0.7),
+                inset 0 0 6px rgba(15, 23, 42, 0.9);
+        }
+        .control-button.blue {
+            background: radial-gradient(circle at 30% 30%, #38bdf8, #0369a1);
+            box-shadow:
+                0 0 10px rgba(56, 189, 248, 0.7),
+                inset 0 0 6px rgba(15, 23, 42, 0.9);
+        }
+        .control-bar {
+            height: 10px;
+            width: 120px;
+            border-radius: 999px;
+            background: linear-gradient(to right, #111827, #0b1120);
+            border: 1px solid #020617;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="brand">
+        <div class="brand-name">Anthony White</div>
+        <div class="brand-sub">
+            Arcade · <span class="mono">anthonycs.dev</span>
+        </div>
+    </div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/learncs/">LearnCS</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="/tools/">Tools</a>
+        <a href="/capyhost/">CapyHost</a>
+        <a href="/arcade/" class="active">Arcade</a>
+    </nav>
+</header>
+
+<main>
+    <div class="cabinet">
+        <div class="marquee">
+            <div>
+                <div class="marquee-title">Capy Arcade</div>
+                <div class="marquee-sub">
+                    Mini-games & concepts from my web + CapyOS projects.
+                </div>
+            </div>
+            <div class="marquee-badge">INSERT&nbsp;COIN</div>
+        </div>
+
+        <div class="screen">
+            <!-- LEFT: games -->
+            <section class="screen-inner">
+                <h1 class="games-header">Game Select</h1>
+                <p class="subtitle">
+                    A menu of games I’ve built or am designing. Some are for the browser, others are planned
+                    for my CapyOS ESP32-S3 desk companion.
+                </p>
+
+                <div class="tag-row">
+                    <span class="tag">CAPYOS</span>
+                    <span class="tag">ESP32-S3</span>
+                    <span class="tag">JS / Web</span>
+                    <span class="tag">MINI GAMES</span>
+                </div>
+
+                <div class="games-grid">
+                    <!-- Game 1: Capy Runner -->
+                    <article class="game-card">
+                        <div class="game-header">
+                            <h2 class="game-title">Capy Runner</h2>
+                            <span class="game-meta">STATUS: WIP · T-REX STYLE</span>
+                        </div>
+                        <p class="game-desc">
+                            An endless runner inspired by the Chrome T-Rex game, but with a capybara instead.
+                            Designed first for CapyOS as a jump-and-duck reflex game on a small screen.
+                        </p>
+                        <div class="pill-row">
+                            <span class="pill">CapyOS</span>
+                            <span class="pill">ESP32-S3</span>
+                            <span class="pill">Endless runner</span>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn disabled" title="Web version coming later">PLAY (COMING TO WEB)</button>
+                        </div>
+                    </article>
+
+                    <!-- Game 2: River Rapids -->
+                    <article class="game-card">
+                        <div class="game-header">
+                            <h2 class="game-title">River Rapids</h2>
+                            <span class="game-meta">STATUS: CONCEPT · AVOIDANCE</span>
+                        </div>
+                        <p class="game-desc">
+                            A game idea where you guide a character or boat down a river, dodging rocks and
+                            obstacles. Planned for CapyOS first, with a simple JavaScript port later.
+                        </p>
+                        <div class="pill-row">
+                            <span class="pill">CapyOS</span>
+                            <span class="pill">Obstacle dodging</span>
+                            <span class="pill">Game design practice</span>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn disabled" title="Not yet implemented">PLAY (NOT AVAILABLE)</button>
+                        </div>
+                    </article>
+
+                    <!-- Game 3: Capy Pong -->
+                    <article class="game-card">
+                        <div class="game-header">
+                            <h2 class="game-title">Capy Pong</h2>
+                            <span class="game-meta">STATUS: PLANNED</span>
+                        </div>
+                        <p class="game-desc">
+                            A Pong-style game with a capybara twist. Built to practice basic game loops,
+                            collision detection, and input handling on limited hardware.
+                        </p>
+                        <div class="pill-row">
+                            <span class="pill">Pong variant</span>
+                            <span class="pill">Game loop</span>
+                            <span class="pill">CapyOS target</span>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn disabled" title="Not yet available in the browser">PLAY (COMING SOON)</button>
+                        </div>
+                    </article>
+
+                    <!-- Game 4: Capy Snake (embedded concept) -->
+                    <article class="game-card">
+                        <div class="game-header">
+                            <h2 class="game-title">Capy Snake</h2>
+                            <span class="game-meta">STATUS: IDEA · CLASSIC</span>
+                        </div>
+                        <p class="game-desc">
+                            A classic Snake-style game adapted for CapyOS. Simple grid movement, growing tail,
+                            and score tracking – good for testing input and display updates on the ESP32-S3.
+                        </p>
+                        <div class="pill-row">
+                            <span class="pill">Classic snake</span>
+                            <span class="pill">Grid logic</span>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn disabled" title="Planned CapyOS game">PLAY (DEVICE ONLY, PLANNED)</button>
+                        </div>
+                    </article>
+                </div>
+
+                <p class="subtitle" style="margin-top: 12px;">
+                    As I build browser versions of these games, the buttons will turn into real
+                    links under <span class="mono">/arcade/&lt;game&gt;/</span>.
+                </p>
+            </section>
+
+            <!-- RIGHT: info / how-it-works / contact -->
+            <aside class="screen-inner">
+                <div class="sidebar-block">
+                    <h2 class="sidebar-title">HOW THIS ARCADE WORKS</h2>
+                    <p class="sidebar-text">
+                        Each card here maps to a real project I’m building or planning:
+                    </p>
+                    <ul>
+                        <li>CapyOS games running on my ESP32-S3 device</li>
+                        <li>Future web ports served from <span class="mono">/arcade/&lt;name&gt;/</span></li>
+                        <li>Experimenting with game loops, input, and small UIs</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-block">
+                    <h2 class="sidebar-title">ADD A NEW GAME</h2>
+                    <p class="sidebar-text">
+                        When I finish a browser version of any game, the steps are:
+                    </p>
+                    <ul>
+                        <li>Create a folder like <span class="mono">/var/www/arcade/capy-runner/</span></li>
+                        <li>Add an <span class="mono">index.html</span> for the game</li>
+                        <li>Change the button here into a real <span class="mono">&lt;a href="/arcade/capy-runner/"&gt;</span> link</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-block">
+                    <h2 class="sidebar-title">CONTACT</h2>
+                    <p class="sidebar-text">If you’re curious about any of these projects:</p>
+                    <p class="contact-item">
+                        <span class="contact-label">Email:</span>
+                        <a href="mailto:awhitecsdev@gmail.com">awhitecsdev@gmail.com</a>
+                    </p>
+                    <p class="contact-item">
+                        <span class="contact-label">GitHub:</span>
+                        <a href="https://github.com/awhitecsdev" target="_blank" rel="noopener">
+                            github.com/awhitecsdev
+                        </a>
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+        <div class="controls">
+            <div class="control-button"></div>
+            <div class="control-button blue"></div>
+            <div class="control-bar"></div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
+

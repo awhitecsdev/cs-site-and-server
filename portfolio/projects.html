@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects – Anthony White</title>
+    <link rel="stylesheet" href="/portfolio/css/style.css">
+</head>
+<body>
+<header>
+    <h1>Anthony White</h1>
+    <p>Computer Science & Electrical Engineering Student</p>
+    <nav>
+        <a href="/portfolio/index.html">Home</a>
+        <a href="/portfolio/about.html">About</a>
+        <a href="/portfolio/skills.html">Skills</a>
+        <a href="/portfolio/projects.html">Projects</a>
+        <a href="/portfolio/contact.html">Contact</a>
+        <a href="/">⮜ Server Hub</a>
+    </nav>
+</header>
+
+<main>
+    <section id="projects">
+        <h2>Projects</h2>
+
+        <article class="project">
+            <h3>CapyHost – Self-Hosted Server Stack</h3>
+            <p>
+                A Linux server that hosts my personal sites and services with Nginx and SSH.
+                I use it to learn server administration, security basics, and deployment.
+            </p>
+            <p><a href="/portfolio/projects/capyhost.html">View details →</a></p>
+        </article>
+
+        <article class="project">
+            <h3>LearnCS – Interactive CS Guide</h3>
+            <p>
+                A web platform aimed at explaining core CS topics clearly, including
+                programming basics, data structures, algorithms, and networking.
+            </p>
+            <p><a href="/portfolio/projects/learncs.html">View details →</a></p>
+        </article>
+
+        <article class="project">
+            <h3>CapyOS – ESP32-S3 Desk Companion</h3>
+            <p>
+                A small “OS” running on an ESP32-S3 with a TFT display and joystick,
+                combining mini-games with tools like clocks and alarms.
+            </p>
+            <p><a href="/portfolio/projects/capyos.html">View details →</a></p>
+        </article>
+    </section>
+</main>
+
+<footer>
+    <div class="links">
+        <a href="https://github.com/YOUR_GITHUB" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/YOUR_LINKEDIN" target="_blank">LinkedIn</a>
+        <a href="mailto:your.email@example.com">Email</a>
+        <a href="/resume.pdf">Resume (soon)</a>
+    </div>
+    <div>© <span id="year"></span> Anthony White</div>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</footer>
+</body>
+</html>
