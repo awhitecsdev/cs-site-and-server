@@ -29,6 +29,7 @@ The benchmark compares repeated exact-match lookup strategies while separating p
 
 - **Case study:** https://anthonycs.dev/projects/inventory-system/
 - **Live demo:** https://anthonycs.dev/projects/inventory-system/app.html
+- **Technical notes:** [docs/DATA_WORKBENCH.md](docs/DATA_WORKBENCH.md)
 
 ### CAPY
 An evolving embedded handheld project built around small microcontrollers, a TFT display, physical controls, storage, audio, and portable power.
@@ -36,6 +37,7 @@ An evolving embedded handheld project built around small microcontrollers, a TFT
 The project progressed from an Arduino Mega proof of concept to an ESP32-based architecture with an MCP23017 I/O expander and a redesigned six-button control layout.
 
 - **Project page:** https://anthonycs.dev/projects/capy/
+- **Technical notes:** [docs/CAPY.md](docs/CAPY.md)
 
 ### LearnCS
 A browser-based study environment for organizing and reviewing computer science material.
