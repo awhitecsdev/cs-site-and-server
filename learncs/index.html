@@ -330,6 +330,13 @@
     </h2>
     
 	    <input type="text" id="searchInput" onkeyup="filterList()" placeholder="Search for topics...">
+<div style="padding:8px 12px;background:#2f2f2f;border:1px solid #666;font-family:Arial,sans-serif;font-size:13px;">
+  <strong>Deep dives:</strong>
+  <a href="cpp.html" style="color:#fff;margin-left:10px;">C++</a>
+  <a href="data-structures.html" style="color:#fff;margin-left:10px;">Data Structures</a>
+  <a href="computer-architecture.html" style="color:#fff;margin-left:10px;">Computer Architecture</a>
+  <a href="https://anthonycs.dev/" style="color:#fff;margin-left:10px;">AnthonyCS</a>
+</div>
 <div class="container">	
 		 <div class="left">
 <body>	
@@ -340,7 +347,7 @@
             <img src="C++1.png"> C++   
         </li>
         <div id="cppInfo" class="info">
-		 <a href="https://cplusplus.com/doc/tutorial/" target="_blank">Learn more</a>
+		 <a href="cpp.html">Deep dive</a> · <a href="https://cplusplus.com/doc/tutorial/" target="_blank">Reference</a>
 		 <p>A popular use of C++ is for developing extensive software infrastructure
 		 and applications running on limited resources. C++ has the unique ability to 
 		 directly manipulate memory.</p>
@@ -396,7 +403,7 @@
         <img src="datastructures.png"> Data Structures
     </li>
     <div id="dataStructures" class="info">
-        <a href="https://en.wikipedia.org/wiki/Data_structure" target="_blank">Learn more</a>
+        <a href="data-structures.html">Deep dive</a> · <a href="https://en.wikipedia.org/wiki/Data_structure" target="_blank">Reference</a>
         <p>Data structures organize and store data efficiently. Examples include arrays, linked lists, and hash tables.</p>
     </div>
 
@@ -406,6 +413,14 @@
     <div id="algorithms" class="info">
         <a href="https://en.wikipedia.org/wiki/Algorithm" target="_blank">Learn more</a>
         <p>Algorithms are step-by-step procedures used for solving computational problems, like sorting and searching algorithms.</p>
+    </div>
+
+    <li onclick="toggleInfo('computerArchitecture')">
+        <img src="datastructures.png"> Computer Architecture
+    </li>
+    <div id="computerArchitecture" class="info">
+        <a href="computer-architecture.html">Deep dive</a>
+        <p>Connect instructions to registers, datapaths, control logic, memory hierarchy, and performance.</p>
     </div>
 
     <li onclick="toggleInfo('operatingSystems')">
