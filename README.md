@@ -9,25 +9,24 @@ Personal computer science and engineering site for projects, technical writeups,
 
 ![Data Workbench running a 23,220-row dataset](docs/images/data-workbench-overview.jpg)
 
-## What I built
+## What this repository contains
 
-AnthonyCS is a self-hosted site that I use as both a portfolio and a place to build software in public. The site is intentionally split into distinct sections instead of forcing every project into one visual system:
+AnthonyCS is self-hosted on Ubuntu/Nginx and split into intentionally different sections rather than one shared frontend.
 
-- **Projects** — engineering project pages and live demos.
-- **Portfolio** — concise professional overview, resume, contact, and selected work.
-- **LearnCS** — a study interface for computer science topics.
-- **Arcade** — standalone browser games with their own retro UI.
-- **CAPY** — documentation for an embedded handheld project.
-- **Data Workbench** — browser-based structured-data exploration and algorithm benchmarking.
+- **Portfolio** — recruiter-facing overview, resume, contact, and selected work.
+- **LearnCS** — interactive study environment.
+- **Arcade** — browser-game launcher and standalone games.
+- **CAPY** — embedded handheld project documentation.
+- **Data Workbench** — structured-data exploration and algorithm benchmarking.
+- **Docs** — architecture and technical notes.
 
-The live site is served from my own Ubuntu/Nginx host rather than a hosted site builder.
+The obsolete `home/`, `html/`, `notes/`, `tools/`, and `capyhost/` snapshots have been removed from this repository.
 
 ## Featured work
 
 ### Data Workbench
-Browser-based tooling for loading, inspecting, editing, searching, profiling, and exporting structured datasets.
 
-The benchmark compares repeated exact-match lookup strategies while separating preprocessing cost from lookup cost. On a documented 23,220-row dataset with 5,000 successful queries, the experiment exposed a major cost in the original generalized sort path and led to a type-aware numeric benchmark implementation.
+Browser-based tooling for loading, inspecting, editing, searching, profiling, benchmarking, and exporting structured datasets.
 
 - **Case study:** https://anthonycs.dev/projects/inventory-system/
 - **Live demo:** https://anthonycs.dev/projects/inventory-system/app.html
@@ -35,45 +34,42 @@ The benchmark compares repeated exact-match lookup strategies while separating p
 - **Technical notes:** [docs/DATA_WORKBENCH.md](docs/DATA_WORKBENCH.md)
 
 ### CAPY
-An evolving embedded handheld project built around small microcontrollers, a TFT display, physical controls, storage, audio, and portable power.
 
-The project progressed from an Arduino Mega proof of concept to an ESP32-based architecture with an MCP23017 I/O expander and a redesigned six-button control layout.
+Embedded handheld project that progressed from an Arduino Mega proof of concept to an ESP32 architecture with a TFT display, six-button input, MCP23017 I/O expansion, audio, battery power, and enclosure work.
 
 - **Project page:** https://anthonycs.dev/projects/capy/
 - **Technical notes:** [docs/CAPY.md](docs/CAPY.md)
 
 ### LearnCS
-A browser-based study environment for organizing and reviewing computer science material.
 
-Current emphasis is on building deeper material in systems-oriented topics rather than maximizing the number of shallow topic pages.
+Interactive computer-science study environment with deeper material in C++, data structures, and computer architecture.
 
 - **Live app:** https://anthonycs.dev/learn/
+- **Source:** [learncs/](learncs/)
 
 ### Arcade
-A collection of standalone browser games. Each game owns its own HTML/JavaScript implementation while the Arcade page acts as a launcher.
+
+Browser-game launcher with standalone games and a deliberately separate retro interface.
 
 - **Live arcade:** https://anthonycs.dev/projects/arcade/
+- **Source:** [arcade/](arcade/)
 
 ## Repository structure
 
+The remaining source is grouped by project while the production server uses the public URL structure shown on the right.
+
 ```text
-.
-├── arcade/        # Earlier Arcade frontend
-├── capyhost/      # CAPY-related web interface
-├── home/          # Earlier AnthonyCS home frontend
-├── html/          # Default/static server files
-├── learncs/       # LearnCS frontend
-├── notes/         # Notes interface
-├── portfolio/     # Portfolio pages and project writeups
-├── tools/         # Utility/tool pages
-└── docs/          # Architecture and project notes
+GitHub                          Production
+├── arcade/                    → /projects/arcade/
+├── data-workbench/            → /projects/inventory-system/
+├── learncs/                   → /learn/
+├── portfolio/                 → /portfolio/
+└── docs/                      → project/architecture documentation
 ```
 
-The production site has continued to evolve beyond some of the older snapshots in this repository. Live project pages are the best reference for the current UI and project state.
+The GitHub names will be normalized to the exact production directory structure during the next direct server sync. Until then, the live site is the authoritative UI build.
 
 ## Architecture
-
-Most of AnthonyCS is deliberately lightweight:
 
 ```text
 Browser
@@ -87,72 +83,44 @@ Static HTML / CSS / JavaScript
 Independent site sections and project applications
 ```
 
-There is no framework required to render the main site. Individual projects are kept as self-contained as practical so they can evolve without coupling every section to a shared frontend stack.
-
 More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ## Tech
 
-- HTML
-- CSS
-- JavaScript
+- HTML / CSS / JavaScript
+- C / C++
 - Linux / Ubuntu
 - Nginx
 - Git
-- ESP32 / Arduino ecosystem for CAPY
-- Data structures and browser performance work in Data Workbench
+- ESP32 / Arduino ecosystem
+- Data structures and browser performance work
+- Computer architecture and digital logic study
 
-## Hardest problem
+## Engineering approach
 
-The main engineering challenge has not been creating another static portfolio page. It has been keeping several different products coherent while letting them stay intentionally different.
+The recurring workflow is to build a usable version, run it, find the constraint, measure or debug it, and revise the design.
 
-LearnCS behaves like a study application, Arcade behaves like a game launcher, Data Workbench behaves like a data tool, and the portfolio stays restrained and recruiter-facing. The shared requirement is clear navigation, understandable project boundaries, and reliable deployment without flattening those interfaces into one generic template.
+That shows up differently across the site: Data Workbench exposes data-structure tradeoffs, CAPY exposes hardware constraints, LearnCS organizes technical study, and Arcade keeps experiments isolated as standalone games.
 
 ## Run locally
-
-Clone the repository:
 
 ```bash
 git clone https://github.com/awhitecsdev/cs-site-and-server.git
 cd cs-site-and-server
-```
-
-Serve it with any static HTTP server. For example:
-
-```bash
 python3 -m http.server 8000
 ```
 
-Then open a section directly, for example:
+Then open the source section you want to inspect:
 
 ```text
-http://localhost:8000/home/
 http://localhost:8000/portfolio/
 http://localhost:8000/learncs/
 http://localhost:8000/arcade/
+http://localhost:8000/data-workbench/
 ```
-
-Some older pages may contain paths that reflect the production server layout.
 
 ## Deployment
 
-Production is hosted on Ubuntu with Nginx and HTTPS. Static changes do not require an application server restart; updated files are served directly by Nginx.
+Production is hosted on Ubuntu with Nginx and HTTPS. Static changes are served directly by Nginx.
 
-Server credentials, private configuration, certificates, and other secrets are intentionally not stored in this repository.
-
-## Direction
-
-Current work is focused on:
-
-- publishing cleaner project source and documentation,
-- improving Data Workbench functionality,
-- deepening selected LearnCS topics,
-- documenting CAPY architecture and hardware decisions,
-- and adding more low-level / digital-hardware work over time.
-
-
-
-## GitHub profile / repository setup
-
-- [Prepared profile README](docs/PROFILE_README.md)
-- [Repository description, homepage, topics, and pinning plan](docs/GITHUB_METADATA.md)
+Server credentials, SSH keys, certificates, and other secrets are intentionally not stored in this repository.
