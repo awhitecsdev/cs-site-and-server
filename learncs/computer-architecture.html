@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Computer Architecture Deep Dive | LearnCS</title><link rel="stylesheet" href="deep-dive.css"></head><body>
+<header class="top"><a class="brand" href="index.html">LearnCS</a><nav><a href="cpp.html">C++</a><a href="data-structures.html">Data Structures</a><a href="https://anthonycs.dev/">AnthonyCS</a></nav></header>
+<main><div class="hero"><p class="eyebrow">LEARNCS / COMPUTER ARCHITECTURE</p><h1>Follow an instruction through the machine.</h1><p>Computer architecture becomes easier when each abstraction is connected to the layer below it: instruction, datapath, control, memory, and physical state.</p><div class="path"><span>ISA</span><span>Registers</span><span>Datapath</span><span>Control</span><span>Memory</span><span>Performance</span></div></div>
+<section><h2>1. ISA is the contract</h2><p>An instruction set architecture defines the software-visible machine: instructions, registers, data types, addressing rules, exceptions, and other behavior software can rely on.</p><p>RISC-V is useful for study because its base instruction formats are regular and the architecture separates a small core ISA from optional extensions.</p></section>
+<section><h2>2. Example: an add instruction</h2><pre><code>add x5, x6, x7
+
+1. instruction is fetched
+2. fields identify rd=x5, rs1=x6, rs2=x7
+3. register file reads x6 and x7
+4. ALU performs addition
+5. result is written to x5
+6. PC advances</code></pre>
+<p>The assembly mnemonic is only the top layer. Under it are encoded bits, control signals, multiplexers, register ports, an ALU operation, and clocked state updates.</p></section>
+<section><h2>3. Combinational vs sequential logic</h2><div class="grid"><div class="card"><h3>Combinational</h3><p class="muted">Output depends on current inputs. Examples: adders, muxes, decoders, ALU logic.</p></div><div class="card"><h3>Sequential</h3><p class="muted">State persists across time. Examples: registers, counters, flip-flops, memories.</p></div></div>
+<p>A CPU datapath is a combination of both: combinational logic computes candidate values; sequential elements capture architectural state on clock edges.</p></section>
+<section><h2>4. Why the memory hierarchy exists</h2><p>Fast storage is expensive and physically constrained. Systems therefore use layers:</p><pre><code>registers
+   ↓
+L1 / L2 / L3 cache
+   ↓
+main memory
+   ↓
+persistent storage</code></pre>
+<p>Programs that reuse nearby data often perform better because caches transfer and retain data in blocks. This is why data layout connects directly to software performance.</p>
+<div class="exercise"><strong>Exercise:</strong> explain why iterating linearly through a contiguous vector is usually friendlier to caches than chasing nodes in a linked list.</div></section>
+<section><h2>5. Performance requires a denominator</h2><p>“Faster CPU” is incomplete. Execution time depends on the work performed, instruction mix, cycles per instruction, clock rate, cache behavior, branch behavior, and implementation.</p><pre><code>CPU time ≈ instruction count × CPI × clock period</code></pre>
+<p>The equation is a model, not a guarantee. Improving one term can affect another.</p></section>
+<section><h2>6. Checkpoint</h2><ul class="checkpoint"><li>Trace one arithmetic instruction from fetch through write-back.</li><li>Distinguish the ISA from a specific microarchitecture.</li><li>Identify which datapath elements store state and which only transform signals.</li><li>Explain caches through locality rather than “they make memory faster.”</li><li>Connect a software data-layout decision to hardware behavior.</li></ul></section></main>
+<footer><span>LearnCS</span><a href="index.html">← Study Guide</a></footer></body></html>
