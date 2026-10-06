@@ -150,3 +150,9 @@ Current work is focused on:
 - documenting CAPY architecture and hardware decisions,
 - and adding more low-level / digital-hardware work over time.
 
+
+
+## GitHub profile / repository setup
+
+- [Prepared profile README](docs/PROFILE_README.md)
+- [Repository description, homepage, topics, and pinning plan](docs/GITHUB_METADATA.md)
