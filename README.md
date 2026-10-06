@@ -7,6 +7,8 @@ Personal computer science and engineering site for projects, technical writeups,
 **Projects:** https://anthonycs.dev/projects/  
 **LearnCS:** https://anthonycs.dev/learn/
 
+![Data Workbench running a 23,220-row dataset](docs/images/data-workbench-overview.jpg)
+
 ## What I built
 
 AnthonyCS is a self-hosted site that I use as both a portfolio and a place to build software in public. The site is intentionally split into distinct sections instead of forcing every project into one visual system:
@@ -29,6 +31,7 @@ The benchmark compares repeated exact-match lookup strategies while separating p
 
 - **Case study:** https://anthonycs.dev/projects/inventory-system/
 - **Live demo:** https://anthonycs.dev/projects/inventory-system/app.html
+- **Source:** [data-workbench/](data-workbench/)
 - **Technical notes:** [docs/DATA_WORKBENCH.md](docs/DATA_WORKBENCH.md)
 
 ### CAPY
