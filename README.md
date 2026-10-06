@@ -7,7 +7,7 @@ Personal computer science and engineering site for projects, technical writeups,
 **Projects:** https://anthonycs.dev/projects/  
 **LearnCS:** https://anthonycs.dev/learn/
 
-![Data Workbench running a 23,220-row dataset](docs/images/data-workbench-overview.jpg)
+
 
 ## Repository structure
 
