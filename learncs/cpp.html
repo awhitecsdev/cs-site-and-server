@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C++ Deep Dive | LearnCS</title><link rel="stylesheet" href="deep-dive.css"></head><body>
+<header class="top"><a class="brand" href="index.html">LearnCS</a><nav><a href="data-structures.html">Data Structures</a><a href="computer-architecture.html">Architecture</a><a href="https://anthonycs.dev/">AnthonyCS</a></nav></header>
+<main><div class="hero"><p class="eyebrow">LEARNCS / C++</p><h1>C++ from memory upward.</h1><p>Focus on the parts of C++ that matter when you care about representation, ownership, lifetime, and how software maps onto a machine.</p><div class="path"><span>Objects</span><span>Memory</span><span>References</span><span>RAII</span><span>Containers</span><span>Performance</span></div></div>
+<section><h2>1. Start with representation</h2><p>A variable is not just a name. It has a type, a size, a lifetime, and some location in memory. C++ exposes enough of that model to make data layout part of program design.</p><div class="grid"><div class="card"><h3>Value</h3><p class="muted">The object itself. Copying a value normally creates another object with its own state.</p></div><div class="card"><h3>Reference</h3><p class="muted">An alias for an existing object. A reference does not create a second copy of that object.</p></div><div class="card"><h3>Pointer</h3><p class="muted">A value that stores an address. It can be reassigned and can also be null.</p></div><div class="card"><h3>Lifetime</h3><p class="muted">The interval during which an object exists and may be used legally.</p></div></div>
+<pre><code>int value = 42;
+int& reference = value;
+int* pointer = &value;
+
+reference += 1;   // changes value
+*pointer += 1;    // also changes value</code></pre></section>
+<section><h2>2. Stack, dynamic storage, and ownership</h2><p>Automatic objects are destroyed when their scope ends. Dynamically allocated objects outlive the expression that created them and need an ownership strategy.</p><pre><code>void automatic_storage() {
+    Widget w;            // destroyed at end of scope
+}
+
+auto p = std::make_unique&lt;Widget&gt;();
+// p owns the Widget.
+// destruction follows p automatically.</code></pre>
+<p>Modern C++ usually expresses ownership with RAII types such as <code>std::unique_ptr</code>, containers, file streams, locks, and other objects whose destructors release resources.</p>
+<div class="exercise"><strong>Exercise:</strong> write a small type that prints from its constructor and destructor. Create it in nested scopes and predict the destruction order before running it.</div></section>
+<section><h2>3. Copies are a design decision</h2><p>Passing a large object by value can create a copy. Passing by const reference gives read-only access to the existing object.</p><pre><code>void inspect(const std::vector&lt;int&gt;& values) {
+    // no vector copy
+}
+
+void consume(std::vector&lt;int&gt; values) {
+    // owns its parameter copy/move
+}</code></pre>
+<p>The right choice depends on intent. Do not mechanically replace every value parameter with a reference.</p></section>
+<section><h2>4. Containers are data-structure choices</h2><div class="grid"><div class="card"><h3>std::vector</h3><p class="muted">Contiguous memory, fast iteration and indexing, amortized append. Usually the default sequence.</p></div><div class="card"><h3>std::unordered_map</h3><p class="muted">Hash-based key lookup. Strong when repeated exact-key access matters.</p></div><div class="card"><h3>std::map</h3><p class="muted">Ordered tree structure. Keeps keys sorted and gives logarithmic operations.</p></div><div class="card"><h3>std::array</h3><p class="muted">Fixed-size contiguous storage with value semantics.</p></div></div></section>
+<section><h2>5. Checkpoint</h2><ul class="checkpoint"><li>Explain the difference between an object, a reference, and a pointer without using the word “basically.”</li><li>Explain why RAII prevents entire classes of cleanup bugs.</li><li>Know when copying is intentional versus accidental.</li><li>Choose a container from workload requirements, not familiarity.</li><li>Be able to reason about object lifetime across nested scopes.</li></ul></section></main>
+<footer><span>LearnCS</span><a href="index.html">← Study Guide</a></footer></body></html>
