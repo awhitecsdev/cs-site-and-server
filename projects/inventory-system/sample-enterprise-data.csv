@@ -1,0 +1,21 @@
+year,industry_code_ANZSIC,industry_name_ANZSIC,rme_size_grp,variable,value,unit
+2025,A,Agriculture Forestry and Fishing,6-9 employees,Sales of goods and services,1842,dollars
+2025,A,Agriculture Forestry and Fishing,10-19 employees,Sales of goods and services,3921,dollars
+2025,C,Manufacturing,6-9 employees,Sales of goods and services,7855,dollars
+2025,C,Manufacturing,20-49 employees,Total income,22940,dollars
+2025,F,Wholesale Trade,10-19 employees,Total income,13112,dollars
+2025,G,Retail Trade,6-9 employees,Total expenditure,5540,dollars
+2025,H,Accommodation and Food Services,10-19 employees,Sales of goods and services,8422,dollars
+2025,I,Transport Postal and Warehousing,20-49 employees,Total income,17501,dollars
+2025,J,Information Media and Telecommunications,10-19 employees,Total income,12890,dollars
+2025,K,Financial and Insurance Services,50-99 employees,Total income,38450,dollars
+2025,L,Rental Hiring and Real Estate Services,6-9 employees,Total expenditure,4201,dollars
+2025,M,Professional Scientific and Technical Services,10-19 employees,Total income,15672,dollars
+2025,N,Administrative and Support Services,20-49 employees,Sales of goods and services,14109,dollars
+2025,O,Public Administration and Safety,50-99 employees,Total expenditure,27331,dollars
+2025,P,Education and Training,10-19 employees,Total income,9344,dollars
+2025,Q,Health Care and Social Assistance,20-49 employees,Total income,21870,dollars
+2025,R,Arts and Recreation Services,6-9 employees,Sales of goods and services,5118,dollars
+2025,S,Other Services,10-19 employees,Total expenditure,6782,dollars
+2024,C,Manufacturing,20-49 employees,Total income,21702,dollars
+2024,M,Professional Scientific and Technical Services,10-19 employees,Total income,14920,dollars

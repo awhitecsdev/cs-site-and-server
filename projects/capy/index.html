@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CAPY | AnthonyCS</title>
+
+    <meta
+        name="description"
+        content="CAPY is an evolving ESP32-based handheld computing platform exploring embedded systems, hardware constraints, physical controls, firmware, and iterative engineering."
+    >
+
+    <link rel="stylesheet" href="capy.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav-inner">
+
+        <a class="brand" href="/">
+            AnthonyCS
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="/projects/">Projects</a>
+            <a href="/portfolio/">Portfolio</a>
+            <a href="/learn/">LearnCS</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <!-- ==================================================
+         HERO
+         ================================================== -->
+
+    <section class="hero">
+        <div class="container">
+
+            <p class="eyebrow">
+                Embedded Systems / Active Development
+            </p>
+
+            <h1>CAPY</h1>
+
+            <p class="hero-subtitle">
+                A handheld computing platform developed through iterative
+                hardware, firmware, and physical-interface design.
+            </p>
+
+
+            <div class="hero-meta">
+
+                <div>
+                    <span>Platform</span>
+                    <strong>ESP32</strong>
+                </div>
+
+                <div>
+                    <span>Display</span>
+                    <strong>320 × 240 TFT</strong>
+                </div>
+
+                <div>
+                    <span>Input</span>
+                    <strong>D-pad + A / B</strong>
+                </div>
+
+                <div>
+                    <span>I/O Expansion</span>
+                    <strong>MCP23017</strong>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==================================================
+         OVERVIEW
+         ================================================== -->
+
+    <section class="section">
+
+        <div class="container split">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">
+                    Overview
+                </p>
+
+                <h2>
+                    Building a handheld from the hardware upward
+                </h2>
+
+            </div>
+
+
+            <div class="prose">
+
+                <p>
+                    CAPY began as an experiment in building a compact
+                    microcontroller-based handheld with a graphical interface
+                    and dedicated physical controls.
+                </p>
+
+                <p>
+                    As the project developed, size, available I/O, wiring,
+                    input design, power, and enclosure thickness became
+                    engineering constraints of their own.
+                </p>
+
+                <p>
+                    The current design evolved from an Arduino Mega proof
+                    of concept into a smaller ESP32-based system with
+                    expanded I/O, six-button controls, audio, portable power,
+                    and wireless capability.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         ENGINEERING SNAPSHOT
+         ================================================== -->
+
+    <section class="section section-alt">
+
+        <div class="container">
+
+            <div class="section-heading wide">
+
+                <p class="eyebrow">
+                    Engineering Snapshot
+                </p>
+
+                <h2>
+                    What the project demonstrates
+                </h2>
+
+            </div>
+
+
+            <div class="decision-grid">
+
+                <article>
+
+                    <span>What I built</span>
+
+                    <h3>
+                        Handheld hardware + firmware platform
+                    </h3>
+
+                    <p>
+                        Iterated from an Arduino Mega proof of concept
+                        to an ESP32 handheld with display, physical controls,
+                        I/O expansion, audio, battery power, and enclosure.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>Tech</span>
+
+                    <h3>
+                        ESP32 / C++ / MCP23017
+                    </h3>
+
+                    <p>
+                        TFT_eSPI-compatible display, I²C GPIO expansion,
+                        six-button input, speaker output, Wi-Fi, and
+                        breadboard-based hardware integration.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>Hardest problem</span>
+
+                    <h3>
+                        Constraints moved as the device shrank
+                    </h3>
+
+                    <p>
+                        Reducing controller size exposed new GPIO, wiring,
+                        input, and enclosure constraints, so the design
+                        had to change rather than simply scale down.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <p class="technical-notes-link">
+                <a href="https://github.com/awhitecsdev/cs-site-and-server/blob/main/docs/CAPY.md">
+                    Technical notes on GitHub →
+                </a>
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         DEVELOPMENT
+         ================================================== -->
+
+    <section class="section section-alt">
+
+        <div class="container">
+
+            <div class="section-heading wide">
+
+                <p class="eyebrow">
+                    Development
+                </p>
+
+                <h2>
+                    Prototype evolution
+                </h2>
+
+            </div>
+
+
+            <!-- PROTOTYPE 1 -->
+
+            <article class="prototype">
+
+                <div class="prototype-media">
+
+                    <div class="media-frame">
+
+                        <video
+                            controls
+                            playsinline
+                            preload="metadata"
+                        >
+                            <source
+                                src="media/video/capy-demo-2025-07-21.mp4"
+                                type="video/mp4"
+                            >
+
+                            Your browser does not support HTML video.
+                        </video>
+
+                    </div>
+
+                    <p class="caption">
+                        Prototype 01 — July 21, 2025
+                    </p>
+
+                </div>
+
+
+                <div class="prototype-copy">
+
+                    <div class="prototype-title">
+
+                        <span>01</span>
+
+                        <div>
+                            <p>Arduino Mega 2560</p>
+                            <h3>Proof of concept</h3>
+                        </div>
+
+                    </div>
+
+
+                    <p>
+                        The original CAPY used an Arduino Mega 2560,
+                        TFT display, analog joystick, breadboards, and
+                        jumper wiring.
+                    </p>
+
+                    <p>
+                        The Mega provided plenty of I/O and made it easy
+                        to validate the basic concept, but its physical
+                        footprint was too large for the compact handheld
+                        I wanted.
+                    </p>
+
+
+                    <div class="change">
+
+                        <strong>Design decision</strong>
+
+                        <span>
+                            Replace the Mega with a much smaller ESP32.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROTOTYPE 2 -->
+
+            <article class="prototype prototype-second">
+
+                <div class="prototype-copy">
+
+                    <div class="prototype-title">
+
+                        <span>02</span>
+
+                        <div>
+                            <p>ESP32</p>
+                            <h3>Handheld architecture</h3>
+                        </div>
+
+                    </div>
+
+
+                    <p>
+                        Prototype 02 moved the system to an ESP32 while
+                        initially retaining the TFT and planned joystick
+                        interface.
+                    </p>
+
+                    <p>
+                        During breadboard development, the input design
+                        changed and the number of available GPIO connections
+                        became increasingly restrictive.
+                    </p>
+
+                    <p>
+                        I added an MCP23017 I/O expander and replaced the
+                        joystick with six digital controls: a four-button
+                        D-pad plus A/Select and B/Back.
+                    </p>
+
+                    <p>
+                        The breadboards and jumper wiring then became the
+                        next physical constraint. They worked for development,
+                        but made the device thicker and less organized than
+                        I wanted, leading to the custom enclosed version.
+                    </p>
+
+
+                    <div class="change">
+
+                        <strong>Result</strong>
+
+                        <span>
+                            ESP32 + MCP23017 + D-pad/A/B + speaker +
+                            battery + custom enclosure.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="prototype-gallery">
+
+                    <figure>
+
+                        <img
+                            src="media/images/capy-prototype-01-2025-09-04.jpg"
+                            alt="CAPY ESP32 breadboard development."
+                        >
+
+                        <figcaption>
+                            <strong>Sept 4</strong>
+                            ESP32 breadboard stage
+                        </figcaption>
+
+                    </figure>
+
+
+                    <figure>
+
+                        <img
+                            src="media/images/capy-prototype-02-2025-09-05.jpg"
+                            alt="CAPY control and peripheral development."
+                        >
+
+                        <figcaption>
+                            <strong>Sept 5</strong>
+                            Controls and peripherals
+                        </figcaption>
+
+                    </figure>
+
+
+                    <figure>
+
+                        <img
+                            src="media/images/capy-prototype-03-2025-09-07.jpg"
+                            alt="CAPY integrated handheld enclosure."
+                        >
+
+                        <figcaption>
+                            <strong>Sept 7</strong>
+                            Integrated handheld
+                        </figcaption>
+
+                    </figure>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         HARDWARE
+         ================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-heading wide">
+
+                <p class="eyebrow">
+                    Current Hardware
+                </p>
+
+                <h2>
+                    ESP32-based system
+                </h2>
+
+            </div>
+
+
+            <div class="hardware-grid">
+
+                <article>
+                    <span>Processor</span>
+                    <h3>ESP32</h3>
+                    <p>
+                        Main processor with integrated Wi-Fi and Bluetooth.
+                    </p>
+                </article>
+
+
+                <article>
+                    <span>Display</span>
+                    <h3>320 × 240 TFT</h3>
+                    <p>
+                        TFT_eSPI-compatible graphical display.
+                    </p>
+                </article>
+
+
+                <article>
+                    <span>Input</span>
+                    <h3>6 buttons</h3>
+                    <p>
+                        Four-direction D-pad with A/Select and B/Back.
+                    </p>
+                </article>
+
+
+                <article>
+                    <span>I/O</span>
+                    <h3>MCP23017</h3>
+                    <p>
+                        I²C GPIO expansion for the physical controls.
+                    </p>
+                </article>
+
+
+                <article>
+                    <span>Audio</span>
+                    <h3>Speaker</h3>
+                    <p>
+                        Local audio output driven by the ESP32.
+                    </p>
+                </article>
+
+
+                <article>
+                    <span>Power</span>
+                    <h3>Battery</h3>
+                    <p>
+                        Portable power for standalone operation.
+                    </p>
+                </article>
+
+            </div>
+
+
+            <div class="technical-table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Mapping</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>I²C SDA</td>
+                            <td>GPIO 27</td>
+                        </tr>
+
+                        <tr>
+                            <td>I²C SCL</td>
+                            <td>GPIO 22</td>
+                        </tr>
+
+                        <tr>
+                            <td>MCP23017</td>
+                            <td><code>0x27</code></td>
+                        </tr>
+
+                        <tr>
+                            <td>Buttons</td>
+                            <td>PA0, PA1, PA2, PA5, PA6, PA7</td>
+                        </tr>
+
+                        <tr>
+                            <td>Speaker</td>
+                            <td>GPIO 26</td>
+                        </tr>
+
+                        <tr>
+                            <td>Backlight</td>
+                            <td>GPIO 21</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         ENGINEERING DECISIONS
+         ================================================== -->
+
+    <section class="section section-alt">
+
+        <div class="container">
+
+            <div class="section-heading wide">
+
+                <p class="eyebrow">
+                    Engineering Decisions
+                </p>
+
+                <h2>
+                    Constraints shaped the design
+                </h2>
+
+            </div>
+
+
+            <div class="decision-grid">
+
+                <article>
+
+                    <span>01</span>
+
+                    <h3>
+                        Mega → ESP32
+                    </h3>
+
+                    <p>
+                        The Mega provided excellent I/O capacity but was
+                        physically too large. The ESP32 dramatically reduced
+                        the controller footprint.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>02</span>
+
+                    <h3>
+                        Joystick → D-pad
+                    </h3>
+
+                    <p>
+                        The original analog joystick was replaced with
+                        dedicated digital controls that better fit the
+                        evolving handheld interface.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>03</span>
+
+                    <h3>
+                        Add MCP23017
+                    </h3>
+
+                    <p>
+                        I/O expansion allowed six buttons to be supported
+                        without consuming the remaining ESP32 GPIO.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>04</span>
+
+                    <h3>
+                        Breadboards → integrated hardware
+                    </h3>
+
+                    <p>
+                        Breadboards accelerated development but introduced
+                        unnecessary thickness and wiring complexity.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         ESP32 TRADEOFF
+         ================================================== -->
+
+    <section class="section">
+
+        <div class="container split">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">
+                    Platform Tradeoffs
+                </p>
+
+                <h2>
+                    The ESP32 solves some problems and creates others
+                </h2>
+
+            </div>
+
+
+            <div class="prose">
+
+                <p>
+                    The ESP32 gives CAPY a compact processor platform,
+                    but available I/O, memory, processing resources, and
+                    physical integration remain important constraints as
+                    the system grows.
+                </p>
+
+                <p>
+                    Its built-in wireless hardware is a major reason to keep
+                    using it. Wi-Fi already supports network functionality
+                    such as NTP time synchronization and can later support
+                    weather data, OTA updates, and other online services.
+                </p>
+
+                <p>
+                    Bluetooth provides another path for local communication,
+                    accessories, data sharing, and possible multiplayer
+                    functionality.
+                </p>
+
+
+                <div class="wireless-grid">
+
+                    <div>
+                        <strong>Wi-Fi</strong>
+                        <span>
+                            NTP, OTA, weather, online services
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong>Bluetooth</strong>
+                        <span>
+                            Sharing, accessories, local communication
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         FUTURE
+         ================================================== -->
+
+    <section class="section future-section">
+
+        <div class="container">
+
+            <div class="section-heading wide">
+
+                <p class="eyebrow">
+                    Next Revision
+                </p>
+
+                <h2>
+                    Smaller and more purpose-built
+                </h2>
+
+                <p>
+                    The next hardware revision will focus primarily on
+                    reducing physical size and replacing temporary
+                    prototyping hardware.
+                </p>
+
+            </div>
+
+
+            <div class="future-grid">
+
+                <article>
+
+                    <span>01</span>
+
+                    <h3>
+                        Soldered hardware
+                    </h3>
+
+                    <p>
+                        Move from removable breadboards to solderable
+                        prototyping board / perfboard with permanent,
+                        shorter hard-wired connections.
+                    </p>
+
+                    <p>
+                        This should eliminate much of the plastic and
+                        connector height that currently contributes to
+                        the device's thickness.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>02</span>
+
+                    <h3>
+                        3D-printed shell
+                    </h3>
+
+                    <p>
+                        Design an enclosure around the actual component
+                        dimensions instead of fitting components into a
+                        manually built shell.
+                    </p>
+
+                    <p>
+                        Display mounting, buttons, battery placement,
+                        speaker openings, and internal supports can then
+                        be designed as part of one system.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>03</span>
+
+                    <h3>
+                        Evaluate Pico / Pico W
+                    </h3>
+
+                    <p>
+                        A future revision may compare the ESP32 with the
+                        Raspberry Pi Pico family for I/O, memory,
+                        performance, board layout, and software support.
+                    </p>
+
+                    <p>
+                        Because wireless functionality is valuable to CAPY,
+                        a Pico W-class platform would be the more direct
+                        alternative if connectivity remains a requirement.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>04</span>
+
+                    <h3>
+                        Deeper hardware
+                    </h3>
+
+                    <p>
+                        Longer-term CAPY development can expand into custom
+                        peripherals, FPGA-based components, and increasingly
+                        low-level digital hardware.
+                    </p>
+
+                    <p>
+                        The goal is for CAPY to continue evolving alongside
+                        my understanding of embedded systems and computer
+                        architecture.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <div class="page-end">
+
+                <p>
+                    CAPY remains an active engineering project. Future
+                    revisions will continue to document the problems,
+                    decisions, and tradeoffs that shape the system.
+                </p>
+
+                <a href="/projects/">
+                    ← Back to Projects
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-inner">
+
+        <span>
+            AnthonyCS / CAPY
+        </span>
+
+        <a href="/projects/">
+            Projects
+        </a>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

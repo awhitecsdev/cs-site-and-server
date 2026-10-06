@@ -1,18 +1,10 @@
-# System
+*.swp
+*.swo
+*~
+*.bak
+.backups/
+*.before-*
 .DS_Store
 Thumbs.db
-
-# Python / backend
-venv/
-__pycache__/
-*.pyc
-
-# Node / frontend (if you ever add build tools)
-node_modules/
-dist/
-build/
-
-# Logs
-*.log
-logs/
-
+*.heic
+*.MOV

@@ -1,0 +1,5378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pocket Pet — a persistent virtual pet game in AnthonyCS Arcade.">
+    <title>Pocket Pet | AnthonyCS Arcade</title>
+
+    <style>
+        :root {
+            --bg: #050608;
+            --panel: #0d0f14;
+            --panel-2: #151821;
+            --border: #2b2e39;
+            --text: #efefe9;
+            --muted: #777c88;
+            --cyan: #58efff;
+            --magenta: #ff57c7;
+            --yellow: #ffe26c;
+            --green: #63e486;
+
+            --shell: #d7c885;
+            --shell-dark: #8b7e4c;
+            --shell-light: #eee2a6;
+
+            --lcd: #a8b47b;
+            --lcd-light: #bec991;
+            --lcd-mid: #667253;
+            --lcd-dark: #263022;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text);
+            background:
+                linear-gradient(rgba(255,255,255,.014) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px),
+                radial-gradient(circle at 50% 0%, #171326 0%, #090a10 42%, #040406 100%);
+            background-size: 34px 34px, 34px 34px, auto;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .page {
+            width: min(calc(100% - 28px), 980px);
+            margin: 0 auto;
+            padding: 24px 0 48px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 34px;
+            color: var(--muted);
+            font-size: .64rem;
+            letter-spacing: .08em;
+        }
+
+        .topbar a:hover {
+            color: var(--cyan);
+        }
+
+        .intro {
+            max-width: 680px;
+            margin: 0 auto 28px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--cyan);
+            font-size: .59rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: Arial Black, Impact, sans-serif;
+            font-size: clamp(3.7rem, 11vw, 6.7rem);
+            font-style: italic;
+            letter-spacing: -.055em;
+            line-height: .88;
+            text-shadow:
+                3px 3px 0 #512363,
+                6px 6px 0 #174f62;
+        }
+
+        .intro-copy {
+            max-width: 610px;
+            margin: 18px auto 0;
+            color: #a0a4af;
+            font-family: system-ui, sans-serif;
+            font-size: .88rem;
+            line-height: 1.65;
+        }
+
+        .game-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .toy {
+            position: relative;
+            width: min(100%, 600px);
+            padding: 46px 46px 34px;
+            background:
+                radial-gradient(circle at 28% 16%, rgba(255,255,255,.24), transparent 24%),
+                linear-gradient(145deg, var(--shell-light), var(--shell) 58%, #b8a865);
+            border: 4px solid var(--shell-dark);
+            border-radius: 46% 46% 39% 39% / 30% 30% 42% 42%;
+            box-shadow:
+                inset 0 0 0 3px rgba(255,255,255,.12),
+                inset 0 -24px 42px rgba(82,68,30,.18),
+                0 34px 90px rgba(0,0,0,.46);
+        }
+
+        .keyring {
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            width: 56px;
+            height: 38px;
+            transform: translateX(-50%);
+            border: 6px solid #a99b61;
+            border-bottom: 0;
+            border-radius: 28px 28px 0 0;
+        }
+
+        .toy-logo {
+            margin-bottom: 13px;
+            color: #625838;
+            font-family: Arial Black, sans-serif;
+            font-size: .72rem;
+            letter-spacing: .14em;
+            text-align: center;
+        }
+
+        .toy-logo span {
+            color: #704c75;
+        }
+
+        .screen-bezel {
+            padding: 13px;
+            background: linear-gradient(145deg, #6c664b, #4d4938);
+            border: 3px solid #82795a;
+            border-radius: 14px;
+            box-shadow: inset 0 0 18px rgba(0,0,0,.55);
+        }
+
+        .screen {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 6 / 5;
+            background: var(--lcd);
+            border: 4px solid #30372c;
+            border-radius: 8px;
+            box-shadow:
+                inset 0 0 35px rgba(39,48,34,.22),
+                0 0 0 1px rgba(255,255,255,.08);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+            cursor: pointer;
+            touch-action: none;
+        }
+
+        .screen::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: .18;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(39,48,34,.16) 0,
+                    rgba(39,48,34,.16) 1px,
+                    transparent 1px,
+                    transparent 4px
+                );
+        }
+
+        .buttons {
+            width: 74%;
+            margin: 30px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .button-wrap {
+            text-align: center;
+        }
+
+        .toy-button {
+            width: 100%;
+            aspect-ratio: 1;
+            padding: 0;
+            color: #ddce91;
+            background:
+                radial-gradient(circle at 38% 28%, #7c7048, #443e2c 70%);
+            border: 3px solid #8d8053;
+            border-radius: 50%;
+            box-shadow:
+                inset 0 -6px 9px rgba(0,0,0,.34),
+                0 6px 10px rgba(0,0,0,.23);
+            cursor: pointer;
+            transition: transform 70ms ease, filter 70ms ease;
+        }
+
+        .toy-button:hover {
+            filter: brightness(1.08);
+        }
+
+        .toy-button:active,
+        .toy-button.pressed {
+            transform: translateY(4px);
+        }
+
+        .toy-button strong {
+            display: block;
+            font-size: 1rem;
+        }
+
+        .button-label {
+            display: block;
+            margin-top: 7px;
+            color: #756944;
+            font-size: .54rem;
+            letter-spacing: .08em;
+        }
+
+        .manual {
+            width: min(100%, 600px);
+            margin: 18px auto 0;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            color: #656a77;
+            background: rgba(11,12,18,.8);
+            border: 1px solid #242731;
+            border-radius: 7px;
+            font-size: .58rem;
+            line-height: 1.5;
+        }
+
+        .manual strong {
+            color: #9ba0ac;
+            font-weight: 500;
+        }
+
+        .status-strip {
+            width: min(100%, 600px);
+            margin: 10px auto 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid #242731;
+            background: #090a0f;
+        }
+
+        .status-strip > div {
+            padding: 10px 12px;
+            border-right: 1px solid #242731;
+        }
+
+        .status-strip > div:last-child {
+            border-right: 0;
+        }
+
+        .status-strip span {
+            display: block;
+            color: #555a67;
+            font-size: .49rem;
+            letter-spacing: .08em;
+        }
+
+        .status-strip strong {
+            display: block;
+            margin-top: 3px;
+            color: #969ba8;
+            font-size: .66rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .toy {
+                padding: 36px 24px 28px;
+            }
+
+            .buttons {
+                width: 82%;
+                gap: 14px;
+            }
+
+            .manual {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .status-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .status-strip > div {
+                border-bottom: 1px solid #242731;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <header class="topbar">
+        <a href="/projects/arcade/">← BACK TO ARCADE</a>
+        <span>CABINET 03 / VIRTUAL PET</span>
+    </header>
+
+    <section class="intro">
+        <p class="eyebrow">AnthonyCS Virtual Pet System</p>
+        <h1>POCKET PET</h1>
+        <p class="intro-copy">
+            Raise a tiny creature from an egg, take care of its needs, earn coins
+            through games, and turn its room into its own little home.
+        </p>
+    </section>
+
+    <main class="game-wrap">
+
+        <section class="toy" aria-label="Pocket Pet virtual pet device">
+
+            <div class="keyring" aria-hidden="true"></div>
+
+            <div class="toy-logo">
+                ANTHONY<span>CS</span> PET
+            </div>
+
+            <div class="screen-bezel">
+                <div class="screen">
+                    <canvas
+                        id="gameCanvas"
+                        width="384"
+                        height="320"
+                        aria-label="Pocket Pet game screen"
+                    ></canvas>
+                </div>
+            </div>
+
+            <div class="buttons">
+
+                <div class="button-wrap">
+                    <button id="buttonA" class="toy-button" type="button" aria-label="A button">
+                        <strong>A</strong>
+                    </button>
+                    <span class="button-label">NEXT / LEFT</span>
+                </div>
+
+                <div class="button-wrap">
+                    <button id="buttonB" class="toy-button" type="button" aria-label="B button">
+                        <strong>B</strong>
+                    </button>
+                    <span class="button-label">SELECT / ACTION</span>
+                </div>
+
+                <div class="button-wrap">
+                    <button id="buttonC" class="toy-button" type="button" aria-label="C button">
+                        <strong>C</strong>
+                    </button>
+                    <span class="button-label">BACK / RIGHT</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div class="manual">
+        <span><strong>Keyboard:</strong> A / B / C or ← / Enter / →</span>
+        <span><strong>Tip:</strong> the menu icons on the LCD can also be clicked.</span>
+    </div>
+
+    <div class="status-strip">
+        <div>
+            <span>SAVE</span>
+            <strong>AUTO</strong>
+        </div>
+        <div>
+            <span>PROGRESSION</span>
+            <strong>PERSISTENT</strong>
+        </div>
+        <div>
+            <span>GAMES</span>
+            <strong>3</strong>
+        </div>
+        <div>
+            <span>ROOM</span>
+            <strong>CUSTOMIZABLE</strong>
+        </div>
+    </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   SETUP
+========================================================= */
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+ctx.imageSmoothingEnabled = false;
+
+const WIDTH = canvas.width;
+const HEIGHT = canvas.height;
+
+const previewMode = window.self !== window.top;
+
+const COLORS = {
+    bg: "#a8b47b",
+    light: "#bec991",
+    mid: "#667253",
+    dark: "#263022",
+    shadow: "rgba(38,48,34,.22)"
+};
+
+const SAVE_KEY = "anthonycs-pocket-pet-v2";
+const TICK_MS = 30000;
+
+
+/* =========================================================
+   GAME DATA
+========================================================= */
+
+function createDefaultState() {
+    return {
+        version: 2,
+
+        pet: {
+            name: "Mochi",
+            hatched: false,
+            stage: "egg",
+            form: null,
+            ageMinutes: 0,
+
+            hunger: 72,
+            happiness: 72,
+            health: 100,
+            energy: 85,
+            discipline: 40,
+            cleanliness: 100,
+
+            weight: 5,
+            sick: false,
+            poop: 0,
+            sleeping: false,
+
+            mischief: false,
+            careMistakes: 0,
+            attentionTicks: 0
+        },
+
+        coins: 150,
+
+        inventory: {
+            accessory: ["none"],
+            wallpaper: ["plain"],
+            floor: ["plain"],
+            decor: ["none"],
+            bed: ["basic"]
+        },
+
+        equipped: {
+            accessory: "none",
+            wallpaper: "plain",
+            floor: "plain",
+            decor: "none",
+            bed: "basic"
+        },
+
+        upgrades: {
+            pantry: 1,
+            toybox: 0,
+            console: 0,
+            piggy: 0
+        },
+
+        stats: {
+            gamesPlayed: 0,
+            highLowBest: 0,
+            jumpBest: 0,
+            catchBest: 0
+        },
+
+        lastUpdate: Date.now()
+    };
+}
+
+
+function mergeState(saved) {
+    const fresh = createDefaultState();
+
+    if (!saved || typeof saved !== "object") {
+        return fresh;
+    }
+
+    if (saved.pet) {
+        Object.assign(fresh.pet, saved.pet);
+    }
+
+    if (saved.inventory) {
+        Object.keys(fresh.inventory).forEach(function (key) {
+            if (Array.isArray(saved.inventory[key])) {
+                fresh.inventory[key] = saved.inventory[key];
+            }
+        });
+    }
+
+    if (saved.equipped) {
+        Object.assign(fresh.equipped, saved.equipped);
+    }
+
+    if (saved.upgrades) {
+        Object.assign(fresh.upgrades, saved.upgrades);
+    }
+
+    if (saved.stats) {
+        Object.assign(fresh.stats, saved.stats);
+    }
+
+    if (typeof saved.coins === "number") {
+        fresh.coins = saved.coins;
+    }
+
+    if (typeof saved.lastUpdate === "number") {
+        fresh.lastUpdate = saved.lastUpdate;
+    }
+
+    return fresh;
+}
+
+
+function loadState() {
+    if (previewMode) {
+        const preview = createDefaultState();
+        preview.pet.hatched = true;
+        preview.pet.stage = "child";
+        preview.pet.ageMinutes = 20;
+        preview.equipped.wallpaper = "stars";
+        preview.equipped.floor = "rug";
+        preview.equipped.decor = "plant";
+        preview.equipped.accessory = "bow";
+        return preview;
+    }
+
+    const raw = localStorage.getItem(SAVE_KEY);
+
+    if (!raw) {
+        return createDefaultState();
+    }
+
+    try {
+        return mergeState(JSON.parse(raw));
+    } catch (error) {
+        console.error("Could not load Pocket Pet save.", error);
+        return createDefaultState();
+    }
+}
+
+
+let state = loadState();
+
+
+function saveState() {
+    if (previewMode) {
+        return;
+    }
+
+    state.lastUpdate = Date.now();
+
+    localStorage.setItem(
+        SAVE_KEY,
+        JSON.stringify(state)
+    );
+}
+
+
+/* =========================================================
+   SHOP CATALOG
+========================================================= */
+
+const CATALOG = {
+    accessory: [
+        { id: "none", label: "No Accessory", price: 0 },
+        { id: "bow", label: "Ribbon Bow", price: 60 },
+        { id: "cap", label: "Tiny Cap", price: 90 },
+        { id: "glasses", label: "Square Glasses", price: 110 },
+        { id: "crown", label: "Little Crown", price: 200 }
+    ],
+
+    wallpaper: [
+        { id: "plain", label: "Plain Wall", price: 0 },
+        { id: "stars", label: "Star Wallpaper", price: 120 },
+        { id: "clouds", label: "Cloud Wallpaper", price: 130 },
+        { id: "checker", label: "Checker Wall", price: 110 },
+        { id: "night", label: "Night Wallpaper", price: 160 }
+    ],
+
+    floor: [
+        { id: "plain", label: "Plain Floor", price: 0 },
+        { id: "rug", label: "Soft Rug", price: 90 },
+        { id: "wood", label: "Wood Floor", price: 140 },
+        { id: "tile", label: "Tile Floor", price: 120 }
+    ],
+
+    decor: [
+        { id: "none", label: "No Decoration", price: 0 },
+        { id: "plant", label: "House Plant", price: 70 },
+        { id: "lamp", label: "Floor Lamp", price: 100 },
+        { id: "poster", label: "Arcade Poster", price: 110 },
+        { id: "aquarium", label: "Mini Aquarium", price: 220 }
+    ],
+
+    bed: [
+        { id: "basic", label: "Basic Bed", price: 0, sleepBonus: 0 },
+        { id: "cloud", label: "Cloud Bed", price: 180, sleepBonus: 2 },
+        { id: "royal", label: "Royal Bed", price: 320, sleepBonus: 4 }
+    ]
+};
+
+
+function catalogItem(type, id) {
+    return CATALOG[type].find(function (item) {
+        return item.id === id;
+    });
+}
+
+
+/* =========================================================
+   RUNTIME UI
+========================================================= */
+
+const MENU = [
+    { name: "FOOD", code: "F" },
+    { name: "GAME", code: "G" },
+    { name: "CLEAN", code: "C" },
+    { name: "MED", code: "+" },
+    { name: "LIGHT", code: "L" },
+    { name: "STAT", code: "S" },
+    { name: "DISC", code: "D" },
+    { name: "SHOP", code: "$" }
+];
+
+let mode = "home";
+let menuIndex = 0;
+
+let currentList = null;
+let statusPage = 0;
+
+let toastText = "";
+let toastUntil = 0;
+
+let audioContext = null;
+
+let lastFrame = performance.now();
+
+
+/* =========================================================
+   LIST SCREEN SYSTEM
+========================================================= */
+
+function openList(title, entries, backAction) {
+    mode = "list";
+
+    currentList = {
+        title: title,
+        entries: entries,
+        selected: 0,
+        back: backAction || goHome
+    };
+}
+
+
+function listNext() {
+    if (!currentList || currentList.entries.length === 0) {
+        return;
+    }
+
+    currentList.selected =
+        (currentList.selected + 1) %
+        currentList.entries.length;
+}
+
+
+function listSelect() {
+    if (!currentList || currentList.entries.length === 0) {
+        return;
+    }
+
+    const entry =
+        currentList.entries[currentList.selected];
+
+    if (entry && typeof entry.action === "function") {
+        entry.action();
+    }
+}
+
+
+function listBack() {
+    if (currentList && typeof currentList.back === "function") {
+        currentList.back();
+    } else {
+        goHome();
+    }
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(text, duration) {
+    toastText = text;
+    toastUntil =
+        performance.now() +
+        (duration || 1900);
+}
+
+
+/* =========================================================
+   SOUND
+========================================================= */
+
+function beep(frequency, duration) {
+    if (previewMode) {
+        return;
+    }
+
+    try {
+        if (!audioContext) {
+            audioContext = new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+        }
+
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        osc.type = "square";
+        osc.frequency.value = frequency;
+
+        gain.gain.value = 0.035;
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start();
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + duration
+        );
+
+        osc.stop(
+            audioContext.currentTime + duration
+        );
+    } catch (error) {
+        // Audio is optional.
+    }
+}
+
+
+/* =========================================================
+   PET SIMULATION
+========================================================= */
+
+function clamp(value, min, max) {
+    return Math.min(
+        Math.max(value, min),
+        max
+    );
+}
+
+
+function clampPet() {
+    state.pet.hunger =
+        clamp(state.pet.hunger, 0, 100);
+
+    state.pet.happiness =
+        clamp(state.pet.happiness, 0, 100);
+
+    state.pet.health =
+        clamp(state.pet.health, 0, 100);
+
+    state.pet.energy =
+        clamp(state.pet.energy, 0, 100);
+
+    state.pet.discipline =
+        clamp(state.pet.discipline, 0, 100);
+
+    state.pet.cleanliness =
+        clamp(state.pet.cleanliness, 0, 100);
+
+    state.pet.weight =
+        clamp(state.pet.weight, 2, 99);
+}
+
+
+function genuineAttentionNeed() {
+    if (!state.pet.hatched) {
+        return false;
+    }
+
+    return (
+        state.pet.hunger <= 25 ||
+        state.pet.happiness <= 25 ||
+        state.pet.energy <= 20 ||
+        state.pet.cleanliness <= 25 ||
+        state.pet.sick ||
+        state.pet.poop >= 2
+    );
+}
+
+
+function attentionActive() {
+    return (
+        genuineAttentionNeed() ||
+        state.pet.mischief
+    );
+}
+
+
+function updateStage() {
+    if (!state.pet.hatched) {
+        state.pet.stage = "egg";
+        return;
+    }
+
+    const previous =
+        state.pet.stage;
+
+    let next =
+        "baby";
+
+    if (state.pet.ageMinutes >= 60) {
+        next = "adult";
+    } else if (state.pet.ageMinutes >= 30) {
+        next = "teen";
+    } else if (state.pet.ageMinutes >= 10) {
+        next = "child";
+    }
+
+    state.pet.stage = next;
+
+    if (
+        next === "adult" &&
+        !state.pet.form
+    ) {
+        if (state.pet.careMistakes <= 2) {
+            state.pet.form = "star";
+        } else if (state.pet.careMistakes <= 6) {
+            state.pet.form = "round";
+        } else {
+            state.pet.form = "gremlin";
+        }
+    }
+
+    if (
+        previous !== next &&
+        previous !== "egg"
+    ) {
+        showToast(
+            state.pet.name +
+            " grew into a " +
+            next +
+            "!"
+        );
+    }
+}
+
+
+function simulateTick(offline) {
+    if (!state.pet.hatched) {
+        return;
+    }
+
+    if (state.pet.health <= 0) {
+        return;
+    }
+
+    state.pet.ageMinutes +=
+        TICK_MS / 60000;
+
+    if (state.pet.sleeping) {
+        const bed =
+            catalogItem(
+                "bed",
+                state.equipped.bed
+            );
+
+        const sleepBonus =
+            bed && bed.sleepBonus
+                ? bed.sleepBonus
+                : 0;
+
+        state.pet.energy +=
+            6 + sleepBonus;
+
+        state.pet.hunger -= 1;
+        state.pet.cleanliness -= 0.3;
+    } else {
+        state.pet.hunger -= 2.3;
+
+        state.pet.happiness -=
+            state.upgrades.toybox
+                ? 0.6
+                : 1.0;
+
+        state.pet.energy -= 1.6;
+        state.pet.cleanliness -= 0.8;
+    }
+
+    if (
+        !state.pet.sleeping &&
+        state.pet.hunger > 55 &&
+        Math.random() > 0.82
+    ) {
+        state.pet.poop += 1;
+        state.pet.cleanliness -= 7;
+    }
+
+    if (
+        state.pet.poop >= 3 &&
+        !state.pet.sick &&
+        Math.random() > 0.82
+    ) {
+        state.pet.sick = true;
+    }
+
+    if (
+        state.pet.cleanliness < 20 &&
+        !state.pet.sick &&
+        Math.random() > 0.86
+    ) {
+        state.pet.sick = true;
+    }
+
+    if (state.pet.hunger <= 10) {
+        state.pet.health -= 3;
+    }
+
+    if (state.pet.energy <= 8) {
+        state.pet.health -= 1.5;
+        state.pet.happiness -= 1;
+    }
+
+    if (state.pet.sick) {
+        state.pet.health -= 2.2;
+    }
+
+    if (
+        state.pet.hunger > 55 &&
+        state.pet.happiness > 50 &&
+        state.pet.cleanliness > 55 &&
+        !state.pet.sick
+    ) {
+        state.pet.health += 0.35;
+    }
+
+    if (
+        !state.pet.mischief &&
+        !genuineAttentionNeed() &&
+        Math.random() > 0.95
+    ) {
+        state.pet.mischief = true;
+    }
+
+    if (genuineAttentionNeed()) {
+        state.pet.attentionTicks += 1;
+
+        if (state.pet.attentionTicks >= 5) {
+            state.pet.careMistakes += 1;
+            state.pet.attentionTicks = 0;
+
+            if (!offline) {
+                showToast("Care mistake recorded.");
+            }
+        }
+    } else {
+        state.pet.attentionTicks = 0;
+    }
+
+    if (
+        state.upgrades.piggy &&
+        Math.floor(state.pet.ageMinutes * 2) % 20 === 0
+    ) {
+        state.coins += 2;
+    }
+
+    clampPet();
+    updateStage();
+
+    if (state.pet.health <= 0) {
+        state.pet.health = 0;
+        state.pet.sleeping = false;
+    }
+
+    if (!offline) {
+        saveState();
+    }
+}
+
+
+function applyOfflineProgress() {
+    if (previewMode) {
+        return;
+    }
+
+    const now = Date.now();
+    const elapsed = Math.max(0, now - state.lastUpdate);
+
+    const ticks =
+        Math.min(
+            Math.floor(elapsed / TICK_MS),
+            240
+        );
+
+    if (ticks <= 0) {
+        return;
+    }
+
+    for (let i = 0; i < ticks; i += 1) {
+        simulateTick(true);
+    }
+
+    state.lastUpdate = now;
+
+    showToast(
+        "Time passed while you were away."
+    );
+
+    saveState();
+}
+
+
+/* =========================================================
+   HATCH
+========================================================= */
+
+function hatchPet() {
+    if (state.pet.hatched) {
+        return;
+    }
+
+    state.pet.hatched = true;
+    state.pet.stage = "baby";
+    state.pet.ageMinutes = 0;
+
+    showToast(
+        state.pet.name +
+        " hatched!"
+    );
+
+    beep(660, 0.08);
+
+    saveState();
+}
+
+
+/* =========================================================
+   FOOD
+========================================================= */
+
+function openFoodMenu() {
+    if (!canCareForPet()) {
+        return;
+    }
+
+    openList(
+        "FOOD",
+        [
+            {
+                label: "MEAL",
+                sub: "Fills hunger",
+                action: feedMeal
+            },
+            {
+                label: "SNACK",
+                sub: "Happiness + weight",
+                action: feedSnack
+            },
+            {
+                label: "BACK",
+                action: goHome
+            }
+        ],
+        goHome
+    );
+}
+
+
+function feedMeal() {
+    const restore =
+        20 +
+        (state.upgrades.pantry - 1) * 6;
+
+    state.pet.hunger += restore;
+    state.pet.health += 1;
+    state.pet.weight += 0.35;
+    state.pet.mischief = false;
+
+    clampPet();
+
+    showToast(
+        state.pet.name +
+        " ate a meal."
+    );
+
+    beep(520, 0.05);
+    saveState();
+    goHome();
+}
+
+
+function feedSnack() {
+    state.pet.hunger += 9;
+    state.pet.happiness += 14;
+    state.pet.weight += 1.2;
+    state.pet.mischief = false;
+
+    clampPet();
+
+    showToast(
+        state.pet.name +
+        " loved the snack."
+    );
+
+    beep(720, 0.05);
+    saveState();
+    goHome();
+}
+
+
+/* =========================================================
+   CLEAN / MEDICINE / LIGHT / DISCIPLINE
+========================================================= */
+
+function cleanRoom() {
+    if (!canCareForPet()) {
+        return;
+    }
+
+    if (
+        state.pet.poop === 0 &&
+        state.pet.cleanliness >= 95
+    ) {
+        showToast("The room is already clean.");
+        return;
+    }
+
+    state.pet.poop = 0;
+    state.pet.cleanliness = 100;
+    state.pet.happiness += 3;
+
+    clampPet();
+
+    showToast("Room cleaned.");
+    beep(610, 0.05);
+    saveState();
+}
+
+
+function giveMedicine() {
+    if (!canCareForPet()) {
+        return;
+    }
+
+    if (!state.pet.sick) {
+        showToast(
+            state.pet.name +
+            " does not need medicine."
+        );
+        return;
+    }
+
+    state.pet.sick = false;
+    state.pet.health += 24;
+    state.pet.happiness -= 4;
+
+    clampPet();
+
+    showToast("Medicine worked.");
+    beep(430, 0.08);
+    saveState();
+}
+
+
+function toggleSleep() {
+    if (!canCareForPet(true)) {
+        return;
+    }
+
+    state.pet.sleeping =
+        !state.pet.sleeping;
+
+    showToast(
+        state.pet.sleeping
+            ? "Lights out. Good night."
+            : "Lights on."
+    );
+
+    beep(
+        state.pet.sleeping ? 360 : 560,
+        0.06
+    );
+
+    saveState();
+}
+
+
+function disciplinePet() {
+    if (!canCareForPet()) {
+        return;
+    }
+
+    if (state.pet.mischief) {
+        state.pet.mischief = false;
+        state.pet.discipline += 12;
+        state.pet.happiness -= 2;
+
+        showToast(
+            state.pet.name +
+            " learned a lesson."
+        );
+    } else {
+        state.pet.discipline += 2;
+        state.pet.happiness -= 8;
+
+        showToast(
+            "That was unfair. Happiness fell."
+        );
+    }
+
+    clampPet();
+    saveState();
+}
+
+
+function canCareForPet(allowSleepToggle) {
+    if (!state.pet.hatched) {
+        showToast("Hatch the egg first.");
+        return false;
+    }
+
+    if (state.pet.health <= 0) {
+        showToast(
+            state.pet.name +
+            " is gone."
+        );
+        return false;
+    }
+
+    if (
+        state.pet.sleeping &&
+        !allowSleepToggle
+    ) {
+        showToast(
+            state.pet.name +
+            " is sleeping."
+        );
+        return false;
+    }
+
+    return true;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function openStatus() {
+    statusPage = 0;
+    mode = "status";
+}
+
+
+function statusNext() {
+    statusPage =
+        (statusPage + 1) % 2;
+}
+
+
+/* =========================================================
+   GAME MENU
+========================================================= */
+
+function openGameMenu() {
+    if (!canCareForPet()) {
+        return;
+    }
+
+    const entries = [
+        {
+            label: "HIGH / LOW",
+            sub: "Always available",
+            action: startHighLow
+        }
+    ];
+
+    if (state.upgrades.console >= 1) {
+        entries.push({
+            label: "JUMP",
+            sub: "Console game",
+            action: startJumpGame
+        });
+    } else {
+        entries.push({
+            label: "JUMP  [LOCKED]",
+            sub: "Buy Game Console",
+            action: function () {
+                showToast(
+                    "Buy a Game Console in Upgrades."
+                );
+            }
+        });
+    }
+
+    if (state.upgrades.console >= 2) {
+        entries.push({
+            label: "CATCH",
+            sub: "Console II game",
+            action: startCatchGame
+        });
+    } else {
+        entries.push({
+            label: "CATCH [LOCKED]",
+            sub: "Upgrade Console",
+            action: function () {
+                showToast(
+                    "Upgrade the Game Console again."
+                );
+            }
+        });
+    }
+
+    entries.push({
+        label: "BACK",
+        action: goHome
+    });
+
+    openList(
+        "MINI GAMES",
+        entries,
+        goHome
+    );
+}
+
+
+/* =========================================================
+   SHOP
+========================================================= */
+
+function openShop() {
+    openList(
+        "SHOP",
+        [
+            {
+                label: "BUY",
+                sub: "Items + upgrades",
+                action: openBuyCategories
+            },
+            {
+                label: "CUSTOMIZE",
+                sub: "Equip owned items",
+                action: openCustomizeCategories
+            },
+            {
+                label: "BACK",
+                action: goHome
+            }
+        ],
+        goHome
+    );
+}
+
+
+function openBuyCategories() {
+    openList(
+        "SHOP / BUY",
+        [
+            {
+                label: "ACCESSORIES",
+                action: function () {
+                    openCatalogShop(
+                        "accessory",
+                        "ACCESSORIES",
+                        openBuyCategories
+                    );
+                }
+            },
+            {
+                label: "ROOM",
+                action: openRoomShop
+            },
+            {
+                label: "UPGRADES",
+                action: openUpgradeShop
+            },
+            {
+                label: "BACK",
+                action: openShop
+            }
+        ],
+        openShop
+    );
+}
+
+
+function openRoomShop() {
+    openList(
+        "ROOM SHOP",
+        [
+            {
+                label: "WALLPAPER",
+                action: function () {
+                    openCatalogShop(
+                        "wallpaper",
+                        "WALLPAPER",
+                        openRoomShop
+                    );
+                }
+            },
+            {
+                label: "FLOOR",
+                action: function () {
+                    openCatalogShop(
+                        "floor",
+                        "FLOOR",
+                        openRoomShop
+                    );
+                }
+            },
+            {
+                label: "DECOR",
+                action: function () {
+                    openCatalogShop(
+                        "decor",
+                        "DECOR",
+                        openRoomShop
+                    );
+                }
+            },
+            {
+                label: "BED",
+                action: function () {
+                    openCatalogShop(
+                        "bed",
+                        "BEDS",
+                        openRoomShop
+                    );
+                }
+            },
+            {
+                label: "BACK",
+                action: openBuyCategories
+            }
+        ],
+        openBuyCategories
+    );
+}
+
+
+function openCatalogShop(
+    type,
+    title,
+    back
+) {
+    const entries =
+        CATALOG[type]
+            .filter(function (item) {
+                return item.price > 0;
+            })
+            .map(function (item) {
+                const owned =
+                    state.inventory[type]
+                        .indexOf(item.id) !== -1;
+
+                return {
+                    label:
+                        item.label +
+                        (
+                            owned
+                                ? "  [OWNED]"
+                                : ""
+                        ),
+
+                    sub:
+                        owned
+                            ? "Already purchased"
+                            : item.price + " COINS",
+
+                    action: function () {
+                        buyCatalogItem(
+                            type,
+                            item,
+                            function () {
+                                openCatalogShop(
+                                    type,
+                                    title,
+                                    back
+                                );
+                            }
+                        );
+                    }
+                };
+            });
+
+    entries.push({
+        label: "BACK",
+        action: back
+    });
+
+    openList(
+        title,
+        entries,
+        back
+    );
+}
+
+
+function buyCatalogItem(
+    type,
+    item,
+    refresh
+) {
+    if (
+        state.inventory[type]
+            .indexOf(item.id) !== -1
+    ) {
+        showToast("You already own that.");
+        return;
+    }
+
+    if (state.coins < item.price) {
+        showToast("Not enough coins.");
+        beep(180, 0.08);
+        return;
+    }
+
+    state.coins -= item.price;
+
+    state.inventory[type].push(
+        item.id
+    );
+
+    state.equipped[type] =
+        item.id;
+
+    showToast(
+        item.label +
+        " purchased + equipped."
+    );
+
+    beep(820, 0.08);
+    saveState();
+
+    refresh();
+}
+
+
+function openUpgradeShop() {
+    const entries = [];
+
+    if (state.upgrades.pantry < 3) {
+        const next =
+            state.upgrades.pantry + 1;
+
+        const price =
+            next === 2
+                ? 140
+                : 300;
+
+        entries.push({
+            label:
+                "PANTRY LV." +
+                next,
+
+            sub:
+                price +
+                " COINS / stronger meals",
+
+            action: function () {
+                buyUpgrade(
+                    "pantry",
+                    price,
+                    3,
+                    openUpgradeShop
+                );
+            }
+        });
+    } else {
+        entries.push({
+            label: "PANTRY MAX",
+            sub: "Fully upgraded",
+            action: function () {
+                showToast("Pantry is max level.");
+            }
+        });
+    }
+
+    if (!state.upgrades.toybox) {
+        entries.push({
+            label: "TOY BOX",
+            sub: "120 COINS / slower boredom",
+            action: function () {
+                buyUpgrade(
+                    "toybox",
+                    120,
+                    1,
+                    openUpgradeShop
+                );
+            }
+        });
+    } else {
+        entries.push({
+            label: "TOY BOX [OWNED]",
+            action: function () {
+                showToast("Toy Box already owned.");
+            }
+        });
+    }
+
+    if (state.upgrades.console < 2) {
+        const nextConsole =
+            state.upgrades.console + 1;
+
+        const consolePrice =
+            nextConsole === 1
+                ? 120
+                : 260;
+
+        entries.push({
+            label:
+                "GAME CONSOLE " +
+                nextConsole,
+
+            sub:
+                consolePrice +
+                " COINS / unlock game",
+
+            action: function () {
+                buyUpgrade(
+                    "console",
+                    consolePrice,
+                    2,
+                    openUpgradeShop
+                );
+            }
+        });
+    } else {
+        entries.push({
+            label: "CONSOLE MAX",
+            sub: "All mini games unlocked",
+            action: function () {
+                showToast("Console is max level.");
+            }
+        });
+    }
+
+    if (!state.upgrades.piggy) {
+        entries.push({
+            label: "PIGGY BANK",
+            sub: "200 COINS / passive savings",
+            action: function () {
+                buyUpgrade(
+                    "piggy",
+                    200,
+                    1,
+                    openUpgradeShop
+                );
+            }
+        });
+    } else {
+        entries.push({
+            label: "PIGGY BANK [OWNED]",
+            action: function () {
+                showToast("Piggy Bank already owned.");
+            }
+        });
+    }
+
+    entries.push({
+        label: "BACK",
+        action: openBuyCategories
+    });
+
+    openList(
+        "UPGRADES",
+        entries,
+        openBuyCategories
+    );
+}
+
+
+function buyUpgrade(
+    key,
+    price,
+    maxLevel,
+    refresh
+) {
+    if (state.coins < price) {
+        showToast("Not enough coins.");
+        beep(180, 0.08);
+        return;
+    }
+
+    if (state.upgrades[key] >= maxLevel) {
+        showToast("Already maxed.");
+        return;
+    }
+
+    state.coins -= price;
+    state.upgrades[key] += 1;
+
+    showToast("Upgrade installed.");
+    beep(840, 0.08);
+
+    saveState();
+    refresh();
+}
+
+
+/* =========================================================
+   CUSTOMIZE
+========================================================= */
+
+function openCustomizeCategories() {
+    openList(
+        "CUSTOMIZE",
+        [
+            {
+                label: "ACCESSORY",
+                action: function () {
+                    openEquipList(
+                        "accessory",
+                        "ACCESSORY",
+                        openCustomizeCategories
+                    );
+                }
+            },
+            {
+                label: "WALLPAPER",
+                action: function () {
+                    openEquipList(
+                        "wallpaper",
+                        "WALLPAPER",
+                        openCustomizeCategories
+                    );
+                }
+            },
+            {
+                label: "FLOOR",
+                action: function () {
+                    openEquipList(
+                        "floor",
+                        "FLOOR",
+                        openCustomizeCategories
+                    );
+                }
+            },
+            {
+                label: "DECOR",
+                action: function () {
+                    openEquipList(
+                        "decor",
+                        "DECOR",
+                        openCustomizeCategories
+                    );
+                }
+            },
+            {
+                label: "BED",
+                action: function () {
+                    openEquipList(
+                        "bed",
+                        "BED",
+                        openCustomizeCategories
+                    );
+                }
+            },
+            {
+                label: "BACK",
+                action: openShop
+            }
+        ],
+        openShop
+    );
+}
+
+
+function openEquipList(
+    type,
+    title,
+    back
+) {
+    const entries =
+        state.inventory[type]
+            .map(function (id) {
+                const item =
+                    catalogItem(type, id);
+
+                const equipped =
+                    state.equipped[type] === id;
+
+                return {
+                    label:
+                        item.label +
+                        (
+                            equipped
+                                ? "  [ON]"
+                                : ""
+                        ),
+
+                    sub:
+                        equipped
+                            ? "Currently equipped"
+                            : "Equip",
+
+                    action: function () {
+                        state.equipped[type] = id;
+
+                        showToast(
+                            item.label +
+                            " equipped."
+                        );
+
+                        beep(680, 0.05);
+                        saveState();
+
+                        openEquipList(
+                            type,
+                            title,
+                            back
+                        );
+                    }
+                };
+            });
+
+    entries.push({
+        label: "BACK",
+        action: back
+    });
+
+    openList(
+        title,
+        entries,
+        back
+    );
+}
+
+
+/* =========================================================
+   HIGH / LOW GAME
+========================================================= */
+
+let highLow = null;
+
+
+function randomNumberExcept(except) {
+    let number;
+
+    do {
+        number =
+            1 +
+            Math.floor(Math.random() * 9);
+    } while (number === except);
+
+    return number;
+}
+
+
+function startHighLow() {
+    highLow = {
+        current:
+            1 +
+            Math.floor(Math.random() * 9),
+
+        choice: 0,
+        round: 1,
+        score: 0,
+        reveal: null,
+        finished: false
+    };
+
+    mode = "highlow";
+}
+
+
+function highLowToggle() {
+    if (!highLow || highLow.finished) {
+        return;
+    }
+
+    if (highLow.reveal !== null) {
+        return;
+    }
+
+    highLow.choice =
+        highLow.choice === 0
+            ? 1
+            : 0;
+}
+
+
+function highLowSelect() {
+    if (!highLow) {
+        return;
+    }
+
+    if (highLow.finished) {
+        startHighLow();
+        return;
+    }
+
+    if (highLow.reveal !== null) {
+        highLow.current =
+            highLow.reveal;
+
+        highLow.reveal =
+            null;
+
+        highLow.round += 1;
+
+        return;
+    }
+
+    const next =
+        randomNumberExcept(
+            highLow.current
+        );
+
+    const guessedHigher =
+        highLow.choice === 1;
+
+    const correct =
+        guessedHigher
+            ? next > highLow.current
+            : next < highLow.current;
+
+    highLow.reveal = next;
+
+    if (correct) {
+        highLow.score += 1;
+        state.coins += 4;
+        beep(850, 0.07);
+    } else {
+        beep(190, 0.07);
+    }
+
+    if (highLow.round >= 5) {
+        highLow.finished = true;
+
+        const bonus =
+            highLow.score * 3;
+
+        state.coins += bonus;
+        state.pet.happiness +=
+            4 +
+            highLow.score * 2;
+
+        state.pet.weight -= 0.2;
+
+        state.stats.gamesPlayed += 1;
+        state.stats.highLowBest =
+            Math.max(
+                state.stats.highLowBest,
+                highLow.score
+            );
+
+        clampPet();
+        saveState();
+    }
+}
+
+
+/* =========================================================
+   JUMP GAME
+========================================================= */
+
+let jumpGame = null;
+
+
+function startJumpGame() {
+    jumpGame = {
+        active: true,
+        finished: false,
+
+        petY: 236,
+        velocityY: 0,
+        grounded: true,
+
+        obstacleX: 410,
+        obstacleWidth: 18,
+
+        score: 0,
+        startTime: performance.now(),
+        lastUpdate: performance.now()
+    };
+
+    mode = "jump";
+}
+
+
+function jumpAction() {
+    if (!jumpGame) {
+        return;
+    }
+
+    if (jumpGame.finished) {
+        startJumpGame();
+        return;
+    }
+
+    if (jumpGame.grounded) {
+        jumpGame.velocityY = -220;
+        jumpGame.grounded = false;
+        beep(600, 0.035);
+    }
+}
+
+
+function updateJumpGame(now) {
+    if (
+        mode !== "jump" ||
+        !jumpGame ||
+        !jumpGame.active
+    ) {
+        return;
+    }
+
+    const dt =
+        Math.min(
+            (now - jumpGame.lastUpdate) / 1000,
+            0.04
+        );
+
+    jumpGame.lastUpdate = now;
+
+    jumpGame.velocityY +=
+        520 * dt;
+
+    jumpGame.petY +=
+        jumpGame.velocityY * dt;
+
+    if (jumpGame.petY >= 236) {
+        jumpGame.petY = 236;
+        jumpGame.velocityY = 0;
+        jumpGame.grounded = true;
+    }
+
+    const speed =
+        120 +
+        Math.min(
+            jumpGame.score * 6,
+            80
+        );
+
+    jumpGame.obstacleX -=
+        speed * dt;
+
+    if (
+        jumpGame.obstacleX <
+        -jumpGame.obstacleWidth
+    ) {
+        jumpGame.obstacleX =
+            390 +
+            Math.random() * 90;
+
+        jumpGame.score += 1;
+        beep(760, 0.025);
+    }
+
+    const petLeft = 74;
+    const petRight = 110;
+    const petBottom =
+        jumpGame.petY + 24;
+    const petTop =
+        jumpGame.petY - 18;
+
+    const obstacleLeft =
+        jumpGame.obstacleX;
+    const obstacleRight =
+        jumpGame.obstacleX +
+        jumpGame.obstacleWidth;
+
+    const obstacleTop = 226;
+
+    if (
+        petRight > obstacleLeft &&
+        petLeft < obstacleRight &&
+        petBottom > obstacleTop &&
+        petTop < 260
+    ) {
+        finishJumpGame();
+        return;
+    }
+
+    if (
+        now -
+        jumpGame.startTime >=
+        20000
+    ) {
+        finishJumpGame();
+    }
+}
+
+
+function finishJumpGame() {
+    if (
+        !jumpGame ||
+        jumpGame.finished
+    ) {
+        return;
+    }
+
+    jumpGame.active = false;
+    jumpGame.finished = true;
+
+    const reward =
+        8 +
+        jumpGame.score * 4;
+
+    state.coins += reward;
+    state.pet.happiness +=
+        8 +
+        jumpGame.score;
+
+    state.pet.weight -=
+        0.6;
+
+    state.stats.gamesPlayed += 1;
+    state.stats.jumpBest =
+        Math.max(
+            state.stats.jumpBest,
+            jumpGame.score
+        );
+
+    clampPet();
+    saveState();
+
+    beep(880, 0.09);
+}
+
+
+/* =========================================================
+   CATCH GAME
+========================================================= */
+
+let catchGame = null;
+
+
+function startCatchGame() {
+    catchGame = {
+        active: true,
+        finished: false,
+
+        playerX: 192,
+        items: [],
+        score: 0,
+
+        lastSpawn: 0,
+        startTime: performance.now(),
+        lastUpdate: performance.now()
+    };
+
+    mode = "catch";
+}
+
+
+function catchMove(amount) {
+    if (
+        !catchGame ||
+        catchGame.finished
+    ) {
+        return;
+    }
+
+    catchGame.playerX =
+        clamp(
+            catchGame.playerX + amount,
+            28,
+            WIDTH - 28
+        );
+}
+
+
+function updateCatchGame(now) {
+    if (
+        mode !== "catch" ||
+        !catchGame ||
+        !catchGame.active
+    ) {
+        return;
+    }
+
+    const dt =
+        Math.min(
+            (now - catchGame.lastUpdate) / 1000,
+            0.04
+        );
+
+    catchGame.lastUpdate = now;
+
+    if (
+        now -
+        catchGame.lastSpawn >
+        650
+    ) {
+        catchGame.lastSpawn = now;
+
+        catchGame.items.push({
+            x:
+                25 +
+                Math.random() *
+                (WIDTH - 50),
+
+            y: 55,
+
+            good:
+                Math.random() >
+                0.22,
+
+            speed:
+                70 +
+                Math.random() * 55
+        });
+    }
+
+    catchGame.items.forEach(
+        function (item) {
+            item.y +=
+                item.speed * dt;
+        }
+    );
+
+    const petLeft =
+        catchGame.playerX - 24;
+
+    const petRight =
+        catchGame.playerX + 24;
+
+    catchGame.items =
+        catchGame.items.filter(
+            function (item) {
+                if (
+                    item.y >= 240 &&
+                    item.y <= 278 &&
+                    item.x >= petLeft &&
+                    item.x <= petRight
+                ) {
+                    if (item.good) {
+                        catchGame.score += 1;
+                        beep(790, 0.025);
+                    } else {
+                        catchGame.score =
+                            Math.max(
+                                0,
+                                catchGame.score - 2
+                            );
+
+                        beep(180, 0.05);
+                    }
+
+                    return false;
+                }
+
+                return item.y < 300;
+            }
+        );
+
+    if (
+        now -
+        catchGame.startTime >=
+        20000
+    ) {
+        finishCatchGame();
+    }
+}
+
+
+function finishCatchGame() {
+    if (
+        !catchGame ||
+        catchGame.finished
+    ) {
+        return;
+    }
+
+    catchGame.active = false;
+    catchGame.finished = true;
+
+    const reward =
+        8 +
+        catchGame.score * 3;
+
+    state.coins += reward;
+
+    state.pet.happiness +=
+        7 +
+        catchGame.score * 0.8;
+
+    state.pet.weight -=
+        0.4;
+
+    state.stats.gamesPlayed += 1;
+    state.stats.catchBest =
+        Math.max(
+            state.stats.catchBest,
+            catchGame.score
+        );
+
+    clampPet();
+    saveState();
+
+    beep(880, 0.09);
+}
+
+
+/* =========================================================
+   MENU ACTIONS
+========================================================= */
+
+function activateMenu(index) {
+    if (!state.pet.hatched) {
+        hatchPet();
+        return;
+    }
+
+    switch (index) {
+        case 0:
+            openFoodMenu();
+            break;
+
+        case 1:
+            openGameMenu();
+            break;
+
+        case 2:
+            cleanRoom();
+            break;
+
+        case 3:
+            giveMedicine();
+            break;
+
+        case 4:
+            toggleSleep();
+            break;
+
+        case 5:
+            openStatus();
+            break;
+
+        case 6:
+            disciplinePet();
+            break;
+
+        case 7:
+            openShop();
+            break;
+    }
+}
+
+
+function goHome() {
+    mode = "home";
+    currentList = null;
+}
+
+
+/* =========================================================
+   A / B / C CONTROLS
+========================================================= */
+
+function pressA() {
+    animateButton("buttonA");
+    beep(520, 0.025);
+
+    if (mode === "home") {
+        if (!state.pet.hatched) {
+            return;
+        }
+
+        menuIndex =
+            (menuIndex + 1) %
+            MENU.length;
+
+        return;
+    }
+
+    if (mode === "list") {
+        listNext();
+        return;
+    }
+
+    if (mode === "status") {
+        statusNext();
+        return;
+    }
+
+    if (mode === "highlow") {
+        highLowToggle();
+        return;
+    }
+
+    if (mode === "jump") {
+        jumpAction();
+        return;
+    }
+
+    if (mode === "catch") {
+        catchMove(-28);
+    }
+}
+
+
+function pressB() {
+    animateButton("buttonB");
+    beep(650, 0.025);
+
+    if (mode === "home") {
+        if (!state.pet.hatched) {
+            hatchPet();
+        } else {
+            activateMenu(menuIndex);
+        }
+
+        return;
+    }
+
+    if (mode === "list") {
+        listSelect();
+        return;
+    }
+
+    if (mode === "status") {
+        statusNext();
+        return;
+    }
+
+    if (mode === "highlow") {
+        highLowSelect();
+        return;
+    }
+
+    if (mode === "jump") {
+        jumpAction();
+        return;
+    }
+
+    if (
+        mode === "catch" &&
+        catchGame &&
+        catchGame.finished
+    ) {
+        startCatchGame();
+    }
+}
+
+
+function pressC() {
+    animateButton("buttonC");
+    beep(430, 0.025);
+
+    if (mode === "home") {
+        return;
+    }
+
+    if (mode === "list") {
+        listBack();
+        return;
+    }
+
+    if (mode === "status") {
+        goHome();
+        return;
+    }
+
+    if (mode === "highlow") {
+        openGameMenu();
+        return;
+    }
+
+    if (mode === "jump") {
+        openGameMenu();
+        return;
+    }
+
+    if (mode === "catch") {
+        if (
+            catchGame &&
+            !catchGame.finished
+        ) {
+            catchMove(28);
+        } else {
+            openGameMenu();
+        }
+    }
+}
+
+
+function animateButton(id) {
+    const button =
+        document.getElementById(id);
+
+    button.classList.add("pressed");
+
+    window.setTimeout(
+        function () {
+            button.classList.remove("pressed");
+        },
+        90
+    );
+}
+
+
+document
+    .getElementById("buttonA")
+    .addEventListener(
+        "click",
+        pressA
+    );
+
+document
+    .getElementById("buttonB")
+    .addEventListener(
+        "click",
+        pressB
+    );
+
+document
+    .getElementById("buttonC")
+    .addEventListener(
+        "click",
+        pressC
+    );
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+        const key =
+            event.key.toLowerCase();
+
+        if (
+            key === "a" ||
+            key === "arrowleft"
+        ) {
+            event.preventDefault();
+
+            if (mode === "catch") {
+                catchMove(-20);
+            } else {
+                pressA();
+            }
+
+            return;
+        }
+
+        if (
+            key === "b" ||
+            key === "enter" ||
+            key === " "
+        ) {
+            event.preventDefault();
+            pressB();
+            return;
+        }
+
+        if (
+            key === "c" ||
+            key === "arrowright"
+        ) {
+            event.preventDefault();
+
+            if (mode === "catch") {
+                catchMove(20);
+            } else {
+                pressC();
+            }
+
+            return;
+        }
+
+        if (
+            mode === "jump" &&
+            key === "arrowup"
+        ) {
+            event.preventDefault();
+            jumpAction();
+        }
+    }
+);
+
+
+/* =========================================================
+   CANVAS CLICKABLE MENU
+========================================================= */
+
+canvas.addEventListener(
+    "click",
+    function (event) {
+        if (
+            mode !== "home" ||
+            !state.pet.hatched
+        ) {
+            return;
+        }
+
+        const rect =
+            canvas.getBoundingClientRect();
+
+        const x =
+            (event.clientX - rect.left) *
+            (WIDTH / rect.width);
+
+        const y =
+            (event.clientY - rect.top) *
+            (HEIGHT / rect.height);
+
+        if (
+            y >= 8 &&
+            y <= 48
+        ) {
+            const cellWidth =
+                WIDTH / MENU.length;
+
+            const index =
+                Math.floor(
+                    x / cellWidth
+                );
+
+            if (
+                index >= 0 &&
+                index < MENU.length
+            ) {
+                menuIndex = index;
+                activateMenu(index);
+            }
+        }
+    }
+);
+
+
+/* =========================================================
+   DRAW HELPERS
+========================================================= */
+
+function clearScreen() {
+    ctx.fillStyle = COLORS.bg;
+
+    ctx.fillRect(
+        0,
+        0,
+        WIDTH,
+        HEIGHT
+    );
+}
+
+
+function pixelRect(
+    x,
+    y,
+    width,
+    height,
+    color
+) {
+    ctx.fillStyle =
+        color || COLORS.dark;
+
+    ctx.fillRect(
+        Math.round(x),
+        Math.round(y),
+        Math.round(width),
+        Math.round(height)
+    );
+}
+
+
+function text(
+    value,
+    x,
+    y,
+    size,
+    align,
+    color,
+    weight
+) {
+    ctx.fillStyle =
+        color || COLORS.dark;
+
+    ctx.textAlign =
+        align || "left";
+
+    ctx.textBaseline =
+        "alphabetic";
+
+    ctx.font =
+        (weight || "bold") +
+        " " +
+        (size || 12) +
+        "px monospace";
+
+    ctx.fillText(
+        String(value),
+        x,
+        y
+    );
+}
+
+
+function centeredText(
+    value,
+    y,
+    size
+) {
+    text(
+        value,
+        WIDTH / 2,
+        y,
+        size,
+        "center"
+    );
+}
+
+
+function drawTopFrame(title) {
+    pixelRect(
+        0,
+        0,
+        WIDTH,
+        34,
+        COLORS.dark
+    );
+
+    text(
+        title,
+        10,
+        22,
+        13,
+        "left",
+        COLORS.light
+    );
+
+    text(
+        state.coins + "c",
+        WIDTH - 10,
+        22,
+        12,
+        "right",
+        COLORS.light
+    );
+}
+
+
+function drawBottomHint(left, center, right) {
+    pixelRect(
+        0,
+        HEIGHT - 27,
+        WIDTH,
+        27,
+        COLORS.dark
+    );
+
+    text(
+        left || "",
+        10,
+        HEIGHT - 9,
+        9,
+        "left",
+        COLORS.light
+    );
+
+    text(
+        center || "",
+        WIDTH / 2,
+        HEIGHT - 9,
+        9,
+        "center",
+        COLORS.light
+    );
+
+    text(
+        right || "",
+        WIDTH - 10,
+        HEIGHT - 9,
+        9,
+        "right",
+        COLORS.light
+    );
+}
+
+
+/* =========================================================
+   HOME MENU ICONS
+========================================================= */
+
+function drawMenuBar() {
+    const cellWidth =
+        WIDTH / MENU.length;
+
+    for (
+        let index = 0;
+        index < MENU.length;
+        index += 1
+    ) {
+        const selected =
+            index === menuIndex;
+
+        const x =
+            index * cellWidth;
+
+        if (selected) {
+            pixelRect(
+                x + 2,
+                5,
+                cellWidth - 4,
+                39,
+                COLORS.dark
+            );
+        }
+
+        text(
+            MENU[index].code,
+            x + cellWidth / 2,
+            22,
+            13,
+            "center",
+            selected
+                ? COLORS.light
+                : COLORS.dark
+        );
+
+        text(
+            MENU[index].name.substring(0, 4),
+            x + cellWidth / 2,
+            37,
+            6,
+            "center",
+            selected
+                ? COLORS.light
+                : COLORS.dark
+        );
+    }
+
+    pixelRect(
+        0,
+        46,
+        WIDTH,
+        2,
+        COLORS.dark
+    );
+
+    if (attentionActive()) {
+        pixelRect(
+            WIDTH - 13,
+            50,
+            8,
+            8,
+            COLORS.dark
+        );
+    }
+}
+
+
+/* =========================================================
+   ROOM
+========================================================= */
+
+function drawRoom() {
+    drawWallpaper();
+    drawFloor();
+    drawBed();
+    drawDecor();
+    drawPoop();
+
+    if (state.pet.hatched) {
+        if (state.pet.health <= 0) {
+            drawGrave();
+        } else if (state.pet.sleeping) {
+            drawSleepingPet();
+        } else {
+            drawPet(
+                WIDTH / 2,
+                210,
+                state.pet.stage
+            );
+        }
+    } else {
+        drawEgg(
+            WIDTH / 2,
+            205
+        );
+    }
+
+    if (
+        state.pet.hatched &&
+        state.pet.health > 0 &&
+        !state.pet.sleeping
+    ) {
+        drawAccessory(
+            WIDTH / 2,
+            210
+        );
+    }
+
+    if (state.pet.sleeping) {
+        ctx.fillStyle =
+            "rgba(38,48,34,.38)";
+
+        ctx.fillRect(
+            0,
+            48,
+            WIDTH,
+            HEIGHT - 48
+        );
+
+        text(
+            "Z",
+            210,
+            166,
+            14
+        );
+
+        text(
+            "z",
+            224,
+            150,
+            10
+        );
+    }
+}
+
+
+function drawWallpaper() {
+    const id =
+        state.equipped.wallpaper;
+
+    pixelRect(
+        0,
+        48,
+        WIDTH,
+        176,
+        COLORS.bg
+    );
+
+    if (id === "stars") {
+        for (let i = 0; i < 18; i += 1) {
+            const x =
+                14 +
+                ((i * 61) % 350);
+
+            const y =
+                62 +
+                ((i * 37) % 138);
+
+            pixelRect(
+                x,
+                y,
+                3,
+                3,
+                COLORS.mid
+            );
+
+            if (i % 3 === 0) {
+                pixelRect(
+                    x - 2,
+                    y + 1,
+                    7,
+                    1,
+                    COLORS.mid
+                );
+            }
+        }
+    }
+
+    if (id === "clouds") {
+        for (let i = 0; i < 4; i += 1) {
+            const x =
+                38 +
+                i * 88;
+
+            const y =
+                78 +
+                (i % 2) * 54;
+
+            pixelRect(
+                x,
+                y,
+                34,
+                8,
+                COLORS.light
+            );
+
+            pixelRect(
+                x + 8,
+                y - 7,
+                16,
+                7,
+                COLORS.light
+            );
+        }
+    }
+
+    if (id === "checker") {
+        for (let y = 54; y < 218; y += 20) {
+            for (let x = 0; x < WIDTH; x += 20) {
+                if (
+                    (
+                        Math.floor(x / 20) +
+                        Math.floor(y / 20)
+                    ) % 2 === 0
+                ) {
+                    ctx.fillStyle =
+                        "rgba(38,48,34,.08)";
+
+                    ctx.fillRect(
+                        x,
+                        y,
+                        20,
+                        20
+                    );
+                }
+            }
+        }
+    }
+
+    if (id === "night") {
+        pixelRect(
+            0,
+            48,
+            WIDTH,
+            176,
+            "#7f8b66"
+        );
+
+        pixelRect(
+            306,
+            70,
+            20,
+            20,
+            COLORS.light
+        );
+
+        pixelRect(
+            312,
+            65,
+            20,
+            20,
+            "#7f8b66"
+        );
+
+        for (let i = 0; i < 13; i += 1) {
+            pixelRect(
+                18 + ((i * 67) % 340),
+                62 + ((i * 43) % 130),
+                2,
+                2,
+                COLORS.light
+            );
+        }
+    }
+}
+
+
+function drawFloor() {
+    const id =
+        state.equipped.floor;
+
+    pixelRect(
+        0,
+        224,
+        WIDTH,
+        HEIGHT - 224,
+        "#929f70"
+    );
+
+    pixelRect(
+        0,
+        222,
+        WIDTH,
+        3,
+        COLORS.dark
+    );
+
+    if (id === "rug") {
+        pixelRect(
+            112,
+            246,
+            160,
+            43,
+            COLORS.light
+        );
+
+        pixelRect(
+            119,
+            253,
+            146,
+            29,
+            COLORS.mid
+        );
+
+        pixelRect(
+            126,
+            260,
+            132,
+            15,
+            COLORS.light
+        );
+    }
+
+    if (id === "wood") {
+        for (let y = 227; y < HEIGHT; y += 13) {
+            pixelRect(
+                0,
+                y,
+                WIDTH,
+                2,
+                COLORS.mid
+            );
+        }
+
+        for (let x = 35; x < WIDTH; x += 64) {
+            pixelRect(
+                x,
+                225,
+                2,
+                HEIGHT - 225,
+                COLORS.mid
+            );
+        }
+    }
+
+    if (id === "tile") {
+        for (let x = 0; x < WIDTH; x += 48) {
+            pixelRect(
+                x,
+                224,
+                2,
+                HEIGHT - 224,
+                COLORS.mid
+            );
+        }
+
+        for (let y = 224; y < HEIGHT; y += 28) {
+            pixelRect(
+                0,
+                y,
+                WIDTH,
+                2,
+                COLORS.mid
+            );
+        }
+    }
+}
+
+
+function drawBed() {
+    const id =
+        state.equipped.bed;
+
+    const x = 286;
+    const y = 190;
+
+    if (id === "basic") {
+        pixelRect(
+            x,
+            y + 25,
+            77,
+            34,
+            COLORS.mid
+        );
+
+        pixelRect(
+            x + 6,
+            y + 18,
+            28,
+            12,
+            COLORS.light
+        );
+
+        pixelRect(
+            x + 4,
+            y + 57,
+            6,
+            14,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 66,
+            y + 57,
+            6,
+            14,
+            COLORS.dark
+        );
+    }
+
+    if (id === "cloud") {
+        pixelRect(
+            x + 2,
+            y + 30,
+            75,
+            27,
+            COLORS.light
+        );
+
+        pixelRect(
+            x + 10,
+            y + 22,
+            58,
+            14,
+            COLORS.light
+        );
+
+        pixelRect(
+            x + 25,
+            y + 16,
+            30,
+            13,
+            COLORS.light
+        );
+
+        pixelRect(
+            x + 6,
+            y + 56,
+            67,
+            6,
+            COLORS.mid
+        );
+    }
+
+    if (id === "royal") {
+        pixelRect(
+            x,
+            y + 21,
+            77,
+            40,
+            COLORS.mid
+        );
+
+        pixelRect(
+            x + 5,
+            y + 9,
+            8,
+            20,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 64,
+            y + 9,
+            8,
+            20,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 8,
+            y + 18,
+            61,
+            9,
+            COLORS.light
+        );
+
+        pixelRect(
+            x + 9,
+            y + 34,
+            59,
+            21,
+            COLORS.light
+        );
+    }
+}
+
+
+function drawDecor() {
+    const id =
+        state.equipped.decor;
+
+    if (id === "plant") {
+        pixelRect(
+            34,
+            194,
+            30,
+            29,
+            COLORS.mid
+        );
+
+        pixelRect(
+            47,
+            154,
+            5,
+            42,
+            COLORS.dark
+        );
+
+        pixelRect(
+            33,
+            161,
+            17,
+            7,
+            COLORS.dark
+        );
+
+        pixelRect(
+            50,
+            171,
+            20,
+            7,
+            COLORS.dark
+        );
+
+        pixelRect(
+            37,
+            182,
+            13,
+            7,
+            COLORS.dark
+        );
+    }
+
+    if (id === "lamp") {
+        pixelRect(
+            47,
+            148,
+            5,
+            70,
+            COLORS.dark
+        );
+
+        pixelRect(
+            35,
+            145,
+            29,
+            8,
+            COLORS.dark
+        );
+
+        pixelRect(
+            39,
+            137,
+            21,
+            8,
+            COLORS.mid
+        );
+
+        pixelRect(
+            34,
+            216,
+            31,
+            7,
+            COLORS.dark
+        );
+    }
+
+    if (id === "poster") {
+        pixelRect(
+            26,
+            82,
+            72,
+            74,
+            COLORS.dark
+        );
+
+        pixelRect(
+            31,
+            87,
+            62,
+            64,
+            COLORS.light
+        );
+
+        text(
+            "A",
+            62,
+            124,
+            30,
+            "center",
+            COLORS.dark
+        );
+
+        text(
+            "RCADE",
+            62,
+            143,
+            8,
+            "center",
+            COLORS.dark
+        );
+    }
+
+    if (id === "aquarium") {
+        pixelRect(
+            22,
+            166,
+            82,
+            53,
+            COLORS.dark
+        );
+
+        pixelRect(
+            27,
+            171,
+            72,
+            42,
+            COLORS.light
+        );
+
+        pixelRect(
+            31,
+            205,
+            64,
+            6,
+            COLORS.mid
+        );
+
+        pixelRect(
+            54,
+            188,
+            12,
+            6,
+            COLORS.dark
+        );
+
+        pixelRect(
+            49,
+            190,
+            6,
+            2,
+            COLORS.dark
+        );
+    }
+}
+
+
+function drawPoop() {
+    const amount =
+        Math.min(
+            state.pet.poop,
+            4
+        );
+
+    for (let i = 0; i < amount; i += 1) {
+        const x =
+            235 -
+            i * 25;
+
+        const y =
+            267 +
+            (i % 2) * 4;
+
+        pixelRect(
+            x,
+            y,
+            17,
+            8,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 4,
+            y - 6,
+            10,
+            6,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 7,
+            y - 10,
+            6,
+            4,
+            COLORS.dark
+        );
+    }
+}
+
+
+/* =========================================================
+   PET SPRITES
+========================================================= */
+
+function drawEgg(x, y) {
+    pixelRect(
+        x - 22,
+        y - 28,
+        44,
+        52,
+        COLORS.light
+    );
+
+    pixelRect(
+        x - 29,
+        y - 14,
+        58,
+        29,
+        COLORS.light
+    );
+
+    pixelRect(
+        x - 17,
+        y - 33,
+        34,
+        6,
+        COLORS.light
+    );
+
+    pixelRect(
+        x - 8,
+        y - 5,
+        7,
+        7,
+        COLORS.mid
+    );
+
+    pixelRect(
+        x + 10,
+        y + 9,
+        6,
+        6,
+        COLORS.mid
+    );
+
+    pixelRect(
+        x - 17,
+        y + 13,
+        5,
+        5,
+        COLORS.mid
+    );
+
+    centeredText(
+        "PRESS B TO HATCH",
+        276,
+        11
+    );
+}
+
+
+function drawPet(x, y, stage) {
+    let bounce =
+        Math.sin(performance.now() / 330) > 0
+            ? 0
+            : 2;
+
+    if (stage === "baby") {
+        drawBaby(
+            x,
+            y + bounce
+        );
+    }
+
+    if (stage === "child") {
+        drawChild(
+            x,
+            y + bounce
+        );
+    }
+
+    if (stage === "teen") {
+        drawTeen(
+            x,
+            y + bounce
+        );
+    }
+
+    if (stage === "adult") {
+        drawAdult(
+            x,
+            y + bounce
+        );
+    }
+}
+
+
+function drawFace(x, y, moodScale) {
+    const hungry =
+        state.pet.hunger <= 25;
+
+    const unhappy =
+        state.pet.happiness <= 25;
+
+    if (state.pet.sick) {
+        pixelRect(
+            x - 16,
+            y - 4,
+            7,
+            3,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 9,
+            y - 4,
+            7,
+            3,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 5,
+            y + 11,
+            10,
+            3,
+            COLORS.dark
+        );
+
+        text(
+            "+",
+            x + 38,
+            y - 27,
+            12,
+            "center"
+        );
+
+        return;
+    }
+
+    if (
+        state.pet.happiness >= 70 &&
+        !hungry
+    ) {
+        pixelRect(
+            x - 17,
+            y - 4,
+            7,
+            4,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 10,
+            y - 4,
+            7,
+            4,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 8,
+            y + 10,
+            16,
+            4,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 4,
+            y + 14,
+            8,
+            3,
+            COLORS.dark
+        );
+
+        return;
+    }
+
+    pixelRect(
+        x - 17,
+        y - 5,
+        6,
+        7,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 11,
+        y - 5,
+        6,
+        7,
+        COLORS.dark
+    );
+
+    if (unhappy || hungry) {
+        pixelRect(
+            x - 8,
+            y + 15,
+            16,
+            3,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 5,
+            y + 12,
+            10,
+            3,
+            COLORS.dark
+        );
+    } else {
+        pixelRect(
+            x - 7,
+            y + 13,
+            14,
+            3,
+            COLORS.dark
+        );
+    }
+}
+
+
+function drawBaby(x, y) {
+    pixelRect(
+        x - 34,
+        y - 28,
+        68,
+        55,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 42,
+        y - 16,
+        84,
+        31,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 27,
+        y - 35,
+        54,
+        8,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 28,
+        y - 22,
+        56,
+        43,
+        COLORS.light
+    );
+
+    drawFace(
+        x,
+        y - 3,
+        1
+    );
+
+    pixelRect(
+        x - 26,
+        y + 25,
+        17,
+        7,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 9,
+        y + 25,
+        17,
+        7,
+        COLORS.dark
+    );
+}
+
+
+function drawChild(x, y) {
+    pixelRect(
+        x - 27,
+        y - 55,
+        15,
+        18,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 12,
+        y - 55,
+        15,
+        18,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 38,
+        y - 41,
+        76,
+        68,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 30,
+        y - 33,
+        60,
+        51,
+        COLORS.light
+    );
+
+    pixelRect(
+        x - 48,
+        y - 14,
+        11,
+        31,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 37,
+        y - 14,
+        11,
+        31,
+        COLORS.dark
+    );
+
+    drawFace(
+        x,
+        y - 8,
+        1
+    );
+
+    pixelRect(
+        x - 27,
+        y + 27,
+        16,
+        9,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 11,
+        y + 27,
+        16,
+        9,
+        COLORS.dark
+    );
+}
+
+
+function drawTeen(x, y) {
+    pixelRect(
+        x - 31,
+        y - 61,
+        14,
+        20,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 17,
+        y - 61,
+        14,
+        20,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 43,
+        y - 46,
+        86,
+        74,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 34,
+        y - 37,
+        68,
+        55,
+        COLORS.light
+    );
+
+    pixelRect(
+        x - 54,
+        y - 17,
+        12,
+        39,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 42,
+        y - 17,
+        12,
+        39,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 28,
+        y + 27,
+        17,
+        13,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 11,
+        y + 27,
+        17,
+        13,
+        COLORS.dark
+    );
+
+    drawFace(
+        x,
+        y - 10,
+        1
+    );
+}
+
+
+function drawAdult(x, y) {
+    const form =
+        state.pet.form ||
+        "round";
+
+    if (form === "star") {
+        pixelRect(
+            x - 40,
+            y - 48,
+            80,
+            74,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 31,
+            y - 39,
+            62,
+            54,
+            COLORS.light
+        );
+
+        pixelRect(
+            x - 49,
+            y - 57,
+            18,
+            25,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 31,
+            y - 57,
+            18,
+            25,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 58,
+            y - 13,
+            18,
+            13,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 40,
+            y - 13,
+            18,
+            13,
+            COLORS.dark
+        );
+    } else if (form === "gremlin") {
+        pixelRect(
+            x - 47,
+            y - 42,
+            94,
+            70,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 36,
+            y - 33,
+            72,
+            51,
+            COLORS.light
+        );
+
+        pixelRect(
+            x - 60,
+            y - 38,
+            22,
+            11,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 38,
+            y - 38,
+            22,
+            11,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 37,
+            y + 26,
+            21,
+            13,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 16,
+            y + 26,
+            21,
+            13,
+            COLORS.dark
+        );
+    } else {
+        pixelRect(
+            x - 46,
+            y - 44,
+            92,
+            72,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 36,
+            y - 34,
+            72,
+            52,
+            COLORS.light
+        );
+
+        pixelRect(
+            x - 53,
+            y - 22,
+            12,
+            41,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 41,
+            y - 22,
+            12,
+            41,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 32,
+            y + 27,
+            20,
+            12,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 12,
+            y + 27,
+            20,
+            12,
+            COLORS.dark
+        );
+    }
+
+    drawFace(
+        x,
+        y - 7,
+        1
+    );
+}
+
+
+function drawAccessory(x, y) {
+    const id =
+        state.equipped.accessory;
+
+    if (id === "bow") {
+        pixelRect(
+            x - 10,
+            y - 67,
+            20,
+            10,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 27,
+            y - 72,
+            17,
+            18,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 10,
+            y - 72,
+            17,
+            18,
+            COLORS.dark
+        );
+    }
+
+    if (id === "cap") {
+        pixelRect(
+            x - 33,
+            y - 66,
+            59,
+            10,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 24,
+            y - 76,
+            42,
+            11,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 20,
+            y - 62,
+            22,
+            6,
+            COLORS.dark
+        );
+    }
+
+    if (id === "glasses") {
+        pixelRect(
+            x - 27,
+            y - 19,
+            19,
+            14,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 8,
+            y - 19,
+            19,
+            14,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 8,
+            y - 15,
+            16,
+            4,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 23,
+            y - 16,
+            11,
+            8,
+            COLORS.light
+        );
+
+        pixelRect(
+            x + 12,
+            y - 16,
+            11,
+            8,
+            COLORS.light
+        );
+    }
+
+    if (id === "crown") {
+        pixelRect(
+            x - 28,
+            y - 70,
+            56,
+            11,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 28,
+            y - 82,
+            10,
+            13,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x - 5,
+            y - 88,
+            10,
+            19,
+            COLORS.dark
+        );
+
+        pixelRect(
+            x + 18,
+            y - 82,
+            10,
+            13,
+            COLORS.dark
+        );
+    }
+}
+
+
+function drawSleepingPet() {
+    const bedX =
+        322;
+
+    const bedY =
+        216;
+
+    pixelRect(
+        bedX - 25,
+        bedY - 15,
+        43,
+        24,
+        COLORS.dark
+    );
+
+    pixelRect(
+        bedX - 18,
+        bedY - 10,
+        30,
+        15,
+        COLORS.light
+    );
+
+    pixelRect(
+        bedX + 8,
+        bedY - 7,
+        6,
+        4,
+        COLORS.dark
+    );
+}
+
+
+function drawGrave() {
+    pixelRect(
+        153,
+        169,
+        78,
+        72,
+        COLORS.dark
+    );
+
+    pixelRect(
+        161,
+        162,
+        62,
+        15,
+        COLORS.dark
+    );
+
+    text(
+        "RIP",
+        192,
+        203,
+        18,
+        "center",
+        COLORS.light
+    );
+
+    text(
+        state.pet.name,
+        192,
+        223,
+        9,
+        "center",
+        COLORS.light
+    );
+}
+
+
+/* =========================================================
+   HOME SCREEN
+========================================================= */
+
+function drawHome(now) {
+    clearScreen();
+
+    drawMenuBar();
+    drawRoom();
+
+    if (state.pet.hatched) {
+        text(
+            state.pet.name.toUpperCase(),
+            10,
+            310,
+            9,
+            "left"
+        );
+
+        text(
+            state.pet.stage.toUpperCase(),
+            WIDTH - 10,
+            310,
+            9,
+            "right"
+        );
+    }
+
+    if (
+        state.pet.mischief &&
+        !genuineAttentionNeed()
+    ) {
+        text(
+            "!",
+            WIDTH - 18,
+            71,
+            17,
+            "center"
+        );
+    }
+
+    if (
+        toastText &&
+        now < toastUntil
+    ) {
+        pixelRect(
+            37,
+            247,
+            WIDTH - 74,
+            38,
+            COLORS.dark
+        );
+
+        text(
+            toastText.substring(0, 42),
+            WIDTH / 2,
+            271,
+            10,
+            "center",
+            COLORS.light
+        );
+    }
+}
+
+
+/* =========================================================
+   LIST SCREEN DRAW
+========================================================= */
+
+function drawListScreen() {
+    clearScreen();
+
+    if (!currentList) {
+        goHome();
+        return;
+    }
+
+    drawTopFrame(
+        currentList.title
+    );
+
+    const entries =
+        currentList.entries;
+
+    const selected =
+        currentList.selected;
+
+    const maxVisible = 6;
+
+    let start =
+        Math.max(
+            0,
+            selected - 2
+        );
+
+    if (
+        start +
+        maxVisible >
+        entries.length
+    ) {
+        start =
+            Math.max(
+                0,
+                entries.length -
+                maxVisible
+            );
+    }
+
+    for (
+        let row = 0;
+        row < maxVisible;
+        row += 1
+    ) {
+        const index =
+            start + row;
+
+        if (index >= entries.length) {
+            break;
+        }
+
+        const entry =
+            entries[index];
+
+        const y =
+            48 +
+            row * 40;
+
+        const active =
+            index === selected;
+
+        if (active) {
+            pixelRect(
+                8,
+                y,
+                WIDTH - 16,
+                35,
+                COLORS.dark
+            );
+        }
+
+        text(
+            active
+                ? ">"
+                : " ",
+            15,
+            y + 22,
+            12,
+            "left",
+            active
+                ? COLORS.light
+                : COLORS.dark
+        );
+
+        text(
+            entry.label.substring(0, 29),
+            31,
+            y + 17,
+            11,
+            "left",
+            active
+                ? COLORS.light
+                : COLORS.dark
+        );
+
+        if (entry.sub) {
+            text(
+                entry.sub.substring(0, 35),
+                31,
+                y + 30,
+                7,
+                "left",
+                active
+                    ? COLORS.light
+                    : COLORS.mid
+            );
+        }
+    }
+
+    drawBottomHint(
+        "A NEXT",
+        "B SELECT",
+        "C BACK"
+    );
+}
+
+
+/* =========================================================
+   STATUS DRAW
+========================================================= */
+
+function drawMeter(
+    label,
+    value,
+    x,
+    y,
+    width
+) {
+    text(
+        label,
+        x,
+        y,
+        9
+    );
+
+    text(
+        Math.round(value),
+        x + width,
+        y,
+        9,
+        "right"
+    );
+
+    pixelRect(
+        x,
+        y + 6,
+        width,
+        8,
+        COLORS.mid
+    );
+
+    pixelRect(
+        x,
+        y + 6,
+        width *
+        clamp(
+            value / 100,
+            0,
+            1
+        ),
+        8,
+        COLORS.dark
+    );
+}
+
+
+function drawStatus() {
+    clearScreen();
+
+    drawTopFrame(
+        "STATUS " +
+        (statusPage + 1) +
+        "/2"
+    );
+
+    if (statusPage === 0) {
+        drawMeter(
+            "HUNGER",
+            state.pet.hunger,
+            26,
+            66,
+            150
+        );
+
+        drawMeter(
+            "HAPPY",
+            state.pet.happiness,
+            208,
+            66,
+            150
+        );
+
+        drawMeter(
+            "HEALTH",
+            state.pet.health,
+            26,
+            118,
+            150
+        );
+
+        drawMeter(
+            "ENERGY",
+            state.pet.energy,
+            208,
+            118,
+            150
+        );
+
+        drawMeter(
+            "DISCIPLINE",
+            state.pet.discipline,
+            26,
+            170,
+            150
+        );
+
+        drawMeter(
+            "CLEAN",
+            state.pet.cleanliness,
+            208,
+            170,
+            150
+        );
+
+        text(
+            "WEIGHT",
+            26,
+            233,
+            10
+        );
+
+        text(
+            state.pet.weight.toFixed(1) +
+            " oz",
+            107,
+            233,
+            10
+        );
+
+        text(
+            "POOP",
+            208,
+            233,
+            10
+        );
+
+        text(
+            state.pet.poop,
+            259,
+            233,
+            10
+        );
+    } else {
+        text(
+            "NAME",
+            25,
+            65,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.pet.name,
+            25,
+            84,
+            15
+        );
+
+        text(
+            "STAGE",
+            25,
+            116,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.pet.stage.toUpperCase(),
+            25,
+            135,
+            15
+        );
+
+        text(
+            "AGE",
+            210,
+            65,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            Math.floor(
+                state.pet.ageMinutes
+            ) +
+            " min",
+            210,
+            84,
+            15
+        );
+
+        text(
+            "CARE MISTAKES",
+            210,
+            116,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.pet.careMistakes,
+            210,
+            135,
+            15
+        );
+
+        text(
+            "GAMES PLAYED",
+            25,
+            176,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.stats.gamesPlayed,
+            25,
+            196,
+            15
+        );
+
+        text(
+            "BEST H/L",
+            145,
+            176,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.stats.highLowBest,
+            145,
+            196,
+            15
+        );
+
+        text(
+            "JUMP",
+            236,
+            176,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.stats.jumpBest,
+            236,
+            196,
+            15
+        );
+
+        text(
+            "CATCH",
+            312,
+            176,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.stats.catchBest,
+            312,
+            196,
+            15
+        );
+
+        text(
+            "EVOLUTION",
+            25,
+            237,
+            9,
+            "left",
+            COLORS.mid
+        );
+
+        text(
+            state.pet.form
+                ? state.pet.form.toUpperCase()
+                : "???",
+            25,
+            257,
+            15
+        );
+    }
+
+    drawBottomHint(
+        "A PAGE",
+        "B PAGE",
+        "C BACK"
+    );
+}
+
+
+/* =========================================================
+   HIGH / LOW DRAW
+========================================================= */
+
+function drawHighLow() {
+    clearScreen();
+
+    drawTopFrame(
+        "HIGH / LOW"
+    );
+
+    centeredText(
+        "IS THE NEXT NUMBER",
+        75,
+        10
+    );
+
+    centeredText(
+        "LOWER OR HIGHER?",
+        92,
+        10
+    );
+
+    pixelRect(
+        150,
+        111,
+        84,
+        75,
+        COLORS.dark
+    );
+
+    text(
+        highLow.current,
+        WIDTH / 2,
+        163,
+        39,
+        "center",
+        COLORS.light
+    );
+
+    if (
+        highLow.reveal !== null
+    ) {
+        text(
+            "NEXT: " +
+            highLow.reveal,
+            WIDTH / 2,
+            211,
+            14,
+            "center"
+        );
+
+        const guessedHigher =
+            highLow.choice === 1;
+
+        const correct =
+            guessedHigher
+                ? highLow.reveal >
+                    highLow.current
+                : highLow.reveal <
+                    highLow.current;
+
+        text(
+            correct
+                ? "CORRECT!"
+                : "WRONG!",
+            WIDTH / 2,
+            235,
+            13,
+            "center"
+        );
+    } else {
+        const leftSelected =
+            highLow.choice === 0;
+
+        if (leftSelected) {
+            pixelRect(
+                63,
+                211,
+                108,
+                30,
+                COLORS.dark
+            );
+        }
+
+        if (!leftSelected) {
+            pixelRect(
+                213,
+                211,
+                108,
+                30,
+                COLORS.dark
+            );
+        }
+
+        text(
+            "LOWER",
+            117,
+            231,
+            12,
+            "center",
+            leftSelected
+                ? COLORS.light
+                : COLORS.dark
+        );
+
+        text(
+            "HIGHER",
+            267,
+            231,
+            12,
+            "center",
+            !leftSelected
+                ? COLORS.light
+                : COLORS.dark
+        );
+    }
+
+    text(
+        "ROUND " +
+        highLow.round +
+        "/5   SCORE " +
+        highLow.score,
+        WIDTH / 2,
+        270,
+        10,
+        "center"
+    );
+
+    if (highLow.finished) {
+        pixelRect(
+            42,
+            94,
+            300,
+            155,
+            COLORS.dark
+        );
+
+        text(
+            "GAME COMPLETE",
+            WIDTH / 2,
+            128,
+            17,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "SCORE " +
+            highLow.score +
+            "/5",
+            WIDTH / 2,
+            159,
+            14,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "B PLAY AGAIN",
+            WIDTH / 2,
+            191,
+            10,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "C EXIT",
+            WIDTH / 2,
+            211,
+            10,
+            "center",
+            COLORS.light
+        );
+    }
+
+    drawBottomHint(
+        "A CHOICE",
+        "B SELECT",
+        "C EXIT"
+    );
+}
+
+
+/* =========================================================
+   JUMP DRAW
+========================================================= */
+
+function drawJumpGame(now) {
+    clearScreen();
+
+    drawTopFrame(
+        "JUMP"
+    );
+
+    pixelRect(
+        0,
+        260,
+        WIDTH,
+        4,
+        COLORS.dark
+    );
+
+    for (
+        let x = 0;
+        x < WIDTH;
+        x += 24
+    ) {
+        pixelRect(
+            x,
+            270,
+            12,
+            3,
+            COLORS.mid
+        );
+    }
+
+    drawMiniPet(
+        92,
+        jumpGame.petY
+    );
+
+    pixelRect(
+        jumpGame.obstacleX,
+        226,
+        jumpGame.obstacleWidth,
+        34,
+        COLORS.dark
+    );
+
+    pixelRect(
+        jumpGame.obstacleX - 6,
+        236,
+        6,
+        8,
+        COLORS.dark
+    );
+
+    text(
+        "SCORE " +
+        jumpGame.score,
+        14,
+        55,
+        10
+    );
+
+    const remaining =
+        Math.max(
+            0,
+            20 -
+            Math.floor(
+                (now - jumpGame.startTime) /
+                1000
+            )
+        );
+
+    text(
+        remaining + "s",
+        WIDTH - 14,
+        55,
+        10,
+        "right"
+    );
+
+    if (jumpGame.finished) {
+        pixelRect(
+            63,
+            103,
+            258,
+            114,
+            COLORS.dark
+        );
+
+        text(
+            "RUN OVER",
+            WIDTH / 2,
+            137,
+            17,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "SCORE " +
+            jumpGame.score,
+            WIDTH / 2,
+            166,
+            13,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "B RETRY / C EXIT",
+            WIDTH / 2,
+            194,
+            9,
+            "center",
+            COLORS.light
+        );
+    }
+
+    drawBottomHint(
+        "A JUMP",
+        "B JUMP",
+        "C EXIT"
+    );
+}
+
+
+function drawMiniPet(x, y) {
+    pixelRect(
+        x - 18,
+        y - 19,
+        36,
+        34,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 12,
+        y - 13,
+        24,
+        22,
+        COLORS.light
+    );
+
+    pixelRect(
+        x - 10,
+        y - 5,
+        4,
+        5,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 6,
+        y - 5,
+        4,
+        5,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x - 13,
+        y + 14,
+        9,
+        6,
+        COLORS.dark
+    );
+
+    pixelRect(
+        x + 4,
+        y + 14,
+        9,
+        6,
+        COLORS.dark
+    );
+}
+
+
+/* =========================================================
+   CATCH DRAW
+========================================================= */
+
+function drawCatchGame(now) {
+    clearScreen();
+
+    drawTopFrame(
+        "CATCH"
+    );
+
+    text(
+        "CATCH TREATS / AVOID X",
+        WIDTH / 2,
+        55,
+        9,
+        "center"
+    );
+
+    catchGame.items.forEach(
+        function (item) {
+            if (item.good) {
+                pixelRect(
+                    item.x - 6,
+                    item.y - 6,
+                    12,
+                    12,
+                    COLORS.dark
+                );
+
+                pixelRect(
+                    item.x - 3,
+                    item.y - 9,
+                    6,
+                    3,
+                    COLORS.dark
+                );
+            } else {
+                text(
+                    "X",
+                    item.x,
+                    item.y,
+                    14,
+                    "center"
+                );
+            }
+        }
+    );
+
+    drawMiniPet(
+        catchGame.playerX,
+        260
+    );
+
+    text(
+        "SCORE " +
+        catchGame.score,
+        12,
+        78,
+        10
+    );
+
+    const remaining =
+        Math.max(
+            0,
+            20 -
+            Math.floor(
+                (now - catchGame.startTime) /
+                1000
+            )
+        );
+
+    text(
+        remaining + "s",
+        WIDTH - 12,
+        78,
+        10,
+        "right"
+    );
+
+    if (catchGame.finished) {
+        pixelRect(
+            63,
+            105,
+            258,
+            112,
+            COLORS.dark
+        );
+
+        text(
+            "TIME!",
+            WIDTH / 2,
+            139,
+            17,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "SCORE " +
+            catchGame.score,
+            WIDTH / 2,
+            168,
+            13,
+            "center",
+            COLORS.light
+        );
+
+        text(
+            "B RETRY / C EXIT",
+            WIDTH / 2,
+            196,
+            9,
+            "center",
+            COLORS.light
+        );
+    }
+
+    drawBottomHint(
+        "A LEFT",
+        "B RETRY",
+        "C RIGHT"
+    );
+}
+
+
+/* =========================================================
+   PREVIEW LABEL
+========================================================= */
+
+function drawPreviewBadge() {
+    if (!previewMode) {
+        return;
+    }
+
+    pixelRect(
+        WIDTH - 84,
+        HEIGHT - 23,
+        78,
+        17,
+        COLORS.dark
+    );
+
+    text(
+        "PREVIEW",
+        WIDTH - 45,
+        HEIGHT - 11,
+        8,
+        "center",
+        COLORS.light
+    );
+}
+
+
+/* =========================================================
+   RENDER LOOP
+========================================================= */
+
+function render(now) {
+    updateJumpGame(now);
+    updateCatchGame(now);
+
+    if (mode === "home") {
+        drawHome(now);
+    } else if (mode === "list") {
+        drawListScreen();
+    } else if (mode === "status") {
+        drawStatus();
+    } else if (mode === "highlow") {
+        drawHighLow();
+    } else if (mode === "jump") {
+        drawJumpGame(now);
+    } else if (mode === "catch") {
+        drawCatchGame(now);
+    }
+
+    drawPreviewBadge();
+
+    lastFrame = now;
+
+    requestAnimationFrame(
+        render
+    );
+}
+
+
+/* =========================================================
+   TICK LOOP
+========================================================= */
+
+if (!previewMode) {
+    window.setInterval(
+        function () {
+            simulateTick(false);
+        },
+        TICK_MS
+    );
+}
+
+
+/* =========================================================
+   SAVE BEFORE LEAVING
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    function () {
+        saveState();
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+applyOfflineProgress();
+updateStage();
+saveState();
+
+requestAnimationFrame(
+    render
+);
+
+</script>
+
+</body>
+</html>

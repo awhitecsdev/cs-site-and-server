@@ -1,0 +1,602 @@
+:root {
+    --background: #0b0d10;
+    --surface: #11151a;
+    --surface-hover: #161b21;
+
+    --text: #f3f5f7;
+    --secondary: #adb5bd;
+    --muted: #707983;
+
+    --border: #252c33;
+    --border-hover: #414b55;
+
+    --max-width: 1180px;
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    min-height: 100%;
+}
+
+
+body {
+    min-height: 100vh;
+    margin: 0;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height: 1.5;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+.page-width {
+    width: min(calc(100% - 48px), var(--max-width));
+    margin: 0 auto;
+}
+
+
+/* HEADER */
+
+.site-header {
+    border-bottom: 1px solid var(--border);
+}
+
+
+.header-inner {
+    width: min(calc(100% - 48px), var(--max-width));
+    min-height: 74px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+
+.brand {
+    font-size: 0.95rem;
+    font-weight: 750;
+
+    letter-spacing: -0.025em;
+}
+
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+
+.site-nav a {
+    color: var(--muted);
+
+    font-size: 0.85rem;
+
+    transition: color 140ms ease;
+}
+
+
+.site-nav a:hover,
+.site-nav a.active {
+    color: var(--text);
+}
+
+
+/* HERO */
+
+.projects-hero {
+    padding: 110px 0 82px;
+}
+
+
+.eyebrow {
+    margin: 0 0 17px;
+
+    color: var(--muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.68rem;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+
+.projects-hero h1 {
+    margin: 0;
+
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 600;
+
+    letter-spacing: -0.07em;
+    line-height: 0.9;
+}
+
+
+.hero-description {
+    max-width: 580px;
+
+    margin: 31px 0 0;
+
+    color: var(--secondary);
+
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+
+/* PROJECTS */
+
+.projects-section {
+    padding-bottom: 100px;
+}
+
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+
+    color: var(--muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.65rem;
+
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* CARD */
+
+.project-card {
+    min-height: 390px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease,
+        box-shadow 160ms ease;
+}
+
+
+.project-card:hover {
+    background: var(--surface-hover);
+
+    border-color: var(--border-hover);
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+
+.project-card:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.project-number {
+    color: #59636d;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.67rem;
+}
+
+
+.status {
+    padding: 5px 8px;
+
+    color: #939da7;
+
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.56rem;
+
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+
+.card-content {
+    flex: 1;
+
+    padding-top: 55px;
+}
+
+
+.card-content h2 {
+    margin: 0 0 17px;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 550;
+
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+
+.card-content p {
+    max-width: 470px;
+
+    margin: 0;
+
+    color: var(--secondary);
+
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin: 30px 0;
+}
+
+
+.project-tags span {
+    padding: 5px 8px;
+
+    color: #89939c;
+
+    border: 1px solid var(--border);
+    border-radius: 3px;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.58rem;
+}
+
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-top: 17px;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 0.7rem;
+}
+
+
+.card-link {
+    color: var(--secondary);
+
+    transition: transform 150ms ease;
+}
+
+
+.project-card:hover .card-link {
+    transform: translateX(3px);
+}
+
+
+/* FIRST PROJECT FEATURED */
+
+.project-card:first-child {
+    grid-column: span 2;
+    min-height: 430px;
+}
+
+
+.project-card:first-child .card-content {
+    max-width: 760px;
+}
+
+
+/* PROJECT DETAIL PAGE */
+
+.project-page {
+    padding: 80px 0 120px;
+}
+
+
+.breadcrumb {
+    margin-bottom: 58px;
+
+    color: var(--muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.68rem;
+}
+
+
+.breadcrumb a:hover {
+    color: var(--text);
+}
+
+
+.project-page-header {
+    padding-bottom: 65px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.project-page-header h1 {
+    margin: 0;
+
+    font-size: clamp(3.7rem, 9vw, 7rem);
+    font-weight: 600;
+
+    letter-spacing: -0.07em;
+    line-height: 0.9;
+}
+
+
+.project-page-summary {
+    max-width: 720px;
+
+    margin: 30px 0 0;
+
+    color: var(--secondary);
+
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+
+.project-page-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 30px;
+}
+
+
+.project-page-meta span {
+    padding: 6px 9px;
+
+    color: #929ba4;
+
+    border: 1px solid var(--border);
+    border-radius: 3px;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.62rem;
+}
+
+
+.project-content {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 720px);
+
+    gap: 55px;
+
+    padding: 60px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.project-content-label {
+    margin: 3px 0 0;
+
+    color: var(--muted);
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 0.65rem;
+
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+
+.project-content-body h2 {
+    margin: 0 0 18px;
+
+    font-size: 1.6rem;
+    letter-spacing: -0.03em;
+}
+
+
+.project-content-body p {
+    margin: 0 0 18px;
+
+    color: var(--secondary);
+
+    line-height: 1.8;
+}
+
+
+.project-content-body ul {
+    padding-left: 20px;
+
+    color: var(--secondary);
+}
+
+
+.project-content-body li {
+    margin: 8px 0;
+}
+
+
+/* FOOTER */
+
+.site-footer {
+    border-top: 1px solid var(--border);
+}
+
+
+.footer-inner {
+    min-height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    color: #5e6871;
+
+    font-size: 0.73rem;
+}
+
+
+.footer-inner a:hover {
+    color: var(--text);
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 750px) {
+
+    .page-width,
+    .header-inner {
+        width: min(calc(100% - 30px), var(--max-width));
+    }
+
+
+    .site-nav {
+        gap: 14px;
+    }
+
+
+    .site-nav a {
+        font-size: 0.76rem;
+    }
+
+
+    .projects-hero {
+        padding: 82px 0 65px;
+    }
+
+
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .project-card:first-child {
+        grid-column: auto;
+    }
+
+
+    .project-card {
+        min-height: 350px;
+    }
+
+
+    .card-content {
+        padding-top: 42px;
+    }
+
+
+    .project-content {
+        grid-template-columns: 1fr;
+        gap: 18px;
+
+        padding: 45px 0;
+    }
+
+
+    .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+
+        gap: 6px;
+    }
+
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AnthonyCS</title>
+
+  <meta
+    name="description"
+    content="AnthonyCS — projects, portfolio, and computer science resources."
+  >
+
+  <style>
+    :root {
+      --background: #0a0a0a;
+      --surface: #111111;
+      --surface-hover: #171717;
+
+      --text: #f5f5f5;
+      --muted: #999999;
+      --border: #282828;
+
+      --accent: #ffffff;
+
+      --max-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(calc(100% - 48px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    /* Header */
+
+    header {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar {
+      min-height: 76px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 32px;
+    }
+
+    .brand {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-size: 0.92rem;
+
+      transition:
+        color 150ms ease,
+        transform 150ms ease;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    /* Hero */
+
+    .hero {
+      min-height: calc(100vh - 77px);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      padding: 96px 0;
+    }
+
+    .eyebrow {
+      margin-bottom: 24px;
+
+      color: var(--muted);
+
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 900px;
+
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 600;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    .hero-description {
+      max-width: 600px;
+
+      margin-top: 38px;
+
+      color: var(--muted);
+
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.65;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+
+      margin-top: 38px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+
+      padding: 13px 18px;
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+
+      font-size: 0.9rem;
+
+      transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        transform 150ms ease;
+    }
+
+    .button:hover {
+      background: var(--surface-hover);
+      border-color: #444444;
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      background: var(--text);
+      border-color: var(--text);
+      color: #090909;
+    }
+
+    .button.primary:hover {
+      background: #dcdcdc;
+      border-color: #dcdcdc;
+    }
+
+    /* Main destinations */
+
+    .destinations {
+      border-top: 1px solid var(--border);
+    }
+
+    .section-heading {
+      padding: 72px 0 32px;
+
+      color: var(--muted);
+
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .destination-list {
+      border-top: 1px solid var(--border);
+    }
+
+    .destination {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      align-items: center;
+      gap: 36px;
+
+      min-height: 150px;
+
+      border-bottom: 1px solid var(--border);
+
+      transition:
+        background 180ms ease,
+        padding 180ms ease;
+    }
+
+    .destination:hover {
+      background: var(--surface);
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+
+    .number {
+      color: #555555;
+
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+      font-size: 0.78rem;
+    }
+
+    .destination h2 {
+      margin-bottom: 8px;
+
+      font-size: clamp(1.65rem, 4vw, 2.5rem);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .destination p {
+      max-width: 520px;
+
+      color: var(--muted);
+
+      font-size: 0.95rem;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 1.5rem;
+
+      transition:
+        color 180ms ease,
+        transform 180ms ease;
+    }
+
+    .destination:hover .arrow {
+      color: var(--text);
+      transform: translateX(5px);
+    }
+
+    /* Footer */
+
+    footer {
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 24px;
+
+      color: #666666;
+
+      font-size: 0.8rem;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+
+      background: #75d98b;
+      border-radius: 50%;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(calc(100% - 32px), var(--max-width));
+      }
+
+      .navbar {
+        min-height: 68px;
+      }
+
+      nav {
+        gap: 16px;
+      }
+
+      nav a {
+        font-size: 0.82rem;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 110px 0;
+      }
+
+      h1 {
+        font-size: clamp(3.4rem, 18vw, 5.5rem);
+      }
+
+      .destination {
+        grid-template-columns: 42px 1fr auto;
+        gap: 12px;
+
+        min-height: 140px;
+      }
+
+      .destination:hover {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .destination p {
+        font-size: 0.85rem;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .brand {
+        font-size: 0.9rem;
+      }
+
+      nav {
+        gap: 12px;
+      }
+
+      nav a {
+        font-size: 0.76rem;
+      }
+
+      .number {
+        display: none;
+      }
+
+      .destination {
+        grid-template-columns: 1fr auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="/">AnthonyCS</a>
+
+      <nav aria-label="Primary navigation">
+        <a href="/projects/">Projects</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="/learn/">LearnCS</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <main>
+
+    <section class="hero">
+      <div class="container">
+
+        <div class="eyebrow">Computer Science / Engineering</div>
+
+        <h1>
+          AnthonyCS
+        </h1>
+
+        <p class="hero-description">
+          A home for the things I build, the work I've done,
+          and the computer science concepts I explore.
+        </p>
+
+        <div class="hero-links">
+          <a class="button primary" href="/projects/">
+            Explore Projects
+            <span>→</span>
+          </a>
+
+          <a class="button" href="/portfolio/">
+            Portfolio
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="destinations">
+
+      <div class="container">
+
+        <div class="section-heading">
+          Explore AnthonyCS
+        </div>
+
+        <div class="destination-list">
+
+          <a class="destination" href="/projects/">
+
+            <div class="number">
+              01
+            </div>
+
+            <div>
+              <h2>Projects</h2>
+              <p>
+                Software, embedded systems, experiments,
+                and other things I've built.
+              </p>
+            </div>
+
+            <div class="arrow">
+              →
+            </div>
+
+          </a>
+
+
+          <a class="destination" href="/portfolio/">
+
+            <div class="number">
+              02
+            </div>
+
+            <div>
+              <h2>Portfolio</h2>
+              <p>
+                My background, experience, skills,
+                and professional work.
+              </p>
+            </div>
+
+            <div class="arrow">
+              →
+            </div>
+
+          </a>
+
+
+          <a class="destination" href="/learn/">
+
+            <div class="number">
+              03
+            </div>
+
+            <div>
+              <h2>LearnCS</h2>
+              <p>
+                Computer science concepts, explanations,
+                tools, and interactive learning material.
+              </p>
+            </div>
+
+            <div class="arrow">
+              →
+            </div>
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    <div class="container footer-inner">
+
+      <span>
+        © 2026 AnthonyCS
+      </span>
+
+      <span class="status">
+        <span class="status-dot"></span>
+        anthonycs.dev
+      </span>
+
+    </div>
+  </footer>
+
+</body>
+</html>

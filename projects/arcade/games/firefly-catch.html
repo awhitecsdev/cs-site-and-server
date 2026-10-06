@@ -1,0 +1,2991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Firefly Catch | AnthonyCS Arcade</title>
+
+    <link
+        rel="icon"
+        type="image/vnd.microsoft.icon"
+        href="https://cdn-icons-png.flaticon.com/512/4877/4877039.png"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:400,700|Playfair+Display:400,700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --glass: rgba(11, 14, 13, 0.72);
+            --glass-heavy: rgba(14, 17, 16, 0.94);
+            --glass-soft: rgba(255, 255, 255, 0.055);
+
+            --border: rgba(255, 255, 255, 0.10);
+            --border-hover: rgba(255, 255, 255, 0.19);
+
+            --text: #f3f5f2;
+            --secondary: #aeb6b0;
+            --muted: #737d76;
+
+            --gold: #e1c85d;
+            --gold-soft: rgba(225, 200, 93, 0.10);
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        body {
+            overflow: hidden;
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                "Roboto",
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    rgba(2, 6, 4, 0.13),
+                    rgba(2, 6, 4, 0.13)
+                ),
+                url("images/firefly_back.png");
+
+            background-size: cover;
+            background-position: center;
+
+            transform: translateZ(0);
+        }
+
+
+        button,
+        a {
+            font: inherit;
+        }
+
+
+        button {
+            color: inherit;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           CANVAS
+        ====================================================== */
+
+        canvas {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            z-index: 1;
+
+            will-change: transform;
+        }
+
+
+        /* =====================================================
+           HUD
+        ====================================================== */
+
+        header {
+            position: fixed;
+
+            top: 18px;
+            left: 50%;
+
+            z-index: 4;
+
+            width: min(calc(100% - 36px), 1120px);
+            height: 62px;
+
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 8px 10px;
+
+            background: var(--glass);
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.28);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            transform: translateX(-50%);
+        }
+
+
+        .btn {
+            min-height: 40px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 14px;
+
+            color: var(--secondary);
+            background: transparent;
+
+            border: 1px solid transparent;
+            border-radius: 7px;
+
+            font-size: 0.78rem;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition:
+                color 140ms ease,
+                background 140ms ease,
+                border-color 140ms ease;
+        }
+
+
+        .btn:hover {
+            color: var(--text);
+
+            background: var(--glass-soft);
+            border-color: var(--border);
+        }
+
+
+        #homeButton {
+            justify-self: start;
+        }
+
+
+        #homeButton::before {
+            content: "←";
+
+            margin-right: 8px;
+
+            color: var(--muted);
+        }
+
+
+        /* =====================================================
+           SCOREBOARD
+        ====================================================== */
+
+        #scoreboard {
+            display: flex;
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 5px;
+
+            color: var(--text);
+            background: rgba(0, 0, 0, 0.24);
+
+            border: 1px solid var(--border);
+            border-radius: 8px;
+
+            font-family:
+                "SFMono-Regular",
+                Consolas,
+                "Liberation Mono",
+                monospace;
+
+            text-align: center;
+
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+
+            will-change: opacity, transform;
+        }
+
+
+        #score,
+        #topScore {
+            min-width: 110px;
+
+            padding: 7px 13px;
+
+            font-size: 0.70rem;
+            font-weight: 500;
+
+            letter-spacing: 0.025em;
+        }
+
+
+        #score {
+            color: #dce2dd;
+        }
+
+
+        #topScore {
+            color: var(--gold);
+
+            border-left: 1px solid var(--border);
+        }
+
+
+        #achievementsButton {
+            justify-self: end;
+
+            color: #d5d9d6;
+
+            background: rgba(255, 255, 255, 0.035);
+
+            border-color: var(--border);
+        }
+
+
+        #achievementsButton:hover {
+            background: rgba(255, 255, 255, 0.075);
+
+            border-color: var(--border-hover);
+        }
+
+
+        /* =====================================================
+           TOOLTIP
+        ====================================================== */
+
+        .tooltip {
+            position: fixed;
+
+            left: 50%;
+            bottom: 24px;
+
+            z-index: 4;
+
+            max-width: calc(100% - 40px);
+
+            padding: 10px 15px;
+
+            color: #c6ccc7;
+            background: var(--glass);
+
+            border: 1px solid var(--border);
+            border-radius: 8px;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.25);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            font-family:
+                "SFMono-Regular",
+                Consolas,
+                "Liberation Mono",
+                monospace;
+
+            font-size: 0.68rem;
+
+            opacity: 1;
+
+            transform: translateX(-50%);
+
+            transition:
+                opacity 500ms ease,
+                transform 500ms ease;
+
+            pointer-events: none;
+        }
+
+
+        .tooltip::before {
+            content: "HOW TO PLAY";
+
+            margin-right: 12px;
+
+            color: var(--gold);
+
+            font-size: 0.57rem;
+
+            letter-spacing: 0.08em;
+        }
+
+
+        .tooltip.fade-out {
+            opacity: 0;
+
+            transform:
+                translateX(-50%)
+                translateY(8px);
+        }
+
+
+        /* =====================================================
+           MODAL
+        ====================================================== */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            z-index: 7;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            background: rgba(2, 4, 3, 0.70);
+
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+
+        .modal.active {
+            display: flex;
+        }
+
+
+        .modal-content {
+            position: relative;
+
+            width: min(100%, 680px);
+            max-height: min(760px, calc(100vh - 48px));
+
+            overflow-y: auto;
+
+            padding: 0;
+
+            color: var(--text);
+            background: var(--glass-heavy);
+
+            border: 1px solid var(--border-hover);
+            border-radius: 12px;
+
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, 0.58);
+
+            animation: modalIn 180ms ease;
+        }
+
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+
+        #modalTitle {
+            margin: 0;
+
+            padding: 24px 62px 21px 24px;
+
+            border-bottom: 1px solid var(--border);
+
+            font-size: 1.35rem;
+            font-weight: 550;
+
+            letter-spacing: -0.035em;
+        }
+
+
+        .close-button {
+            position: absolute;
+
+            top: 17px;
+            right: 17px;
+
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.035);
+
+            border: 1px solid var(--border);
+            border-radius: 6px;
+
+            font-size: 1.3rem;
+            font-weight: 300;
+            line-height: 1;
+
+            cursor: pointer;
+
+            transition:
+                color 140ms ease,
+                background 140ms ease,
+                border-color 140ms ease;
+        }
+
+
+        .close-button:hover {
+            color: var(--text);
+
+            background: rgba(255, 255, 255, 0.07);
+
+            border-color: var(--border-hover);
+        }
+
+
+        /* =====================================================
+           STATS
+        ====================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            gap: 1px;
+
+            margin: 0;
+
+            background: var(--border);
+
+            border-bottom: 1px solid var(--border);
+        }
+
+
+        .stats h3 {
+            grid-column: 1 / -1;
+
+            margin: 0;
+
+            padding: 16px 20px;
+
+            color: var(--muted);
+            background: #111513;
+
+            font-family:
+                "SFMono-Regular",
+                Consolas,
+                monospace;
+
+            font-size: 0.61rem;
+            font-weight: 500;
+
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+
+        .stats p {
+            min-height: 76px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            gap: 8px;
+
+            margin: 0;
+            padding: 14px 18px;
+
+            color: var(--muted);
+            background: #111513;
+
+            font-size: 0.69rem;
+        }
+
+
+        .stats p strong {
+            color: #939c95;
+
+            font-family:
+                "SFMono-Regular",
+                Consolas,
+                monospace;
+
+            font-size: 0.59rem;
+            font-weight: 500;
+
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+
+        .stats p span {
+            color: var(--text);
+
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           ACHIEVEMENTS
+        ====================================================== */
+
+        .achievements-modal {
+            margin: 0;
+            padding: 21px 22px 24px;
+        }
+
+
+        .achievements-modal h3 {
+            margin: 0 0 15px;
+
+            color: var(--muted);
+
+            font-family:
+                "SFMono-Regular",
+                Consolas,
+                monospace;
+
+            font-size: 0.61rem;
+            font-weight: 500;
+
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+
+        .achievement-list-modal {
+            max-height: 270px;
+
+            overflow-y: auto;
+        }
+
+
+        .achievement-item {
+            display: grid;
+            grid-template-columns: 34px minmax(0, 1fr);
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+
+        .achievement-item:last-child {
+            border-bottom: 0;
+        }
+
+
+        .achievement-item .badge {
+            width: 31px;
+            height: 31px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--gold);
+            background: var(--gold-soft);
+
+            border: 1px solid rgba(225, 200, 93, 0.17);
+            border-radius: 7px;
+
+            font-size: 0.9rem;
+        }
+
+
+        .achievement-item strong {
+            display: block;
+
+            margin-bottom: 2px;
+
+            color: var(--text);
+
+            font-size: 0.79rem;
+            font-weight: 550;
+        }
+
+
+        .achievement-item p {
+            color: var(--muted);
+
+            font-size: 0.70rem;
+        }
+
+
+        /* =====================================================
+           TOASTS CREATED BY JS
+        ====================================================== */
+
+        .achievement-box {
+            position: fixed;
+
+            right: 24px;
+            bottom: 24px;
+
+            z-index: 10;
+
+            width: min(330px, calc(100% - 48px));
+
+            padding: 16px 18px;
+
+            color: var(--text);
+            background: rgba(17, 21, 19, 0.94);
+
+            border: 1px solid var(--border-hover);
+            border-radius: 9px;
+
+            box-shadow:
+                0 18px 55px rgba(0, 0, 0, 0.45);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            transition:
+                opacity 300ms ease,
+                transform 300ms ease;
+        }
+
+
+        .achievement-box h3 {
+            margin: 0 0 4px;
+
+            color: var(--gold);
+
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+
+        .achievement-box p {
+            margin: 0;
+
+            color: #d7dcd8;
+
+            font-size: 0.79rem;
+        }
+
+
+        .achievement-box small {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 0.68rem;
+        }
+
+
+        .achievement-box.fade-out {
+            opacity: 0;
+
+            transform: translateY(8px);
+        }
+
+
+        /* =====================================================
+           SCROLLBARS
+        ====================================================== */
+
+        .modal-content::-webkit-scrollbar,
+        .achievement-list-modal::-webkit-scrollbar {
+            width: 7px;
+        }
+
+
+        .modal-content::-webkit-scrollbar-thumb,
+        .achievement-list-modal::-webkit-scrollbar-thumb {
+            background: #343c37;
+
+            border-radius: 10px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width: 650px) {
+
+            header {
+                top: 10px;
+
+                width: calc(100% - 20px);
+                height: auto;
+
+                grid-template-columns: auto 1fr auto;
+
+                gap: 7px;
+
+                padding: 7px;
+            }
+
+
+            .btn {
+                min-height: 38px;
+
+                padding: 0 10px;
+
+                font-size: 0.68rem;
+            }
+
+
+            #homeButton {
+                font-size: 0;
+            }
+
+
+            #homeButton::before {
+                margin: 0;
+
+                font-size: 1rem;
+            }
+
+
+            #scoreboard {
+                justify-self: center;
+
+                gap: 0;
+            }
+
+
+            #score,
+            #topScore {
+                min-width: auto;
+
+                padding: 6px 8px;
+
+                font-size: 0.58rem;
+            }
+
+
+            #achievementsButton {
+                font-size: 0;
+            }
+
+
+            #achievementsButton::after {
+                content: "Stats";
+
+                font-size: 0.67rem;
+            }
+
+
+            .tooltip {
+                bottom: 15px;
+
+                width: calc(100% - 30px);
+
+                text-align: center;
+            }
+
+
+            .tooltip::before {
+                display: none;
+            }
+
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+
+            .modal {
+                padding: 10px;
+            }
+
+
+            .modal-content {
+                max-height: calc(100vh - 20px);
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+
+        <a
+            href="/projects/arcade/"
+            id="homeButton"
+            class="btn"
+        >
+            Arcade
+        </a>
+
+
+        <div id="scoreboard">
+
+            <div id="score">
+                Score: 0
+            </div>
+
+            <div id="topScore">
+                Top Score: 0
+            </div>
+
+        </div>
+
+
+        <button
+            id="achievementsButton"
+            class="btn"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="achievementsModal"
+        >
+            Stats & Achievements
+        </button>
+
+    </header>
+
+
+    <canvas id="menuCanvas"></canvas>
+
+
+    <div
+        id="achievementsModal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
+
+        <div class="modal-content">
+
+            <button
+                class="close-button"
+                type="button"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <h2 id="modalTitle">
+                Stats & Achievements
+            </h2>
+
+
+            <div class="stats">
+
+                <h3>
+                    Statistics
+                </h3>
+
+
+                <p>
+                    <strong>Current Score</strong>
+                    <span id="modalScore">0</span>
+                </p>
+
+
+                <p>
+                    <strong>Top Score</strong>
+                    <span id="modalTopScore">0</span>
+                </p>
+
+
+                <p>
+                    <strong>Highest Combo</strong>
+                    <span id="modalHighestCombo">1</span>
+                </p>
+
+
+                <p>
+                    <strong>Fireflies Collected</strong>
+                    <span id="modalTotalFireflies">0</span>
+                </p>
+
+
+                <p>
+                    <strong>Red Objects Hit</strong>
+                    <span id="modalTotalRedObjects">0</span>
+                </p>
+
+
+                <p>
+                    <strong>Achievements</strong>
+
+                    <span>
+                        <span id="modalUnlocked">0</span>
+                        /
+                        <span id="modalTotal">0</span>
+                    </span>
+                </p>
+
+            </div>
+
+
+            <div class="achievements-modal">
+
+                <h3>
+                    Unlocked Achievements
+                </h3>
+
+                <div class="achievement-list-modal"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="tooltip"
+        class="tooltip"
+    >
+        Move your mouse to collect fireflies.
+        Avoid the red objects.
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            (function () {
+
+                const canvas =
+                    document.getElementById("menuCanvas");
+
+                const ctx =
+                    canvas.getContext("2d");
+
+
+                let devicePixelRatio =
+                    window.devicePixelRatio || 1;
+
+                let canvasWidth =
+                    window.innerWidth;
+
+                let canvasHeight =
+                    window.innerHeight;
+
+
+                function resizeCanvas() {
+
+                    devicePixelRatio =
+                        window.devicePixelRatio || 1;
+
+                    canvasWidth =
+                        window.innerWidth;
+
+                    canvasHeight =
+                        window.innerHeight;
+
+
+                    canvas.width =
+                        canvasWidth *
+                        devicePixelRatio;
+
+                    canvas.height =
+                        canvasHeight *
+                        devicePixelRatio;
+
+
+                    canvas.style.width =
+                        canvasWidth + "px";
+
+                    canvas.style.height =
+                        canvasHeight + "px";
+
+
+                    ctx.setTransform(
+                        devicePixelRatio,
+                        0,
+                        0,
+                        devicePixelRatio,
+                        0,
+                        0
+                    );
+
+                }
+
+
+                window.addEventListener(
+                    "resize",
+                    resizeCanvas
+                );
+
+
+                resizeCanvas();
+
+
+                /* =============================================
+                   MOUSE INTERACTION
+                ============================================== */
+
+                const mouse = {
+                    x: null,
+                    y: null,
+                    radius: 80
+                };
+
+
+                const mouseTrail = [];
+
+                const maxTrailLength = 10;
+
+
+                window.addEventListener(
+                    "mousemove",
+                    function (event) {
+
+                        mouse.x =
+                            event.clientX;
+
+                        mouse.y =
+                            event.clientY;
+
+
+                        mouseTrail.push({
+                            x: mouse.x,
+                            y: mouse.y
+                        });
+
+
+                        if (
+                            mouseTrail.length >
+                            maxTrailLength
+                        ) {
+                            mouseTrail.shift();
+                        }
+
+                    },
+                    {
+                        passive: true
+                    }
+                );
+
+
+                window.addEventListener(
+                    "mouseout",
+                    function () {
+
+                        mouse.x = null;
+                        mouse.y = null;
+
+                        mouseTrail.length = 0;
+
+                    },
+                    {
+                        passive: true
+                    }
+                );
+
+
+                /* =============================================
+                   GAME VARIABLES
+                ============================================== */
+
+                const COMBO_TIMEOUT_DURATION =
+                    1000;
+
+
+                let score = 0;
+
+                let topScore = 0;
+
+                let comboMultiplier = 1;
+
+                let highestCombo = 1;
+
+                let comboTimeout;
+
+                let totalFirefliesPopped = 0;
+
+                let totalRedObjectsPopped = 0;
+
+                let unlockedAchievements = [];
+
+
+                /* =============================================
+                   DOM ELEMENTS
+                ============================================== */
+
+                const scoreElement =
+                    document.getElementById("score");
+
+                const topScoreElement =
+                    document.getElementById("topScore");
+
+                const modalScore =
+                    document.getElementById("modalScore");
+
+                const modalTopScore =
+                    document.getElementById("modalTopScore");
+
+                const modalHighestCombo =
+                    document.getElementById("modalHighestCombo");
+
+                const modalTotalFireflies =
+                    document.getElementById("modalTotalFireflies");
+
+                const modalTotalRedObjects =
+                    document.getElementById("modalTotalRedObjects");
+
+                const modalUnlocked =
+                    document.getElementById("modalUnlocked");
+
+                const modalTotal =
+                    document.getElementById("modalTotal");
+
+                const achievementListModal =
+                    document.querySelector(
+                        ".achievement-list-modal"
+                    );
+
+                const achievementsButton =
+                    document.getElementById(
+                        "achievementsButton"
+                    );
+
+                const achievementsModal =
+                    document.getElementById(
+                        "achievementsModal"
+                    );
+
+                const closeModalButton =
+                    document.querySelector(
+                        ".close-button"
+                    );
+
+
+                /* =============================================
+                   ACHIEVEMENTS
+                ============================================== */
+
+                const achievements = [
+
+                    {
+                        threshold: 10,
+                        type: "fireflies",
+                        name: "First Flight",
+                        description:
+                            "Collect 10 Fireflies"
+                    },
+
+                    {
+                        threshold: 25,
+                        type: "fireflies",
+                        name: "Firefly Enthusiast",
+                        description:
+                            "Collect 25 Fireflies"
+                    },
+
+                    {
+                        threshold: 50,
+                        type: "fireflies",
+                        name: "Firefly Master",
+                        description:
+                            "Collect 50 Fireflies"
+                    },
+
+                    {
+                        threshold: 10,
+                        type: "combo",
+                        name: "Combo Starter",
+                        description:
+                            "Achieve a combo multiplier of 10x"
+                    },
+
+                    {
+                        threshold: 5,
+                        type: "obstacles",
+                        name: "You Didn't See That",
+                        description:
+                            "Hit 5 Red Objects"
+                    },
+
+                    {
+                        threshold: 20,
+                        type: "obstacles",
+                        name: "Obstacle Crusher",
+                        description:
+                            "Hit 20 Red Objects"
+                    }
+
+                ];
+
+
+                /* =============================================
+                   FIREFLY
+                ============================================== */
+
+                class Firefly {
+
+                    constructor() {
+                        this.reset();
+                    }
+
+
+                    reset() {
+
+                        this.x =
+                            Math.random() *
+                            canvasWidth;
+
+                        this.y =
+                            Math.random() *
+                            canvasHeight;
+
+                        this.size =
+                            Math.random() * 3 + 2;
+
+                        this.hue = 60;
+
+                        this.speed =
+                            Math.random() * 1 + 0.5;
+
+                        this.direction =
+                            Math.random() *
+                            Math.PI *
+                            2;
+
+                        this.alpha =
+                            Math.random() *
+                            0.5 +
+                            0.5;
+
+                        this.alphaChange =
+                            Math.random() *
+                            0.01 +
+                            0.005;
+
+                        this.maxAlpha =
+                            Math.random() *
+                            0.5 +
+                            0.5;
+
+                        this.collected =
+                            false;
+
+                    }
+
+
+                    update() {
+
+                        if (this.collected) {
+                            return;
+                        }
+
+
+                        this.x +=
+                            Math.cos(
+                                this.direction
+                            ) *
+                            this.speed;
+
+                        this.y +=
+                            Math.sin(
+                                this.direction
+                            ) *
+                            this.speed;
+
+
+                        if (
+                            Math.random() <
+                            0.02
+                        ) {
+
+                            this.direction +=
+                                Math.random() *
+                                0.5 -
+                                0.25;
+
+                        }
+
+
+                        if (
+                            this.x <
+                            -this.size
+                        ) {
+
+                            this.x =
+                                canvasWidth +
+                                this.size;
+
+                        }
+
+
+                        if (
+                            this.x >
+                            canvasWidth +
+                            this.size
+                        ) {
+
+                            this.x =
+                                -this.size;
+
+                        }
+
+
+                        if (
+                            this.y <
+                            -this.size
+                        ) {
+
+                            this.y =
+                                canvasHeight +
+                                this.size;
+
+                        }
+
+
+                        if (
+                            this.y >
+                            canvasHeight +
+                            this.size
+                        ) {
+
+                            this.y =
+                                -this.size;
+
+                        }
+
+
+                        this.alpha +=
+                            this.alphaChange;
+
+
+                        if (
+                            this.alpha <= 0 ||
+                            this.alpha >=
+                            this.maxAlpha
+                        ) {
+
+                            this.alphaChange *=
+                                -1;
+
+                        }
+
+
+                        if (
+                            mouse.x !== null &&
+                            mouse.y !== null
+                        ) {
+
+                            const dx =
+                                this.x -
+                                mouse.x;
+
+                            const dy =
+                                this.y -
+                                mouse.y;
+
+                            const distSq =
+                                dx * dx +
+                                dy * dy;
+
+
+                            if (
+                                distSq <
+                                mouse.radius *
+                                mouse.radius
+                            ) {
+
+                                const dist =
+                                    Math.sqrt(
+                                        distSq
+                                    );
+
+
+                                this.x +=
+                                    (dx / dist) *
+                                    1;
+
+                                this.y +=
+                                    (dy / dist) *
+                                    1;
+
+                            }
+
+                        }
+
+
+                        if (
+                            this.checkCollision(
+                                mouse.x,
+                                mouse.y
+                            )
+                        ) {
+
+                            this.collect();
+
+                        } else {
+
+                            for (
+                                let i = 0;
+                                i <
+                                mouseTrail.length;
+                                i += 1
+                            ) {
+
+                                const t =
+                                    mouseTrail[i];
+
+
+                                if (
+                                    this.checkCollision(
+                                        t.x,
+                                        t.y
+                                    )
+                                ) {
+
+                                    this.collect();
+
+                                    break;
+
+                                }
+
+                            }
+
+                        }
+
+
+                        this.draw();
+
+                    }
+
+
+                    draw() {
+
+                        ctx.fillStyle =
+                            "hsla(" +
+                            this.hue +
+                            ", 100%, 70%, " +
+                            this.alpha * 0.3 +
+                            ")";
+
+
+                        ctx.beginPath();
+
+
+                        ctx.arc(
+                            this.x,
+                            this.y,
+                            this.size * 3,
+                            0,
+                            Math.PI * 2
+                        );
+
+
+                        ctx.fill();
+
+
+                        ctx.fillStyle =
+                            "hsla(" +
+                            this.hue +
+                            ", 100%, 70%, 1)";
+
+
+                        ctx.beginPath();
+
+
+                        ctx.arc(
+                            this.x,
+                            this.y,
+                            this.size,
+                            0,
+                            Math.PI * 2
+                        );
+
+
+                        ctx.fill();
+
+                    }
+
+
+                    collect() {
+
+                        this.collected = true;
+
+
+                        updateScore(1);
+
+
+                        explosions.add(
+                            this.x,
+                            this.y
+                        );
+
+
+                        totalFirefliesPopped +=
+                            1;
+
+
+                        if (
+                            comboMultiplier >
+                            1
+                        ) {
+
+                            comboMessages.add(
+                                this.x,
+                                this.y,
+                                comboMultiplier
+                            );
+
+                        }
+
+
+                        comboMultiplier += 1;
+
+
+                        clearTimeout(
+                            comboTimeout
+                        );
+
+
+                        comboTimeout =
+                            setTimeout(
+                                function () {
+
+                                    comboMultiplier =
+                                        1;
+
+                                },
+                                COMBO_TIMEOUT_DURATION
+                            );
+
+
+                        if (
+                            comboMultiplier >
+                            highestCombo
+                        ) {
+
+                            highestCombo =
+                                comboMultiplier;
+
+
+                            updateHighestComboDisplay();
+
+                        }
+
+
+                        checkUnlockAchievements();
+
+
+                        const instance =
+                            this;
+
+
+                        setTimeout(
+                            function () {
+
+                                instance.reset();
+
+                            },
+                            1000
+                        );
+
+                    }
+
+
+                    checkCollision(
+                        px,
+                        py
+                    ) {
+
+                        if (
+                            px === null ||
+                            py === null
+                        ) {
+                            return false;
+                        }
+
+
+                        const dx =
+                            this.x - px;
+
+                        const dy =
+                            this.y - py;
+
+                        const distSq =
+                            dx * dx +
+                            dy * dy;
+
+                        const colSq =
+                            (
+                                this.size +
+                                15
+                            ) *
+                            (
+                                this.size +
+                                15
+                            );
+
+
+                        return (
+                            distSq <
+                            colSq
+                        );
+
+                    }
+
+                }
+
+
+                /* =============================================
+                   OBSTACLE
+                ============================================== */
+
+                class Obstacle {
+
+                    constructor() {
+                        this.reset();
+                    }
+
+
+                    reset() {
+
+                        this.x =
+                            Math.random() *
+                            (
+                                canvasWidth -
+                                60
+                            ) +
+                            30;
+
+                        this.y =
+                            Math.random() *
+                            (
+                                canvasHeight -
+                                60
+                            ) +
+                            30;
+
+                        this.size = 15;
+
+                        this.speed =
+                            Math.random() *
+                            0.5 +
+                            0.2;
+
+                        this.direction =
+                            Math.random() *
+                            Math.PI *
+                            2;
+
+                        this.hue = 0;
+
+                        this.alpha = 0.8;
+
+                        this.collected =
+                            false;
+
+                    }
+
+
+                    update() {
+
+                        if (this.collected) {
+                            return;
+                        }
+
+
+                        this.x +=
+                            Math.cos(
+                                this.direction
+                            ) *
+                            this.speed;
+
+                        this.y +=
+                            Math.sin(
+                                this.direction
+                            ) *
+                            this.speed;
+
+
+                        if (
+                            this.x <
+                            this.size ||
+                            this.x >
+                            canvasWidth -
+                            this.size
+                        ) {
+
+                            this.direction =
+                                Math.PI -
+                                this.direction;
+
+                        }
+
+
+                        if (
+                            this.y <
+                            this.size ||
+                            this.y >
+                            canvasHeight -
+                            this.size
+                        ) {
+
+                            this.direction =
+                                -this.direction;
+
+                        }
+
+
+                        this.draw();
+
+
+                        if (
+                            this.checkCollision(
+                                mouse.x,
+                                mouse.y
+                            )
+                        ) {
+
+                            this.collect();
+
+                        } else {
+
+                            for (
+                                let i = 0;
+                                i <
+                                mouseTrail.length;
+                                i += 1
+                            ) {
+
+                                const t =
+                                    mouseTrail[i];
+
+
+                                if (
+                                    this.checkCollision(
+                                        t.x,
+                                        t.y
+                                    )
+                                ) {
+
+                                    this.collect();
+
+                                    break;
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+                    draw() {
+
+                        ctx.fillStyle =
+                            "hsla(" +
+                            this.hue +
+                            ", 100%, 50%, " +
+                            this.alpha +
+                            ")";
+
+
+                        ctx.beginPath();
+
+
+                        ctx.arc(
+                            this.x,
+                            this.y,
+                            this.size,
+                            0,
+                            Math.PI * 2
+                        );
+
+
+                        ctx.fill();
+
+                    }
+
+
+                    collect() {
+
+                        this.collected = true;
+
+
+                        resetScore();
+
+
+                        explosions.add(
+                            this.x,
+                            this.y
+                        );
+
+
+                        totalRedObjectsPopped +=
+                            1;
+
+
+                        displayResetNotification();
+
+
+                        checkUnlockAchievements();
+
+
+                        const instance =
+                            this;
+
+
+                        setTimeout(
+                            function () {
+
+                                instance.reset();
+
+                            },
+                            2000
+                        );
+
+                    }
+
+
+                    checkCollision(
+                        px,
+                        py
+                    ) {
+
+                        if (
+                            px === null ||
+                            py === null
+                        ) {
+                            return false;
+                        }
+
+
+                        const dx =
+                            this.x - px;
+
+                        const dy =
+                            this.y - py;
+
+                        const distSq =
+                            dx * dx +
+                            dy * dy;
+
+                        const colSq =
+                            (
+                                this.size +
+                                15
+                            ) *
+                            (
+                                this.size +
+                                15
+                            );
+
+
+                        return (
+                            distSq <
+                            colSq
+                        );
+
+                    }
+
+                }
+
+
+                /* =============================================
+                   EXPLOSIONS
+                ============================================== */
+
+                const explosions = {
+
+                    pool: [],
+                    active: [],
+
+
+                    add(
+                        x,
+                        y
+                    ) {
+
+                        let explosion =
+                            this.pool.pop();
+
+
+                        if (!explosion) {
+
+                            explosion =
+                                new Explosion();
+
+                        }
+
+
+                        explosion.init(
+                            x,
+                            y
+                        );
+
+
+                        this.active.push(
+                            explosion
+                        );
+
+                    },
+
+
+                    update() {
+
+                        for (
+                            let i =
+                                this.active.length -
+                                1;
+
+                            i >= 0;
+
+                            i -= 1
+                        ) {
+
+                            const e =
+                                this.active[i];
+
+
+                            e.update();
+
+
+                            if (
+                                !e.isAlive()
+                            ) {
+
+                                this.pool.push(
+                                    e
+                                );
+
+
+                                this.active.splice(
+                                    i,
+                                    1
+                                );
+
+                            }
+
+                        }
+
+                    }
+
+                };
+
+
+                class Explosion {
+
+                    init(
+                        x,
+                        y
+                    ) {
+
+                        this.x = x;
+                        this.y = y;
+
+                        this.life = 30;
+
+                        this.particles = [];
+
+
+                        for (
+                            let i = 0;
+                            i < 5;
+                            i += 1
+                        ) {
+
+                            this.particles.push({
+
+                                x:
+                                    this.x,
+
+                                y:
+                                    this.y,
+
+                                velocity: {
+
+                                    x:
+                                        (
+                                            Math.random() -
+                                            0.5
+                                        ) *
+                                        3,
+
+                                    y:
+                                        (
+                                            Math.random() -
+                                            0.5
+                                        ) *
+                                        3
+
+                                },
+
+                                radius:
+                                    Math.random() *
+                                    3 +
+                                    1,
+
+                                color:
+                                    "hsla(" +
+                                    Math.random() *
+                                    360 +
+                                    ", 100%, 50%, 1)"
+
+                            });
+
+                        }
+
+                    }
+
+
+                    update() {
+
+                        this.particles.forEach(
+                            function (p) {
+
+                                p.x +=
+                                    p.velocity.x;
+
+                                p.y +=
+                                    p.velocity.y;
+
+                                p.velocity.y +=
+                                    0.05;
+
+
+                                ctx.fillStyle =
+                                    p.color;
+
+
+                                ctx.beginPath();
+
+
+                                ctx.arc(
+                                    p.x,
+                                    p.y,
+                                    p.radius,
+                                    0,
+                                    Math.PI * 2
+                                );
+
+
+                                ctx.fill();
+
+                            }
+                        );
+
+
+                        this.life -= 1;
+
+                    }
+
+
+                    isAlive() {
+
+                        return (
+                            this.life >
+                            0
+                        );
+
+                    }
+
+                }
+
+
+                /* =============================================
+                   COMBO MESSAGES
+                ============================================== */
+
+                const comboMessages = {
+
+                    pool: [],
+                    active: [],
+
+
+                    add(
+                        x,
+                        y,
+                        multiplier
+                    ) {
+
+                        let msg =
+                            this.pool.pop();
+
+
+                        if (!msg) {
+
+                            msg =
+                                new ComboMessage();
+
+                        }
+
+
+                        msg.init(
+                            x,
+                            y,
+                            multiplier
+                        );
+
+
+                        this.active.push(
+                            msg
+                        );
+
+                    },
+
+
+                    update() {
+
+                        for (
+                            let i =
+                                this.active.length -
+                                1;
+
+                            i >= 0;
+
+                            i -= 1
+                        ) {
+
+                            const m =
+                                this.active[i];
+
+
+                            m.update();
+
+
+                            if (
+                                !m.isAlive()
+                            ) {
+
+                                this.pool.push(
+                                    m
+                                );
+
+
+                                this.active.splice(
+                                    i,
+                                    1
+                                );
+
+                            }
+
+                        }
+
+                    }
+
+                };
+
+
+                class ComboMessage {
+
+                    init(
+                        x,
+                        y,
+                        multiplier
+                    ) {
+
+                        this.x = x;
+                        this.y = y;
+
+                        this.multiplier =
+                            multiplier;
+
+                        this.alpha = 1;
+
+                        this.life = 60;
+
+                    }
+
+
+                    update() {
+
+                        ctx.fillStyle =
+                            "rgba(255, 215, 0, " +
+                            this.alpha +
+                            ")";
+
+
+                        ctx.font =
+                            'bold 24px "Playfair Display", serif';
+
+
+                        ctx.textAlign =
+                            "center";
+
+
+                        ctx.fillText(
+                            "Combo x" +
+                            this.multiplier,
+                            this.x,
+                            this.y - 20
+                        );
+
+
+                        this.alpha -=
+                            1 /
+                            this.life;
+
+                    }
+
+
+                    isAlive() {
+
+                        return (
+                            this.alpha >
+                            0
+                        );
+
+                    }
+
+                }
+
+
+                /* =============================================
+                   ENTITIES
+                ============================================== */
+
+                const fireflies = [];
+
+                const obstacles = [];
+
+
+                for (
+                    let i = 0;
+                    i < 30;
+                    i += 1
+                ) {
+
+                    fireflies.push(
+                        new Firefly()
+                    );
+
+                }
+
+
+                for (
+                    let i = 0;
+                    i < 5;
+                    i += 1
+                ) {
+
+                    obstacles.push(
+                        new Obstacle()
+                    );
+
+                }
+
+
+                /* =============================================
+                   ANIMATION
+                ============================================== */
+
+                function animate() {
+
+                    ctx.clearRect(
+                        0,
+                        0,
+                        canvasWidth,
+                        canvasHeight
+                    );
+
+
+                    if (
+                        mouseTrail.length >
+                        1
+                    ) {
+
+                        ctx.beginPath();
+
+
+                        const gradient =
+                            ctx.createLinearGradient(
+
+                                mouseTrail[0].x,
+                                mouseTrail[0].y,
+
+                                mouseTrail[
+                                    mouseTrail.length -
+                                    1
+                                ].x,
+
+                                mouseTrail[
+                                    mouseTrail.length -
+                                    1
+                                ].y
+
+                            );
+
+
+                        gradient.addColorStop(
+                            0,
+                            "rgba(255,255,255,0.6)"
+                        );
+
+
+                        gradient.addColorStop(
+                            1,
+                            "rgba(255,255,255,0)"
+                        );
+
+
+                        ctx.strokeStyle =
+                            gradient;
+
+                        ctx.lineWidth =
+                            6;
+
+                        ctx.lineCap =
+                            "round";
+
+
+                        ctx.moveTo(
+                            mouseTrail[0].x,
+                            mouseTrail[0].y
+                        );
+
+
+                        for (
+                            let i = 1;
+                            i <
+                            mouseTrail.length;
+                            i += 1
+                        ) {
+
+                            ctx.lineTo(
+                                mouseTrail[i].x,
+                                mouseTrail[i].y
+                            );
+
+                        }
+
+
+                        ctx.stroke();
+
+                    }
+
+
+                    fireflies.forEach(
+                        function (f) {
+
+                            f.update();
+
+                        }
+                    );
+
+
+                    obstacles.forEach(
+                        function (o) {
+
+                            o.update();
+
+                        }
+                    );
+
+
+                    explosions.update();
+
+                    comboMessages.update();
+
+
+                    requestAnimationFrame(
+                        animate
+                    );
+
+                }
+
+
+                animate();
+
+
+                /* =============================================
+                   SCORE
+                ============================================== */
+
+                function updateScore(
+                    increment
+                ) {
+
+                    score +=
+                        increment *
+                        comboMultiplier;
+
+
+                    scoreElement.textContent =
+                        "Score: " +
+                        score;
+
+
+                    if (
+                        score >
+                        topScore
+                    ) {
+
+                        topScore =
+                            score;
+
+
+                        topScoreElement.textContent =
+                            "Top Score: " +
+                            topScore;
+
+                    }
+
+
+                    saveData();
+
+                    updateModalStats();
+
+                }
+
+
+                function resetScore() {
+
+                    score = 0;
+
+                    comboMultiplier =
+                        1;
+
+
+                    scoreElement.textContent =
+                        "Score: 0";
+
+
+                    saveData();
+
+                    updateModalStats();
+
+                }
+
+
+                function updateHighestComboDisplay() {
+
+                    modalHighestCombo.textContent =
+                        highestCombo;
+
+
+                    saveData();
+
+                }
+
+
+                function updateModalStats() {
+
+                    modalScore.textContent =
+                        score;
+
+                    modalTopScore.textContent =
+                        topScore;
+
+                    modalHighestCombo.textContent =
+                        highestCombo;
+
+                    modalTotalFireflies.textContent =
+                        totalFirefliesPopped;
+
+                    modalTotalRedObjects.textContent =
+                        totalRedObjectsPopped;
+
+                    modalUnlocked.textContent =
+                        unlockedAchievements.length;
+
+                    modalTotal.textContent =
+                        achievements.length;
+
+                }
+
+
+                /* =============================================
+                   SCORE RESET NOTIFICATION
+                ============================================== */
+
+                function displayResetNotification() {
+
+                    const box =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    box.classList.add(
+                        "achievement-box"
+                    );
+
+
+                    box.style.background =
+                        "rgba(70, 20, 20, 0.94)";
+
+
+                    box.innerHTML =
+                        "<h3>Score Reset</h3>" +
+                        "<p>You hit an obstacle.</p>";
+
+
+                    document.body.appendChild(
+                        box
+                    );
+
+
+                    setTimeout(
+                        function () {
+
+                            box.classList.add(
+                                "fade-out"
+                            );
+
+
+                            box.addEventListener(
+                                "transitionend",
+                                function () {
+
+                                    box.remove();
+
+                                }
+                            );
+
+                        },
+                        3000
+                    );
+
+                }
+
+
+                /* =============================================
+                   ACHIEVEMENTS
+                ============================================== */
+
+                function checkUnlockAchievements() {
+
+                    achievements.forEach(
+                        function (a) {
+
+                            const conditionMet =
+                                (
+                                    a.type ===
+                                    "fireflies" &&
+                                    totalFirefliesPopped >=
+                                    a.threshold
+                                ) ||
+                                (
+                                    a.type ===
+                                    "combo" &&
+                                    highestCombo >=
+                                    a.threshold
+                                ) ||
+                                (
+                                    a.type ===
+                                    "obstacles" &&
+                                    totalRedObjectsPopped >=
+                                    a.threshold
+                                );
+
+
+                            if (
+                                conditionMet &&
+                                !unlockedAchievements.includes(
+                                    a.name
+                                )
+                            ) {
+
+                                unlockAchievement(
+                                    a
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                function unlockAchievement(
+                    a
+                ) {
+
+                    unlockedAchievements.push(
+                        a.name
+                    );
+
+
+                    displayAchievement(
+                        a
+                    );
+
+
+                    addAchievementBadge(
+                        a
+                    );
+
+
+                    saveData();
+
+                }
+
+
+                function displayAchievement(
+                    a
+                ) {
+
+                    const achievementBox =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    achievementBox.classList.add(
+                        "achievement-box"
+                    );
+
+
+                    achievementBox.innerHTML =
+                        "<h3>Achievement Unlocked</h3>" +
+                        "<p>" +
+                        a.name +
+                        "</p>" +
+                        "<small>" +
+                        a.description +
+                        "</small>";
+
+
+                    document.body.appendChild(
+                        achievementBox
+                    );
+
+
+                    setTimeout(
+                        function () {
+
+                            achievementBox.classList.add(
+                                "fade-out"
+                            );
+
+
+                            achievementBox.addEventListener(
+                                "transitionend",
+                                function () {
+
+                                    achievementBox.remove();
+
+                                }
+                            );
+
+                        },
+                        4000
+                    );
+
+                }
+
+
+                function addAchievementBadge(
+                    a
+                ) {
+
+                    const badge =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    badge.classList.add(
+                        "achievement-item"
+                    );
+
+
+                    badge.innerHTML =
+                        '<div class="badge">★</div>' +
+                        "<div>" +
+                            "<strong>" +
+                            a.name +
+                            "</strong>" +
+                            "<p>" +
+                            a.description +
+                            "</p>" +
+                        "</div>";
+
+
+                    achievementListModal.appendChild(
+                        badge
+                    );
+
+                }
+
+
+                /* =============================================
+                   STORAGE
+                ============================================== */
+
+                function saveData() {
+
+                    const data = {
+
+                        score:
+                            score,
+
+                        topScore:
+                            topScore,
+
+                        highestCombo:
+                            highestCombo,
+
+                        totalFirefliesPopped:
+                            totalFirefliesPopped,
+
+                        totalRedObjectsPopped:
+                            totalRedObjectsPopped,
+
+                        unlockedAchievements:
+                            unlockedAchievements
+
+                    };
+
+
+                    localStorage.setItem(
+                        "fireflyData",
+                        JSON.stringify(
+                            data
+                        )
+                    );
+
+                }
+
+
+                function loadData() {
+
+                    const saved =
+                        localStorage.getItem(
+                            "fireflyData"
+                        );
+
+
+                    if (saved) {
+
+                        const data =
+                            JSON.parse(
+                                saved
+                            );
+
+
+                        score =
+                            data.score ||
+                            0;
+
+                        topScore =
+                            data.topScore ||
+                            0;
+
+                        highestCombo =
+                            data.highestCombo ||
+                            1;
+
+                        totalFirefliesPopped =
+                            data.totalFirefliesPopped ||
+                            0;
+
+                        totalRedObjectsPopped =
+                            data.totalRedObjectsPopped ||
+                            0;
+
+                        unlockedAchievements =
+                            data.unlockedAchievements ||
+                            [];
+
+
+                        unlockedAchievements.forEach(
+                            function (name) {
+
+                                const achievement =
+                                    achievements.find(
+                                        function (a) {
+
+                                            return (
+                                                a.name ===
+                                                name
+                                            );
+
+                                        }
+                                    );
+
+
+                                if (achievement) {
+
+                                    addAchievementBadge(
+                                        achievement
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                        scoreElement.textContent =
+                            "Score: " +
+                            score;
+
+                        topScoreElement.textContent =
+                            "Top Score: " +
+                            topScore;
+
+
+                        updateModalStats();
+
+                    }
+
+                }
+
+
+                loadData();
+
+
+                /* =============================================
+                   MODAL
+                ============================================== */
+
+                achievementsButton.addEventListener(
+                    "click",
+                    function () {
+
+                        achievementsModal.classList.add(
+                            "active"
+                        );
+
+
+                        updateModalStats();
+
+                    }
+                );
+
+
+                closeModalButton.addEventListener(
+                    "click",
+                    function () {
+
+                        achievementsModal.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                window.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            event.target ===
+                            achievementsModal &&
+                            achievementsModal.classList.contains(
+                                "active"
+                            )
+                        ) {
+
+                            achievementsModal.classList.remove(
+                                "active"
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                window.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.key ===
+                            "Escape" &&
+                            achievementsModal.classList.contains(
+                                "active"
+                            )
+                        ) {
+
+                            achievementsModal.classList.remove(
+                                "active"
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                /* =============================================
+                   TOOLTIP
+                ============================================== */
+
+                setTimeout(
+                    function () {
+
+                        const tooltip =
+                            document.getElementById(
+                                "tooltip"
+                            );
+
+
+                        if (tooltip) {
+
+                            tooltip.classList.add(
+                                "fade-out"
+                            );
+
+
+                            tooltip.addEventListener(
+                                "transitionend",
+                                function () {
+
+                                    tooltip.remove();
+
+                                }
+                            );
+
+                        }
+
+                    },
+                    5000
+                );
+
+            })();
+
+        });
+    </script>
+
+</body>
+</html>

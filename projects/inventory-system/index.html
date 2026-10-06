@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Data Workbench — browser-based structured data exploration and algorithm benchmarking by Anthony White."
+    >
+
+    <title>Data Workbench | AnthonyCS</title>
+
+    <link rel="stylesheet" href="project.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <a class="brand" href="/">
+        AnthonyCS
+    </a>
+
+    <nav>
+        <a href="/projects/">Projects</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="/learn/">LearnCS</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <p class="kicker">
+            SOFTWARE / DATA TOOL
+        </p>
+
+        <h1>
+            Data Workbench
+        </h1>
+
+        <p class="intro">
+            A browser-based tool for inspecting, searching,
+            editing, analyzing, and benchmarking structured datasets.
+        </p>
+
+        <div class="hero-actions">
+
+            <a
+                class="button primary"
+                href="app.html"
+            >
+                Launch Workbench
+            </a>
+
+            <a
+                class="button secondary"
+                href="https://github.com/awhitecsdev/cs-site-and-server/tree/main/projects/inventory-system"
+            >
+                Source Code
+            </a>
+
+            <a
+                class="button secondary"
+                href="/projects/"
+            >
+                Back to Projects
+            </a>
+
+        </div>
+
+        <div class="tags">
+            <span>JavaScript</span>
+            <span>CSV / TSV / JSON</span>
+            <span>Data Structures</span>
+            <span>Algorithms</span>
+        </div>
+
+    </section>
+
+
+    <!-- METRICS -->
+
+    <section class="metrics">
+
+        <div>
+            <strong>23,220</strong>
+            <span>rows tested</span>
+        </div>
+
+        <div>
+            <strong>7</strong>
+            <span>columns in test dataset</span>
+        </div>
+
+        <div>
+            <strong>5,000</strong>
+            <span>benchmark queries</span>
+        </div>
+
+        <div>
+            <strong>3</strong>
+            <span>lookup strategies</span>
+        </div>
+
+    </section>
+
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="section-heading">
+            <span>01</span>
+            <h2>Overview</h2>
+        </div>
+
+        <div class="overview-grid">
+
+            <div>
+
+                <p>
+                    Data Workbench began as a Data Structures and
+                    Algorithms course project and was later redesigned
+                    independently into a more general structured-data
+                    exploration tool.
+                </p>
+
+                <p>
+                    The current application can load real CSV, TSV,
+                    and JSON datasets, normalize their structure,
+                    search and sort records, calculate numeric summaries,
+                    modify data, export CSV files, and compare different
+                    lookup strategies.
+                </p>
+
+            </div>
+
+            <aside>
+
+                <p class="small-label">
+                    Current Build
+                </p>
+
+                <ul>
+                    <li>Browser-based</li>
+                    <li>Editable datasets</li>
+                    <li>Automatic numeric detection</li>
+                    <li>Algorithm benchmarking</li>
+                    <li>CSV export</li>
+                </ul>
+
+            </aside>
+
+        </div>
+
+    </section>
+
+
+    <!-- ENGINEERING SNAPSHOT -->
+
+    <section class="section">
+
+        <div class="section-heading">
+            <span>02</span>
+            <h2>Engineering Snapshot</h2>
+        </div>
+
+        <div class="implementation-notes">
+
+            <div>
+                <strong>What I built</strong>
+                <p>
+                    A client-side structured-data workbench with import,
+                    normalization, editing, profiling, search, sorting,
+                    export, and repeatable lookup benchmarks.
+                </p>
+            </div>
+
+            <div>
+                <strong>Tech</strong>
+                <p>
+                    Vanilla JavaScript, HTML, CSS, Papa Parse,
+                    browser File APIs, Maps, sorted arrays, and
+                    binary search.
+                </p>
+            </div>
+
+            <div>
+                <strong>Hardest problem</strong>
+                <p>
+                    Making benchmark comparisons use the same typed
+                    keys and query workload while separating index
+                    build cost from lookup cost.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CAPABILITIES -->
+
+    <section class="section">
+
+        <div class="section-heading">
+            <span>03</span>
+            <h2>Capabilities</h2>
+        </div>
+
+        <div class="capabilities">
+
+            <article>
+                <h3>Import</h3>
+                <p>
+                    CSV, TSV, JSON arrays, JSON objects,
+                    and objects containing a data array.
+                </p>
+            </article>
+
+            <article>
+                <h3>Explore</h3>
+                <p>
+                    Search globally or by column, sort fields,
+                    and browse records through pagination.
+                </p>
+            </article>
+
+            <article>
+                <h3>Edit</h3>
+                <p>
+                    Add, modify, and delete records directly
+                    inside the current dataset.
+                </p>
+            </article>
+
+            <article>
+                <h3>Analyze</h3>
+                <p>
+                    Profile any column for populated, missing,
+                    and unique values; numeric fields also report
+                    mean, median, minimum, and maximum.
+                </p>
+            </article>
+
+            <article>
+                <h3>Benchmark</h3>
+                <p>
+                    Compare linear search, a Map index,
+                    and sorted-array binary search.
+                </p>
+            </article>
+
+            <article>
+                <h3>Export</h3>
+                <p>
+                    Export the current edited dataset
+                    back to CSV.
+                </p>
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ARCHITECTURE -->
+
+    <section class="section">
+
+        <div class="section-heading">
+            <span>04</span>
+            <h2>Architecture</h2>
+        </div>
+
+        <div class="pipeline">
+
+            <div>
+                <strong>File</strong>
+                <span>CSV / TSV / JSON</span>
+            </div>
+
+            <b>→</b>
+
+            <div>
+                <strong>Parse</strong>
+                <span>Schema discovery</span>
+            </div>
+
+            <b>→</b>
+
+            <div>
+                <strong>Normalize</strong>
+                <span>Record model</span>
+            </div>
+
+            <b>→</b>
+
+            <div>
+                <strong>State</strong>
+                <span>Working dataset</span>
+            </div>
+
+            <b>→</b>
+
+            <div>
+                <strong>Operate</strong>
+                <span>Search / Analyze / Edit</span>
+            </div>
+
+        </div>
+
+
+        <div class="implementation-notes">
+
+            <div>
+                <strong>Schema handling</strong>
+                <p>
+                    Duplicate CSV headers are retained safely,
+                    blank headers are ignored, and malformed extra
+                    fields do not silently expand the schema.
+                </p>
+            </div>
+
+            <div>
+                <strong>JSON normalization</strong>
+                <p>
+                    JSON schemas are generated from the union
+                    of keys found across the loaded records.
+                </p>
+            </div>
+
+            <div>
+                <strong>Numeric inference</strong>
+                <p>
+                    A field is classified as numeric when at least
+                    80% of its populated values parse as numbers.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- BENCHMARK -->
+
+    <section class="section">
+
+        <div class="section-heading">
+            <span>05</span>
+            <h2>Search Benchmark</h2>
+        </div>
+
+        <div class="benchmark-intro">
+
+            <p>
+                The current benchmark measures repeated exact-match
+                lookups while separating preprocessing cost from
+                lookup cost.
+            </p>
+
+            <div class="benchmark-context">
+                <span>23,220 records</span>
+                <span>value column</span>
+                <span>5,000 queries</span>
+                <span>median of 5 runs</span>
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Strategy</th>
+                        <th>Build</th>
+                        <th>Search</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Linear Array</td>
+                        <td>0 ms</td>
+                        <td>439.1 ms</td>
+                        <td>439.1 ms</td>
+                    </tr>
+
+                    <tr class="best">
+                        <td>Map Index</td>
+                        <td>1.0 ms</td>
+                        <td>0.2 ms</td>
+                        <td>1.1 ms</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sorted + Binary</td>
+                        <td>844.2 ms</td>
+                        <td>162.4 ms</td>
+                        <td>1003.3 ms</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="benchmark-notes">
+
+            <p>
+                Binary search reduced lookup time compared with
+                repeated linear scanning, but constructing the
+                sorted representation introduced a substantial
+                upfront cost.
+            </p>
+
+            <p>
+                For this workload, the Map index provided the
+                lowest combined build and lookup time.
+                The experiment demonstrates why data-structure
+                selection depends on the complete workload,
+                not lookup complexity alone.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- NEXT -->
+
+    <section class="section next-section">
+
+        <div class="section-heading">
+            <span>06</span>
+            <h2>Next Revision</h2>
+        </div>
+
+        <div class="next-grid">
+
+            <p>
+                Faster table rendering for substantially larger datasets
+                through row virtualization and incremental updates.
+            </p>
+
+            <p>
+                Compound filtering and saved views for repeatable
+                dataset inspection.
+            </p>
+
+            <p>
+                Mixed successful and unsuccessful lookup workloads
+                to compare hit and miss behavior.
+            </p>
+
+            <p>
+                More memory-conscious parsing and processing for
+                larger local files.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINAL CTA -->
+
+    <section class="cta">
+
+        <div>
+            <p class="kicker">
+                CURRENT BUILD
+            </p>
+
+            <h2>
+                Inspect the application directly.
+            </h2>
+        </div>
+
+        <a
+            class="button primary"
+            href="app.html"
+        >
+            Launch Workbench
+        </a>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <a href="/projects/">
+        ← Projects
+    </a>
+
+    <span>
+        AnthonyCS
+    </span>
+
+</footer>
+
+</body>
+</html>

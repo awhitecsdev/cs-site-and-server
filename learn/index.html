@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="LearnCS — an interactive computer science study environment."
+    >
+
+    <title>LearnCS</title>
+
+    <link
+        rel="stylesheet"
+        href="/learn/css/learn.css?v=2"
+    >
+
+    <script
+        src="/learn/js/learn.js?v=2"
+        defer
+    ></script>
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand-area">
+
+            <a
+                class="brand"
+                href="/learn/"
+            >
+                LearnCS
+            </a>
+
+            <span class="brand-description">
+                Computer Science Study Environment
+            </span>
+
+        </div>
+
+
+        <div class="topbar-tools">
+
+            <label
+                class="search-wrapper"
+                for="searchInput"
+            >
+                <span class="search-symbol">⌕</span>
+
+                <input
+                    id="searchInput"
+                    class="search-input"
+                    type="search"
+                    placeholder="Search LearnCS..."
+                    autocomplete="off"
+                >
+            </label>
+
+
+            <a
+                class="anthonycs-link"
+                href="https://github.com/awhitecsdev/cs-site-and-server/tree/main/learn"
+            >
+                Source
+            </a>
+
+            <a
+                class="anthonycs-link"
+                href="/"
+            >
+                AnthonyCS
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         APPLICATION
+    ====================================================== -->
+
+    <main class="app">
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-scroll">
+
+
+                <!-- LANGUAGES -->
+
+                <section
+                    class="navigation-group"
+                    data-group="languages"
+                >
+
+                    <div class="navigation-heading">
+                        <span>Languages</span>
+                        <span>05</span>
+                    </div>
+
+
+                    <button
+                        class="nav-item active"
+                        type="button"
+                        data-topic="cpp"
+                    >
+                        <span class="nav-name">C++</span>
+                        <span class="nav-type">LANG</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="python"
+                    >
+                        <span class="nav-name">Python</span>
+                        <span class="nav-type">LANG</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="assembly"
+                    >
+                        <span class="nav-name">Assembly</span>
+                        <span class="nav-type">LANG</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="rust"
+                    >
+                        <span class="nav-name">Rust</span>
+                        <span class="nav-type">LANG</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="html"
+                    >
+                        <span class="nav-name">HTML</span>
+                        <span class="nav-type">LANG</span>
+                    </button>
+
+                </section>
+
+
+
+                <!-- COMPUTER SCIENCE -->
+
+                <section
+                    class="navigation-group"
+                    data-group="computer-science"
+                >
+
+                    <div class="navigation-heading">
+                        <span>Computer Science</span>
+                        <span>06</span>
+                    </div>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="data-structures"
+                    >
+                        <span class="nav-name">
+                            Data Structures
+                        </span>
+
+                        <span class="nav-type">CS</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="computer-architecture"
+                    >
+                        <span class="nav-name">
+                            Computer Architecture
+                        </span>
+
+                        <span class="nav-type">CS</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="algorithms"
+                    >
+                        <span class="nav-name">
+                            Algorithms
+                        </span>
+
+                        <span class="nav-type">CS</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="operating-systems"
+                    >
+                        <span class="nav-name">
+                            Operating Systems
+                        </span>
+
+                        <span class="nav-type">CS</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="networks"
+                    >
+                        <span class="nav-name">
+                            Networks
+                        </span>
+
+                        <span class="nav-type">CS</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="unix"
+                    >
+                        <span class="nav-name">
+                            Unix &amp; Command Line
+                        </span>
+
+                        <span class="nav-type">CS</span>
+                    </button>
+
+                </section>
+
+
+
+                <!-- PRACTICE -->
+
+                <section
+                    class="navigation-group"
+                    data-group="practice"
+                >
+
+                    <div class="navigation-heading">
+                        <span>Practice</span>
+                        <span>07</span>
+                    </div>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="calculator"
+                    >
+                        <span class="nav-name">
+                            Basic Calculator
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="greeting"
+                    >
+                        <span class="nav-name">
+                            Write a Greeting
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="guessing-game"
+                    >
+                        <span class="nav-name">
+                            Number Guessing Game
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="file-reader"
+                    >
+                        <span class="nav-name">
+                            File Word Counter
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="fibonacci"
+                    >
+                        <span class="nav-name">
+                            Fibonacci Sequence
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="coin-toss"
+                    >
+                        <span class="nav-name">
+                            Coin Toss
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-topic="temperature"
+                    >
+                        <span class="nav-name">
+                            Temperature Conversion
+                        </span>
+
+                        <span class="nav-type">LAB</span>
+                    </button>
+
+                </section>
+
+
+
+                <!-- REFERENCE -->
+
+                <section
+                    class="navigation-group"
+                    data-group="reference"
+                >
+
+                    <div class="navigation-heading">
+                        <span>Reference</span>
+                        <span>02</span>
+                    </div>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="history"
+                    >
+                        <span class="nav-name">
+                            History of Computing
+                        </span>
+
+                        <span class="nav-type">REF</span>
+                    </button>
+
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="figures"
+                    >
+                        <span class="nav-name">
+                            Important Figures
+                        </span>
+
+                        <span class="nav-type">REF</span>
+                    </button>
+
+                </section>
+
+
+            </div>
+
+
+            <!-- SIDEBAR FOOTER -->
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-status">
+
+                    <span class="status-light"></span>
+
+                    <span>
+                        LearnCS
+                    </span>
+
+                </div>
+
+                <span class="version">
+                    v2
+                </span>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN WORKSPACE
+        ================================================== -->
+
+        <section class="workspace">
+
+
+            <!-- TOPIC HEADER -->
+
+            <header class="workspace-header">
+
+                <div class="workspace-title-area">
+
+                    <p
+                        id="topicCategory"
+                        class="topic-category"
+                    >
+                        Programming Language
+                    </p>
+
+                    <h1 id="topicTitle">
+                        C++
+                    </h1>
+
+                    <p
+                        id="topicSummary"
+                        class="topic-summary"
+                    >
+                        High-performance systems programming.
+                    </p>
+
+                </div>
+
+
+                <div class="topic-meta">
+
+                    <span
+                        id="topicDifficulty"
+                        class="meta-item"
+                    >
+                        Intermediate
+                    </span>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 TOPIC TABS
+            ================================================== -->
+
+            <nav
+                id="topicTabs"
+                class="topic-tabs"
+                aria-label="Topic sections"
+            >
+
+                <!-- Generated by JavaScript -->
+
+            </nav>
+
+
+
+            <!-- =================================================
+                 MAIN CONTENT AREA
+            ================================================== -->
+
+            <div class="workspace-layout">
+
+
+                <!-- CONTENT -->
+
+                <article class="main-panel">
+
+                    <div class="panel-titlebar">
+
+                        <span id="panelTitle">
+                            Overview
+                        </span>
+
+                        <span class="panel-indicator">
+                            LearnCS
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="topicContent"
+                        class="topic-content"
+                    >
+
+                        <!-- Generated by JavaScript -->
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- =============================================
+                     RIGHT TOOL RAIL
+                ============================================== -->
+
+                <aside class="tool-rail">
+
+
+                    <!-- QUICK TOOLS -->
+
+                    <section class="tool-panel">
+
+                        <div class="tool-panel-heading">
+                            Tools
+                        </div>
+
+
+                        <button
+                            class="tool-button"
+                            type="button"
+                            data-tool="compiler"
+                        >
+
+                            <span>
+                                Compiler
+                            </span>
+
+                            <span>
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            class="tool-button"
+                            type="button"
+                            data-view="history"
+                        >
+
+                            <span>
+                                CS History
+                            </span>
+
+                            <span>
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            class="tool-button"
+                            type="button"
+                            data-view="figures"
+                        >
+
+                            <span>
+                                Important Figures
+                            </span>
+
+                            <span>
+                                →
+                            </span>
+
+                        </button>
+
+                    </section>
+
+
+
+                    <!-- CURRENT TOPIC -->
+
+                    <section class="tool-panel">
+
+                        <div class="tool-panel-heading">
+                            Current Topic
+                        </div>
+
+
+                        <dl class="topic-information">
+
+                            <div>
+                                <dt>Section</dt>
+
+                                <dd id="infoCategory">
+                                    Languages
+                                </dd>
+                            </div>
+
+
+                            <div>
+                                <dt>Topic</dt>
+
+                                <dd id="infoTopic">
+                                    C++
+                                </dd>
+                            </div>
+
+
+                            <div>
+                                <dt>Level</dt>
+
+                                <dd id="infoDifficulty">
+                                    Intermediate
+                                </dd>
+                            </div>
+
+                        </dl>
+
+                    </section>
+
+
+
+                    <!-- STUDY TIP -->
+
+                    <section class="tool-panel">
+
+                        <div class="tool-panel-heading">
+                            Study
+                        </div>
+
+
+                        <p class="tool-copy">
+                            Explore the tabs above instead of treating
+                            each topic as a single definition.
+                        </p>
+
+                    </section>
+
+
+                </aside>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         COMPILER MODAL
+    ====================================================== -->
+
+    <div
+        id="compilerModal"
+        class="modal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="modal-backdrop"
+            data-close-modal
+        ></div>
+
+
+        <section
+            class="modal-window"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="compilerTitle"
+        >
+
+            <header class="modal-header">
+
+                <div>
+                    <span class="modal-label">
+                        LearnCS Tool
+                    </span>
+
+                    <h2 id="compilerTitle">
+                        Compiler
+                    </h2>
+                </div>
+
+
+                <button
+                    id="closeCompiler"
+                    class="close-button"
+                    type="button"
+                    aria-label="Close compiler"
+                >
+                    ×
+                </button>
+
+            </header>
+
+
+            <div class="compiler-toolbar">
+
+                <label for="compilerLanguage">
+                    Language
+                </label>
+
+
+                <select id="compilerLanguage">
+
+                    <option value="python">
+                        Python
+                    </option>
+
+                    <option value="cpp">
+                        C++
+                    </option>
+
+                    <option value="java">
+                        Java
+                    </option>
+
+                    <option value="javascript">
+                        JavaScript
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <iframe
+                id="compilerFrame"
+                class="compiler-frame"
+                src="https://onecompiler.com/embed/python?theme=dark"
+                title="Online compiler"
+                loading="lazy"
+            ></iframe>
+
+        </section>
+
+    </div>
+
+
+</body>
+</html>

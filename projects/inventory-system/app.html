@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Data Workbench</title>
+
+    <link
+        rel="stylesheet"
+        href="./styles.css"
+    >
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <header>
+
+        <div>
+            <p class="label">
+                Browser Data Tool
+            </p>
+
+            <h1>
+                Data Workbench
+            </h1>
+        </div>
+
+
+        <div class="header-buttons">
+
+            <button
+                id="newButton"
+                class="secondary"
+                type="button"
+            >
+                New Dataset
+            </button>
+
+
+            <button
+                id="exportButton"
+                type="button"
+                disabled
+            >
+                Export CSV
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         FILE UPLOAD
+         ========================= -->
+
+    <section
+        id="uploadSection"
+        class="card upload-section"
+    >
+
+        <div
+            id="dropZone"
+            class="drop-zone"
+        >
+
+            <h2>
+                Open a Dataset
+            </h2>
+
+
+            <p>
+                Load any CSV, TSV, or JSON dataset.
+            </p>
+
+
+            <div class="upload-actions">
+                <button
+                    id="chooseButton"
+                    type="button"
+                >
+                    Choose File
+                </button>
+
+                <button
+                    id="sampleButton"
+                    class="secondary"
+                    type="button"
+                >
+                    Load Sample Dataset
+                </button>
+            </div>
+
+
+            <input
+                id="fileInput"
+                type="file"
+                accept=".csv,.tsv,.json"
+                hidden
+            >
+
+
+            <p class="small">
+                Your data stays inside your browser.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         WORKSPACE
+         ========================= -->
+
+    <main
+        id="workspace"
+        hidden
+    >
+
+
+        <!-- DATASET INFO -->
+
+        <section class="card dataset-info">
+
+            <div>
+
+                <p class="label">
+                    Dataset
+                </p>
+
+
+                <h2 id="datasetName">
+                    Dataset
+                </h2>
+
+
+                <p
+                    id="datasetDescription"
+                    class="muted"
+                ></p>
+
+            </div>
+
+
+
+            <div class="metrics">
+
+                <div class="metric">
+
+                    <strong id="rowCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Rows
+                    </span>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <strong id="columnCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Columns
+                    </span>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <strong id="numericCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Numeric
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             SEARCH CONTROLS
+             ========================= -->
+
+        <section class="card controls">
+
+            <div class="search-controls">
+
+                <select id="searchField">
+                </select>
+
+
+                <input
+                    id="searchInput"
+                    type="search"
+                    placeholder="Search dataset..."
+                >
+
+            </div>
+
+
+            <div class="control-buttons">
+
+                <button
+                    id="clearSearchButton"
+                    class="secondary"
+                    type="button"
+                >
+                    Clear
+                </button>
+
+
+                <button
+                    id="addButton"
+                    type="button"
+                >
+                    Add Record
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             MAIN LAYOUT
+             ========================= -->
+
+        <div class="layout">
+
+
+            <!-- DATA TABLE -->
+
+            <section class="card table-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <p class="label">
+                            Records
+                        </p>
+
+                        <h2>
+                            Data Table
+                        </h2>
+
+                    </div>
+
+
+                    <span
+                        id="filterStatus"
+                        class="muted"
+                    ></span>
+
+                </div>
+
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead id="tableHead">
+                        </thead>
+
+                        <tbody id="tableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <div class="pagination">
+
+                    <button
+                        id="previousButton"
+                        class="secondary"
+                        type="button"
+                    >
+                        Previous
+                    </button>
+
+
+                    <span id="pageStatus">
+                    </span>
+
+
+                    <button
+                        id="nextButton"
+                        class="secondary"
+                        type="button"
+                    >
+                        Next
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 SIDEBAR
+                 ========================= -->
+
+            <aside>
+
+
+                <!-- COLUMN PROFILE -->
+
+<section class="card sidebar-card">
+
+    <p class="label">
+        Analysis
+    </p>
+
+    <h2>
+        Column Profile
+    </h2>
+
+    <label class="profile-field-label">
+        Column
+
+        <select id="profileField">
+        </select>
+    </label>
+
+    <div id="statistics">
+    </div>
+
+</section>
+
+
+                <!-- BENCHMARK -->
+
+                <section class="card sidebar-card">
+
+                    <p class="label">
+                        Performance
+                    </p>
+
+
+                    <h2>
+                        Search Benchmark
+                    </h2>
+
+
+                    <p class="muted small">
+                        Compare different search strategies
+                        using any column in the dataset.
+                    </p>
+
+
+
+                    <label>
+
+                        Column
+
+                        <select id="benchmarkField">
+                        </select>
+
+                    </label>
+
+
+
+                    <label>
+
+                        Number of Queries
+
+                        <input
+                            id="benchmarkQueries"
+                            type="number"
+                            min="10"
+                            max="5000"
+                            value="1000"
+                        >
+
+                    </label>
+
+
+
+                    <button
+                        id="benchmarkButton"
+                        type="button"
+                    >
+                        Run Benchmark
+                    </button>
+
+
+                    <div id="benchmarkResults">
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================
+     RECORD EDITOR
+     ========================= -->
+
+<dialog id="recordDialog">
+
+    <form id="recordForm">
+
+        <div class="dialog-header">
+
+            <div>
+
+                <p class="label">
+                    Record Editor
+                </p>
+
+
+                <h2 id="dialogTitle">
+                    Add Record
+                </h2>
+
+            </div>
+
+
+            <button
+                id="closeDialogButton"
+                type="button"
+                class="icon-button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <div id="recordFields">
+        </div>
+
+
+
+        <div class="dialog-actions">
+
+            <button
+                id="cancelDialogButton"
+                type="button"
+                class="secondary"
+            >
+                Cancel
+            </button>
+
+
+            <button type="submit">
+                Save
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+<!-- =========================
+     TOAST
+     ========================= -->
+
+<div
+    id="toast"
+    class="toast"
+    hidden
+></div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+     ========================= -->
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="./app.js?v=21"></script>
+
+</body>
+
+</html>
