@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Data Workbench — browser-based structured-data inspection, editing, profiling, and search benchmarking.">
+  <title>Data Workbench</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <a class="brand" href="https://anthonycs.dev/">AnthonyCS</a>
+    <span class="slash">/</span>
+    <span>Data Workbench</span>
+  </div>
+  <nav>
+    <a href="https://anthonycs.dev/projects/inventory-system/">Case Study</a>
+    <a href="https://github.com/awhitecsdev/cs-site-and-server/tree/main/data-workbench">Source</a>
+  </nav>
+</header>
+
+<main>
+  <section class="intro">
+    <div>
+      <p class="eyebrow">STRUCTURED DATA TOOL</p>
+      <h1>Inspect a dataset without writing a script first.</h1>
+      <p class="lede">Load CSV, TSV, or JSON. Search, sort, edit, profile columns, export the result, and compare lookup strategies in the browser.</p>
+    </div>
+    <div class="load-panel">
+      <label class="file-button">
+        <input id="fileInput" type="file" accept=".csv,.tsv,.json,text/csv,text/tab-separated-values,application/json">
+        Open File
+      </label>
+      <button id="sampleButton" class="primary">Load Sample Dataset</button>
+      <p id="message" class="message">No dataset loaded.</p>
+    </div>
+  </section>
+
+  <section class="metrics" aria-label="dataset summary">
+    <div><strong id="rowCount">0</strong><span>Rows</span></div>
+    <div><strong id="columnCount">0</strong><span>Columns</span></div>
+    <div><strong id="numericCount">0</strong><span>Numeric</span></div>
+    <div><strong id="datasetName">—</strong><span>Dataset</span></div>
+  </section>
+
+  <section class="workspace">
+    <div class="table-side">
+      <div class="toolbar">
+        <div class="search-group">
+          <input id="searchInput" type="search" placeholder="Search records…">
+          <select id="searchField"><option value="__all__">All columns</option></select>
+        </div>
+        <div class="toolbar-actions">
+          <button id="addRowButton">Add Row</button>
+          <button id="exportButton">Export CSV</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="pager">
+        <button id="prevPage">Previous</button>
+        <span id="pageStatus">Page 0 of 0</span>
+        <button id="nextPage">Next</button>
+      </div>
+    </div>
+
+    <aside>
+      <section class="panel">
+        <p class="panel-label">ANALYSIS</p>
+        <h2>Column Profile</h2>
+        <label>Column<select id="profileField"></select></label>
+        <div id="profile"></div>
+      </section>
+
+      <section class="panel">
+        <p class="panel-label">PERFORMANCE</p>
+        <h2>Search Benchmark</h2>
+        <p class="muted">Same query set, three lookup strategies. Build cost is measured separately.</p>
+        <label>Column<select id="benchmarkField"></select></label>
+        <label>Queries<input id="benchmarkQueries" type="number" min="10" max="5000" value="1000"></label>
+        <button id="runBenchmark" class="primary wide">Run Benchmark</button>
+        <div id="benchmarkResults" class="benchmark-results"></div>
+      </section>
+    </aside>
+  </section>
+</main>
+
+<dialog id="editDialog">
+  <form method="dialog" id="editForm">
+    <div class="dialog-head">
+      <h2 id="dialogTitle">Edit Row</h2>
+      <button value="cancel" class="icon-button" aria-label="Close">×</button>
+    </div>
+    <div id="editFields" class="edit-fields"></div>
+    <div class="dialog-actions">
+      <button value="cancel">Cancel</button>
+      <button id="saveRowButton" value="default" class="primary">Save</button>
+    </div>
+  </form>
+</dialog>
+</body>
+</html>
