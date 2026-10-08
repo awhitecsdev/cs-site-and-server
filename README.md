@@ -34,7 +34,7 @@ This repository mirrors the public structure of the production site.
 └── docs/
 ```
 
-Old snapshots such as `home/`, `html/`, `notes/`, `tools/`, `capyhost/`, `learncs/`, and the old top-level `arcade/` have been removed.
+
 
 ## Featured work
 
