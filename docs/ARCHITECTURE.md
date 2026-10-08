@@ -1,6 +1,6 @@
 # AnthonyCS Architecture
 
-This document describes the high-level structure of the live AnthonyCS site and the design decisions behind it.
+This document describes the live site's structure and the design decisions behind it.
 
 ## System overview
 
@@ -32,13 +32,13 @@ The site is primarily static HTML, CSS, and JavaScript served directly by Nginx.
 
 The site contains several interfaces with different goals:
 
-- **Portfolio** should be fast to scan and recruiter-facing.
+- **Portfolio** should be fast to scan 
 - **Projects** should show evidence, design decisions, demos, and technical detail.
 - **LearnCS** should behave like a study tool.
-- **Arcade** should preserve a game/cabinet identity.
-- **Data Workbench** should behave like a compact data application.
+- **Arcade** should have a gaming identity.
+- **Data Workbench** should behave like a data tool.
 
-A single global design system would make these interfaces visually consistent, but it would also erase useful product distinctions. The architecture therefore favors shared navigation conventions and clear links between sections over forcing every page into one frontend template.
+A single global design system would require far less work and keep these interfaces visually consistent, but it would also erase useful page distinctions. The architecture therefore favors shared navigation conventions and clear links between sections over forcing every page into one frontend template.
 
 ## Data Workbench
 
@@ -110,7 +110,7 @@ https://anthonycs.dev/projects/capy/
 
 ## Arcade
 
-Arcade is intentionally a launcher rather than a monolithic game application.
+Arcade is intentionally a launcher rather than having all games in 1 file.
 
 ```text
 Arcade launcher
@@ -125,8 +125,7 @@ Each game remains a standalone document/application. This keeps game logic isola
 
 ## LearnCS
 
-LearnCS is organized as a study interface rather than a marketing page. The current direction is selective depth: a few strong areas are more useful than many shallow sections.
-
+LearnCS is organized as a study interface. The current direction is selective and based on what I study or have found useful.
 Near-term focus:
 
 1. C / C++
